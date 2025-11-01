@@ -48,7 +48,7 @@ public class Category {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "parent")
-    List<Category> children = new ArrayList<>();
+    List<Category> children;
 
     @NotNull
     @CreationTimestamp
@@ -66,6 +66,7 @@ public class Category {
         this.name = name;
         this.description = description;
         this.parent = parent;
+        this.children = new ArrayList<>();
     }
 
     public void update(String name, String description) {

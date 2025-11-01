@@ -16,6 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -28,8 +29,8 @@ public class PurchaseProduct {
 
     @Id
     @Size(max = 16)
-    @Column(name = "id", nullable = false, length = 16)
-    String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

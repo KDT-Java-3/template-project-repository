@@ -15,7 +15,6 @@ import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -87,7 +86,7 @@ public class Purchase {
     LocalDateTime udDt;
 
     @OneToMany(mappedBy = "purchase")
-    List<PurchaseProduct> purchaseProducts = new ArrayList<>();
+    List<PurchaseProduct> purchaseProducts;
 
     @Builder
     public Purchase(User user, Long totalCount, BigDecimal totalPrice, String postCode, String recipientAddress, String recipientName, String recipientPhone, String req) {
