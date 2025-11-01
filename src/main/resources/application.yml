@@ -1,0 +1,33 @@
+spring:
+
+  flyway:
+    enabled: true
+    # 마이그레이션 파일 위치 지정 (기본값)
+    locations: classpath:db/migration
+#    baseline-on-migrate: true # 기존 스키마가 있을 경우 기준선 설정
+
+  # 데이터베이스 연결 설정
+  datasource:
+    url: jdbc:mysql://localhost:3306/sparta_commerce?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA 및 Hibernate 설정
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+# 로깅 레벨 설정
+logging:
+  level:
+    # Hibernate가 실행하는 SQL 쿼리를 DEBUG 레벨로 로그에 출력
+    org.hibernate.SQL: DEBUG
+    org.flywaydb.core: DEBUG
+
+# 내장 웹 서버 설정
+server:
+  port: 8080
