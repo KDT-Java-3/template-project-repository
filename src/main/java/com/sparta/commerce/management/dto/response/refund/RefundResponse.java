@@ -14,7 +14,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RefundResponse {
     String status;
-    Instant rgDt;
+    LocalDateTime rgDt;
     String reason;
 
     public static RefundResponse getRefundResponse(Refund refund) {

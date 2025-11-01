@@ -24,7 +24,7 @@ public class PurchaseResponse {
     String status;
     String recipientAddress;
     String recipientName;
-    Instant rgDt;
+    LocalDateTime rgDt;
     List<PurchaseProduct> purchaseProducts;
 
     public static PurchaseResponse getPurchase(Purchase purchase){

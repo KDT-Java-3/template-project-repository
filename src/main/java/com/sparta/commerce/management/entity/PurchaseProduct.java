@@ -47,13 +47,13 @@ public class PurchaseProduct {
     @NotNull
     @CreationTimestamp
     @Column(name = "rg_dt", nullable = false)
-    Instant rgDt;
+    LocalDateTime rgDt;
 
     @NotNull
     @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
-    Instant udDt;
+    LocalDateTime udDt;
 
     @Builder
     public PurchaseProduct(Purchase purchase, Product product, Integer quantity, BigDecimal price) {

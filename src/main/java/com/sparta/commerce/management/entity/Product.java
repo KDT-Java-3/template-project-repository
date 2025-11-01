@@ -50,12 +50,12 @@ public class Product {
     @NotNull
     @CreationTimestamp
     @Column(name = "rg_dt", nullable = false)
-    Instant rgDt;
+    LocalDateTime rgDt;
 
     @NotNull
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
-    Instant udDt;
+    LocalDateTime udDt;
 
     @Builder
     public Product(String name, String description, BigDecimal price, Integer stock, Category category) {

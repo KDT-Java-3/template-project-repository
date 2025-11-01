@@ -50,13 +50,13 @@ public class Category {
     @NotNull
     @CreationTimestamp
     @Column(name = "rg_dt", nullable = false)
-    Instant rgDt;
+    LocalDateTime rgDt;
 
     @NotNull
     @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
-    Instant udDt;
+    LocalDateTime udDt;
 
     @Builder
     public Category(String name, String description, Category parent) {

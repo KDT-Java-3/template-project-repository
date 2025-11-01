@@ -99,15 +99,15 @@ public class PurchaseService {
         return PurchaseResponse.getPurchase(savePurchase);
     }
 
-    //단일 주문
-    public PurchaseResponse findById(UUID id){
-        return PurchaseResponse.getPurchase(Objects.requireNonNull(purchaseRepository.findById(id).orElse(null)));
-    }
-
-    //전체 주문
-    public List<PurchaseResponse> findAll(){
-        return PurchaseResponse.getPurchaseList(purchaseRepository.findAll());
-    }
+//    //단일 주문
+//    public PurchaseResponse findById(UUID id){
+//        return PurchaseResponse.getPurchase(Objects.requireNonNull(purchaseRepository.findById(id).orElse(null)));
+//    }
+//
+//    //전체 주문
+//    public List<PurchaseResponse> findAll(){
+//        return PurchaseResponse.getPurchaseList(purchaseRepository.findAll());
+//    }
 
     //특정 사용자의 주문 목록
     public List<PurchaseResponse> findAllByUserId(UUID userId) {

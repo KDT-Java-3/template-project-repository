@@ -75,13 +75,13 @@ public class Purchase {
     @NotNull
     @CreationTimestamp
     @Column(name = "rg_dt", nullable = false)
-    Instant rgDt;
+    LocalDateTime rgDt;
 
     @NotNull
     @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
-    Instant udDt;
+    LocalDateTime udDt;
 
     @OneToMany(mappedBy = "purchase")
     List<PurchaseProduct> purchaseProducts = new ArrayList<>();

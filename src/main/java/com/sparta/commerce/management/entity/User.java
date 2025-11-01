@@ -59,13 +59,13 @@ public class User {
     @NotNull
     @CreationTimestamp
     @Column(name = "rg_dt", nullable = false)
-    Instant rgDt;
+    LocalDateTime rgDt;
 
     @NotNull
     @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
-    Instant udDt;
+    LocalDateTime udDt;
 
     @Builder
     public User(String name, String registrationNumber, String birth, String email, String phone, Boolean isForeigner, String loginId) {

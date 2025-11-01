@@ -13,6 +13,7 @@ import org.hibernate.annotations.*;
 import org.webjars.NotFoundException;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -44,13 +45,12 @@ public class Refund {
     @NotNull
     @CreationTimestamp
     @Column(name = "rg_dt", nullable = false)
-    Instant rgDt;
+    LocalDateTime rgDt;
 
     @NotNull
-    @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
-    Instant udDt;
+    LocalDateTime udDt;
 
     @Builder
     public Refund(Purchase purchase, String reason, String status) {
