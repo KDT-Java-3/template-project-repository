@@ -9,4 +9,8 @@ public enum OrderStatus {
     public boolean cantChange(OrderStatus newOrderStatus) {
         return this == PENDING && newOrderStatus == PENDING;
     }
+
+    public boolean cantCancel() {
+        return this != PENDING;
+    }
 }

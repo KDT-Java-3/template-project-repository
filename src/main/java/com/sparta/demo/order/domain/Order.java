@@ -1,7 +1,6 @@
 package com.sparta.demo.order.domain;
 
 import com.sparta.demo.product.domain.Product;
-import com.sparta.demo.refund.domain.Refund;
 import com.sparta.demo.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -81,14 +80,10 @@ public class Order {
     }
 
     public void cancel() {
-        if (this.orderStatus != OrderStatus.PENDING) {
+        if (this.orderStatus.cantCancel()) {
             throw new IllegalStateException("주문을 취소할 수 없는 상태입니다.");
         }
         product.increaseStock(quantity);
-        this.orderStatus = OrderStatus.CANCELLED;
-        this.lastUpdateTime = LocalDateTime.now();
-    }
-
         this.orderStatus = OrderStatus.CANCELLED;
         this.lastUpdateTime = LocalDateTime.now();
     }
