@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -32,5 +35,11 @@ public class CategoryService {
         category.update(patchRequest.getName(), patchRequest.getDescription());
 
         return CategoryResponse.fromEntity(category);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryWithProductResponse> getCategories() {
+        return categoryJpaRepository.findAll()
+                .stream().map(CategoryWithProductResponse::fromEntity).toList();
     }
 }

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
@@ -26,6 +28,11 @@ public class CategoryApiController {
     }
 
     // 모든 카테고리 조회 API
+    @GetMapping
+    public ResponseEntity<List<CategoryWithProductResponse>> getCategories() {
+        List<CategoryWithProductResponse> result = categoryService.getCategories();
+        return ResponseEntity.ok(result);
+    }
 
 
     // 카테고리 수정 API

@@ -1,14 +1,15 @@
 package com.sparta.ecommerce.category.domain;
 
 import com.sparta.ecommerce.common.domain.BaseEntity;
+import com.sparta.ecommerce.product.domain.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-import org.hibernate.validator.constraints.Length;
+
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -30,6 +31,9 @@ public class Category extends BaseEntity {
     @Column(name = "description", length = 2000)
     @Comment("카테고리 설명")
     private String description;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
     public void update(String name, String description) {
         this.name = name;

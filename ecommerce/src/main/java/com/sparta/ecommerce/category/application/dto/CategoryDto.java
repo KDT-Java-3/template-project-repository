@@ -1,14 +1,18 @@
 package com.sparta.ecommerce.category.application.dto;
 
 import com.sparta.ecommerce.category.domain.Category;
+import com.sparta.ecommerce.product.application.dto.ProductDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CategoryDto {
@@ -38,14 +42,8 @@ public class CategoryDto {
     }
 
     @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CategoryResponse{
-        private Long id;
-        private String name;
-        private String description;
-        private LocalDateTime createdAt;
+    @SuperBuilder
+    public static class CategoryResponse extends CommonCategoryResponse{
 
         public static CategoryResponse fromEntity(Category category) {
             return CategoryResponse.builder()
@@ -56,4 +54,28 @@ public class CategoryDto {
                     .build();
         }
     }
+
+    @Getter
+    @SuperBuilder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryWithProductResponse extends CommonCategoryResponse{
+
+        List<ProductDto.ProductResponse> products;
+
+        public static CategoryWithProductResponse fromEntity(Category category) {
+            return CategoryWithProductResponse.builder()
+                    .id(category.getId())
+                    .name(category.getName())
+                    .description(category.getDescription())
+                    .createdAt(category.getCreatedAt())
+                    .products(category.getProducts()
+                            .stream().map(ProductDto.ProductResponse::fromEntity)
+                            .collect(Collectors.toList())
+                    )
+                    .build();
+        }
+    }
+
+
 }
