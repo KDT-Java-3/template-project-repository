@@ -18,6 +18,8 @@ spring:
 
   # JPA 및 Hibernate 설정
   jpa:
+    # show_sql: JPA 실행시 작동하는 SQL이 콘솔에 표시된다
+    show_sql: true
     hibernate:
       # ddl-auto: 애플리케이션 실행 시 스키마(테이블) 처리 전략
       # none: 아무 작업도 하지 않음 (운영 환경 추천)
