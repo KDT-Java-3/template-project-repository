@@ -1,4 +1,4 @@
-package com.spartaecommerce.product.domain;
+package com.spartaecommerce.product.domain.entity;
 
 import com.spartaecommerce.common.domain.Money;
 import lombok.AccessLevel;

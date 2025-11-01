@@ -1,4 +1,4 @@
-package com.spartaecommerce.product.application.dto;
+package com.spartaecommerce.product.domain.command;
 
 import com.spartaecommerce.common.domain.Money;
 

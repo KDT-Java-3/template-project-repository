@@ -1,6 +1,6 @@
-package com.spartaecommerce.product.presentation.controller.dto;
+package com.spartaecommerce.product.presentation.controller.dto.response;
 
-import com.spartaecommerce.product.domain.Product;
+import com.spartaecommerce.product.domain.entity.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

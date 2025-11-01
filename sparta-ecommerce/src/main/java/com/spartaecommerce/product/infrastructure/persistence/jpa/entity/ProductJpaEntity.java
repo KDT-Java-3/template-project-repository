@@ -1,7 +1,7 @@
 package com.spartaecommerce.product.infrastructure.persistence.jpa.entity;
 
 import com.spartaecommerce.common.domain.Money;
-import com.spartaecommerce.product.domain.Product;
+import com.spartaecommerce.product.domain.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -58,7 +58,7 @@ public class ProductJpaEntity {
         return new Product(
             this.id,
             this.name,
-            Money.of(this.price),
+            Money.from(this.price),
             this.stock,
             this.categoryId,
             this.createdAt,

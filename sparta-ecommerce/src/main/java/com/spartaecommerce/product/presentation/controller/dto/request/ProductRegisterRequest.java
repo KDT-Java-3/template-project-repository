@@ -1,7 +1,7 @@
-package com.spartaecommerce.product.presentation.controller.dto;
+package com.spartaecommerce.product.presentation.controller.dto.request;
 
 import com.spartaecommerce.common.domain.Money;
-import com.spartaecommerce.product.application.dto.ProductRegisterCommand;
+import com.spartaecommerce.product.domain.command.ProductRegisterCommand;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +27,7 @@ public record ProductRegisterRequest(
 
     public ProductRegisterCommand toCommand() {
         return new ProductRegisterCommand(
-            name, Money.of(price), stock, categoryId
+            name, Money.from(price), stock, categoryId
         );
     }
 }

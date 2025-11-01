@@ -22,7 +22,7 @@ public record Money(
         amount = amount.setScale(SCALE, RoundingMode.HALF_UP);
     }
 
-    public static Money of(BigDecimal amount) {
+    public static Money from(BigDecimal amount) {
         return new Money(amount);
     }
 
