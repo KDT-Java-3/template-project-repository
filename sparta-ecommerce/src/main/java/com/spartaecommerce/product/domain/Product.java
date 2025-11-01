@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Product {
 
     private Long productId;
@@ -27,7 +27,7 @@ public class Product {
 
     private LocalDateTime updatedAt;
 
-    public static Product register(
+    public static Product createNew(
         String name,
         Money price,
         Integer stock,

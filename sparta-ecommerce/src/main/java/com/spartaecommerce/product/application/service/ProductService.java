@@ -15,7 +15,7 @@ public class ProductService {
     public Long register(ProductRegisterCommand registerCommand) {
         // TODO: category 존재여부 확인
 
-        Product product = Product.register(
+        Product product = Product.createNew(
             registerCommand.name(),
             registerCommand.price(),
             registerCommand.stock(),
@@ -23,5 +23,9 @@ public class ProductService {
         );
 
         return productRepository.register(product);
+    }
+
+    public Product getProduct(Long productId) {
+        return productRepository.getProduct(productId);
     }
 }

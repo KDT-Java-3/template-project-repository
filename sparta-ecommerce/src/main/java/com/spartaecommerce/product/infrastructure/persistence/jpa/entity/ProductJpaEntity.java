@@ -1,5 +1,6 @@
 package com.spartaecommerce.product.infrastructure.persistence.jpa.entity;
 
+import com.spartaecommerce.common.domain.Money;
 import com.spartaecommerce.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,7 +26,8 @@ public class ProductJpaEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    private String price;
+    @Column(nullable = false)
+    private BigDecimal price;
 
     @Column(nullable = false)
     private Integer stock;
@@ -43,11 +46,23 @@ public class ProductJpaEntity {
         return new ProductJpaEntity(
             null,
             product.getName(),
-            product.getPrice().toString(),
+            product.getPrice().amount(),
             product.getStock(),
             product.getCategoryId(),
             product.getCreatedAt(),
             product.getUpdatedAt()
+        );
+    }
+
+    public Product toDomain() {
+        return new Product(
+            this.id,
+            this.name,
+            Money.of(this.price),
+            this.stock,
+            this.categoryId,
+            this.createdAt,
+            this.updatedAt
         );
     }
 }
