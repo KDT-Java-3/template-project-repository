@@ -20,7 +20,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponseDto createCategory(CreateCategoryRequestDto requestDto){
         Category parent = null;
-        if(parent != null){
+        if(requestDto.getParentId() != null){
             parent = categoryRepository.findById(requestDto.getParentId())
                     .orElseThrow(() -> new IllegalArgumentException("Category id " + requestDto.getParentId() + " not found"));
         }
