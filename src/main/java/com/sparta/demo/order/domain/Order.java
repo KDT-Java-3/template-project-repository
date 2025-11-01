@@ -87,4 +87,10 @@ public class Order {
         this.orderStatus = OrderStatus.CANCELLED;
         this.lastUpdateTime = LocalDateTime.now();
     }
+
+    public void refund() {
+        product.increaseStock(quantity);
+        this.orderStatus = OrderStatus.CANCELLED;
+        this.lastUpdateTime = LocalDateTime.now();
+    }
 }

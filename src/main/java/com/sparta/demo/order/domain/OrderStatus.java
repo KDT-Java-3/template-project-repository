@@ -7,10 +7,16 @@ public enum OrderStatus {
     ;
 
     public boolean cantChange(OrderStatus newOrderStatus) {
-        return this == PENDING && newOrderStatus == PENDING;
+        return switch (this) {
+            case PENDING -> newOrderStatus != OrderStatus.PENDING;
+            case COMPLETED, CANCELLED -> false;
+        };
     }
 
     public boolean cantCancel() {
-        return this != PENDING;
+        return switch (this) {
+            case PENDING -> false;
+            case COMPLETED, CANCELLED -> true;
+        };
     }
 }
