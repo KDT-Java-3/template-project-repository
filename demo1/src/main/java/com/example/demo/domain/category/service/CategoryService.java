@@ -2,6 +2,7 @@ package com.example.demo.domain.category.service;
 
 import com.example.demo.domain.category.dto.CategoryResponseDto;
 import com.example.demo.domain.category.dto.CreateCategoryRequestDto;
+import com.example.demo.domain.category.dto.UpdateCategoryRequestDto;
 import com.example.demo.domain.category.entity.Category;
 import com.example.demo.domain.category.repositry.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,22 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category " + id + " not found"));
         return CategoryResponseDto.from(category);
+    }
+
+    // 카테고리 수정
+    @Transactional
+    public CategoryResponseDto updateCategory(Long id, UpdateCategoryRequestDto requestDto){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category " + id + " not found"));
+
+        if(requestDto.getName() != null){
+            category.updateName(requestDto.getName());
+        }
+
+        if(requestDto.getDescription() != null){
+            category.updateDescription(requestDto.getDescription());
+        }
+        Category updatedCategory = categoryRepository.save(category);
+        return CategoryResponseDto.from(updatedCategory);
     }
 }

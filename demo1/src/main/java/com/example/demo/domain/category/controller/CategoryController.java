@@ -2,6 +2,7 @@ package com.example.demo.domain.category.controller;
 
 import com.example.demo.domain.category.dto.CategoryResponseDto;
 import com.example.demo.domain.category.dto.CreateCategoryRequestDto;
+import com.example.demo.domain.category.dto.UpdateCategoryRequestDto;
 import com.example.demo.domain.category.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,18 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    // 카테고리 아이디로 검색
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponseDto> getAllCategoriesById(@PathVariable Long id){
         CategoryResponseDto category = categoryService.getCategorybyId(id);
         return ResponseEntity.ok(category);
+    }
+
+    // 카테고리 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable Long id, @Valid @RequestBody UpdateCategoryRequestDto category){
+        CategoryResponseDto updatedCategory = categoryService.updateCategory(id, category);
+        return ResponseEntity.ok(updatedCategory);
     }
 
 }

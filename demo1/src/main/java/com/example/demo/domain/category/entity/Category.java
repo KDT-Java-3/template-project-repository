@@ -52,4 +52,12 @@ public class Category {
         this.description = description;
         this.parent = parent;
     }
+
+    public void updateName(String name){
+        this.name = name;
+    }
+
+    public void updateDescription(String description){
+        this.description = description;
+    }
 }
