@@ -34,8 +34,8 @@ public class CommonResponse<T> {
         return new CommonResponse<>(errorCode, message, null);
     }
 
-    public static <T> CommonResponse<T> error(ErrorCode errorCode) {
-        return new CommonResponse<>(errorCode.getCode(), errorCode.getMessage(), null);
+    public static <T> CommonResponse<T> error(ErrorCode errorCode, String message) {
+        return new CommonResponse<>(errorCode.getCode(), message, null);
     }
 
 }

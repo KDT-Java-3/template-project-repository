@@ -7,15 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    ALREADY_PROCESSED_PAYMENT(400, "ALREADY_PROCESSED_PAYMENT", "This is a payment that has already been processed."),
-    PROVIDER_ERROR(400, "PROVIDER_ERROR", "This is temporary error. Please try again in a few minutes."),
-    EXCEED_MAX_CARD_INSTALLMENT_PLAN(400, "EXCEED_MAX_CARD_INSTALLMENT_PLAN", "Maximum number of installment months exceeded. (installmentPlanMonths)"),
+    // common
     INVALID_REQUEST(400, "INVALID_REQUEST", "The bad request."),
-    NOT_ALLOWED_POINT_USE(400, "NOT_ALLOWED_POINT_USE", "Card point payment failed because the card cannot be used points."),
-    INVALID_API_KEY(400, "INVALID_API_KEY", "Incorrect secret key."),
-    INVALID_REJECT_CARD(400, "INVALID_REJECT_CARD", "Refer to card issuer/decline."),
-    BELOW_MINIMUM_AMOUNT(400, "BELOW_MINIMUM_AMOUNT", "Payment can be made from 100 won or more by credit card, and 200 won or more for account."),
-    ENTITY_NOT_FOUND(404, "ENTITY_NOT_FOUND", "The requested entity does not exist.");
+
+    // jpa
+    ENTITY_NOT_FOUND(404, "ENTITY_NOT_FOUND", "The requested entity does not exist."),
+    ENTITY_ALREADY_EXISTS(409, "ENTITY_ALREADY_EXISTS", "The entity already exists.");
 
     private final int httpStatus;
     private final String code;

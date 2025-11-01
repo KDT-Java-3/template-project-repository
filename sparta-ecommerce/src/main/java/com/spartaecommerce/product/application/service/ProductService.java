@@ -27,7 +27,7 @@ public class ProductService {
     }
 
     public Product getProduct(Long productId) {
-        return productRepository.getProduct(productId);
+        return productRepository.getById(productId);
     }
 
     // TODO: Pagination 변경 예정
@@ -38,7 +38,7 @@ public class ProductService {
     @Transactional
     public void update(Long productId, ProductUpdateCommand updateCommand) {
         // TODO: name 중보 여부 검증
-        Product product = productRepository.getProduct(productId);
+        Product product = productRepository.getById(productId);
         product.update(updateCommand);
         productRepository.save(product);
     }

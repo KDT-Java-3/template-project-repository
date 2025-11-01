@@ -9,7 +9,7 @@ public interface ProductRepository {
 
     Long save(Product product);
 
-    Product getProduct(Long productId);
+    Product getById(Long productId);
 
     List<Product> search(ProductSearchQuery searchQuery);
 

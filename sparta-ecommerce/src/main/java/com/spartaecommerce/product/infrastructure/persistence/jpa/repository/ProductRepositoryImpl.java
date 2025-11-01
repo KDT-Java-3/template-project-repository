@@ -31,7 +31,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product getProduct(Long productId) {
+    public Product getById(Long productId) {
         ProductJpaEntity productJpaEntity = productJpaRepository.findById(productId)
             .orElseThrow(() -> new BusinessException(
                 ErrorCode.ENTITY_NOT_FOUND,
