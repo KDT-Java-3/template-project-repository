@@ -55,7 +55,7 @@ public class PurchaseService {
                 if (product.getStock() < ppr.getQuantity()) throw new NotFoundException("상품 재고가 부족합니다.");
 
                 //전체 물건수 && 금액 개산
-                totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(ppr.getQuantity())));
+                totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(ppr.getQuantity())));
                 totalCount += ppr.getQuantity();
             }
         }
