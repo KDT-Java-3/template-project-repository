@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Getter
 @DynamicInsert
@@ -29,6 +30,9 @@ public class CategoryJpaEntity {
 
     @Column(nullable = false)
     private String name;
+
+    @Column
+    private String description;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,17 +51,23 @@ public class CategoryJpaEntity {
         return new CategoryJpaEntity(
             category.getId(),
             category.getName(),
+            category.getDescription(),
             null,
             category.getCreatedAt(),
             category.getUpdatedAt()
         );
     }
 
-    public CategoryJpaEntity create(
-        String name,
-        CategoryJpaEntity parent
-    ) {
-        return new CategoryJpaEntity(name, parent);
+    public Category toDomain() {
+        return new Category(
+            this.id,
+            this.name,
+            this.description,
+            null,
+            Collections.emptyList(),
+            this.createdAt,
+            this.updatedAt
+        );
     }
 
     private CategoryJpaEntity(

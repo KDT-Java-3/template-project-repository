@@ -52,12 +52,12 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<CommonResponse<PageResponse<ProductResponse>>> searchProducts(
-        @Valid ProductSearchRequest searchRequest
+    public ResponseEntity<CommonResponse<PageResponse<ProductResponse>>> search(
+        ProductSearchRequest searchRequest
     ) {
         ProductSearchQuery searchQuery = searchRequest.toQuery();
 
-        List<Product> products = productService.searchProducts(searchQuery);
+        List<Product> products = productService.search(searchQuery);
         List<ProductResponse> response = products.stream()
             .map(ProductResponse::from)
             .toList();
