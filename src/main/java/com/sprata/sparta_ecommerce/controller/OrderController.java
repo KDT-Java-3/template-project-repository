@@ -1,20 +1,51 @@
 package com.sprata.sparta_ecommerce.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RestController;
+import com.sprata.sparta_ecommerce.dto.ChangeOrderStatusRequestDto;
+import com.sprata.sparta_ecommerce.dto.OrderRequestDto;
+import com.sprata.sparta_ecommerce.dto.OrderResponseDto;
+import com.sprata.sparta_ecommerce.entity.OrderStatus;
+import com.sprata.sparta_ecommerce.service.OrderService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import com.sprata.sparta_ecommerce.dto.ResponseDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/order")
-@Slf4j
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/orders")
+@RequiredArgsConstructor
 public class OrderController {
-    /** 주문 생성*/
-    /** 주문 조회*/
-    /** 주문 상태변경*/
-    /** 주문 취소*/
 
+    private final OrderService orderService;
 
-    /** 환불 요청*/
-    /** 환불 처리*/
-    /** 환불 조회*/
+    @PostMapping
+    public ResponseEntity<ResponseDto<?>> createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
+        OrderResponseDto responseDto = orderService.createOrder(orderRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseDto.success(responseDto, "주문 생성 성공"));
+    }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ResponseDto<?>> getOrdersByUserId(@PathVariable Long userId) {
+        List<OrderResponseDto> responseDtos = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(ResponseDto.success(responseDtos, "주문 목록 조회 성공"));
+    }
 
+    @PatchMapping("/{orderId}/status")
+    public ResponseEntity<ResponseDto<?>> updateOrderStatus(@PathVariable Long orderId,
+                                                            @Valid @RequestBody ChangeOrderStatusRequestDto requestDto
+                                                            ) {
+        OrderStatus status = OrderStatus.find(requestDto);
+        OrderResponseDto responseDto = orderService.updateOrderStatus(orderId, status);
+        return ResponseEntity.ok(ResponseDto.success(responseDto, "주문 상태 수정 성공"));
+    }
+
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<ResponseDto<?>> cancelOrder(@PathVariable Long orderId) {
+        Long id = orderService.cancelOrder(orderId);
+        return ResponseEntity.ok(ResponseDto.success(id, "주문 취소 성공"));
+    }
 }

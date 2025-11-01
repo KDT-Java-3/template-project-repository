@@ -1,16 +1,12 @@
 package com.sprata.sparta_ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
-@Setter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,11 +33,16 @@ public class Order extends Timestamped {
     @Column(nullable = false)
     private OrderStatus status;
 
+    @Builder
     public Order(Long userId, Product product, int quantity, String shippingAddress) {
         this.userId = userId;
         this.product = product;
         this.quantity = quantity;
         this.shippingAddress = shippingAddress;
         this.status = OrderStatus.PENDING;
+    }
+
+    public void updateStatus(OrderStatus status) {
+        this.status = status;
     }
 }

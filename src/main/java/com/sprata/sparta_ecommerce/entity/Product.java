@@ -52,6 +52,7 @@ public class Product extends Timestamped {
         this.category = category;
     }
 
+    /** 동시성 처리 */
     public void updateStock(int stock) {
         this.stock = stock;
     }
