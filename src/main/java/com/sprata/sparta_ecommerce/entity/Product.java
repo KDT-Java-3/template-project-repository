@@ -1,16 +1,15 @@
 package com.sprata.sparta_ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
-@Setter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,7 +35,16 @@ public class Product extends Timestamped {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @Builder
     public Product(String name, String description, Long price, int stock, Category category) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+    }
+
+    public void update( String name, String description, Long price, int stock, Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
