@@ -71,4 +71,15 @@ public class Product {
         this.stock = stock;
         this.category = category;
     }
+
+    public void increaseStock(int value) {
+        this.stock += value;
+    }
+
+    public void decreaseStock(int value) {
+        if (this.stock < value) {
+            throw new IllegalArgumentException("상품 보유 재고보다 감소하려는 재고가 더 많습니다.");
+        }
+        this.stock -= value;
+    }
 }

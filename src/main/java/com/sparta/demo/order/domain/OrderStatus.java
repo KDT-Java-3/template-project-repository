@@ -6,7 +6,7 @@ public enum OrderStatus {
     CANCELLED,
     ;
 
-    public boolean canChange(OrderStatus newOrderStatus) {
-        return this != PENDING || newOrderStatus != PENDING;
+    public boolean cantChange(OrderStatus newOrderStatus) {
+        return this == PENDING && newOrderStatus == PENDING;
     }
 }
