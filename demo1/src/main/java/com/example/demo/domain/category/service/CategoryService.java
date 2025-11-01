@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,5 +35,20 @@ public class CategoryService {
                 .build();
         Category savedCategory = categoryRepository.save(category);
         return CategoryResponseDto.from(savedCategory);
+    }
+
+    // 카테고리 조회
+    public List<CategoryResponseDto> getAllCategories(){
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(CategoryResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
+    // 아이디로 카테고리 조회
+    public CategoryResponseDto getCategorybyId(Long id){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category " + id + " not found"));
+        return CategoryResponseDto.from(category);
     }
 }
