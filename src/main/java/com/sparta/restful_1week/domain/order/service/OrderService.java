@@ -3,9 +3,6 @@ package com.sparta.restful_1week.domain.order.service;
 import com.sparta.restful_1week.domain.order.dto.OrderInDTO;
 import com.sparta.restful_1week.domain.order.dto.OrderOutDTO;
 import com.sparta.restful_1week.domain.order.entity.Order;
-import com.sparta.restful_1week.domain.product.dto.ProductInDTO;
-import com.sparta.restful_1week.domain.product.dto.ProductOutDTO;
-import com.sparta.restful_1week.domain.product.entity.Product;
 
 import java.util.Collections;
 import java.util.HashMap;

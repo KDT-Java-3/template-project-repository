@@ -3,7 +3,6 @@ package com.sparta.restful_1week.domain.order.controller;
 import com.sparta.restful_1week.domain.order.dto.OrderInDTO;
 import com.sparta.restful_1week.domain.order.dto.OrderOutDTO;
 import com.sparta.restful_1week.domain.order.service.OrderService;
-import com.sparta.restful_1week.domain.product.dto.ProductOutDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
