@@ -72,6 +72,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-  
+
   flyway:
     enabled: false   # H2 테스트에서는 필요 없으면 비활성화

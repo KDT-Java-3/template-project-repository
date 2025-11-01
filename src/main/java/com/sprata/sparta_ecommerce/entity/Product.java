@@ -51,4 +51,8 @@ public class Product extends Timestamped {
         this.stock = stock;
         this.category = category;
     }
+
+    public void updateStock(int stock) {
+        this.stock = stock;
+    }
 }
