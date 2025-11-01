@@ -26,4 +26,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("maxPrice") BigDecimal maxPrice,
             @Param("keyword") String keyword
     );
+
+    List<Product> findByCategoryId(Long categoryId);
 }

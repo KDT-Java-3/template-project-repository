@@ -7,8 +7,12 @@ import com.sparta.demo.category.domain.Category;
 import com.sparta.demo.category.service.CategoryService;
 import com.sparta.demo.category.service.command.CategorySaveCommand;
 import com.sparta.demo.category.service.command.CategoryUpdateCommand;
+import com.sparta.demo.product.domain.Product;
+import com.sparta.demo.product.domain.ProductRepository;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +22,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static java.util.stream.Collectors.toMap;
+
 @RestController
 @RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final ProductRepository productRepository;
 
     @PostMapping("/categories")
     ResponseEntity<Void> save(@RequestBody CategorySaveRequest request) {
@@ -34,8 +41,15 @@ public class CategoryController {
     @GetMapping("/categories")
     ResponseEntity<List<CategoryFindAllResponse>> findAll() {
         List<Category> categories = categoryService.findAll();
-        List<CategoryFindAllResponse> responses = categories.stream()
-                .map(CategoryFindAllResponse::of)
+
+        Map<Category, List<Product>> categoryProductsMap = categories.stream()
+                .collect(toMap(
+                        Function.identity(),
+                        category -> productRepository.findByCategoryId(category.getId())
+                ));
+
+        var responses = categoryProductsMap.entrySet().stream()
+                .map(entry -> CategoryFindAllResponse.of(entry.getKey(), entry.getValue()))
                 .toList();
         return ResponseEntity.ok(responses);
     }
