@@ -21,3 +21,60 @@
 
 ##### 1.4. **PR 병합**
 프로젝트 이상이 없다면 **제출용 브랜치**에 PR을 병합합니다.
+
+
+---
+
+### 도메인 정보
+
+user
+- id
+- username
+- nickname
+- email
+- role
+- passwordHash
+- createdAt
+- updatedAt
+
+product
+- id
+- name
+- price
+- description
+- stock
+- categoryId
+- createdAt
+- updatedAt
+
+category
+- id
+- name
+- description
+- parentId
+
+order
+- id
+- userId
+- totalPrice
+- shippingAddress
+- status
+- createdAt
+- updatedAt
+
+refund
+- id
+- orderId
+- userId // 비정규화
+- status
+- reason
+- createdAt
+- approvedAt
+- rejectedAt
+
+productOrder
+- id
+- productId
+- orderId
+- quantity
+- price
