@@ -25,4 +25,6 @@ public abstract class BaseEntity {
     @Column(name = "updated_at", nullable = false)
     @Comment("수정일")
     private LocalDateTime updatedAt;
+
+
 }

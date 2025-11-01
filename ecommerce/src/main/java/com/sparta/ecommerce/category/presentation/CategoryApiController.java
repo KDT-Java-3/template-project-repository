@@ -6,10 +6,7 @@ import com.sparta.ecommerce.category.application.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -32,7 +29,14 @@ public class CategoryApiController {
 
 
     // 카테고리 수정 API
-
-
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @PathVariable Long id,
+            @RequestBody @Valid
+            CategoryPatchRequest patchRequest
+    ){
+        CategoryResponse result = categoryService.patchCategory(id, patchRequest);
+        return ResponseEntity.ok(result);
+    }
 
 }
