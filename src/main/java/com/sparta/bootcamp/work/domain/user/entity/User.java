@@ -1,6 +1,7 @@
 package com.sparta.bootcamp.work.domain.user.entity;
 
 import com.sparta.bootcamp.work.domain.order.entity.Order;
+import com.sparta.bootcamp.work.domain.refund.entity.Refund;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,10 +13,8 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
@@ -24,11 +23,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 @Table
+@Builder
 @Entity
 @Getter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
@@ -53,19 +54,8 @@ public class User {
   @UpdateTimestamp
   LocalDateTime updatedAt;
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.LAZY)
   List<Order> Orders = new ArrayList<>();
-
-  @Builder
-  public User(
-      String name,
-      String email,
-      String passwordHash
-  ) {
-    this.name = name;
-    this.email = email;
-    this.passwordHash = passwordHash;
-  }
 
   public void setName(String name) {
     if (StringUtils.hasText(name)) {

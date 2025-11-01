@@ -68,12 +68,11 @@ public class OrderService {
 
         for (Order order : orderList) {
 
-            List<OrderProduct> orderProducts = orderProductRepository.findByOrder(order);
+            OrderProduct orderProduct = orderProductRepository.findByOrder(order).orElseThrow(() -> new RuntimeException("Order not found"));
 
             List<Product> products = new ArrayList<>();
-            for (OrderProduct orderProduct : orderProducts) {
-                products.add(orderProduct.getProduct());
-            }
+            products.add(orderProduct.getProduct());
+
             orderDtoList.add(OrderDto.fromOrderProducts(order, products));
         }
 
