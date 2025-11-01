@@ -2,14 +2,18 @@ package com.sparta.ecommerce.category.domain;
 
 import com.sparta.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Entity
 @Table(name = "category")
-@NoArgsConstructor
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category extends BaseEntity {
 
     @Id
@@ -25,7 +29,4 @@ public class Category extends BaseEntity {
     @Comment("카테고리 설명")
     private String description;
 
-    @Column(name = "parent_category_id")
-    @Comment("부모 카테고리 일련번호")
-    private Long parentCategoryId;
 }
