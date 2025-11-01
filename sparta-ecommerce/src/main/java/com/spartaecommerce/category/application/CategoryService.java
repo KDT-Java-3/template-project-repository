@@ -1,6 +1,7 @@
 package com.spartaecommerce.category.application;
 
 import com.spartaecommerce.category.domain.commnad.CategoryRegisterCommand;
+import com.spartaecommerce.category.domain.commnad.CategoryUpdateCommand;
 import com.spartaecommerce.category.domain.entity.Category;
 import com.spartaecommerce.category.domain.query.CategorySearchQuery;
 import com.spartaecommerce.category.domain.repository.CategoryRepository;
@@ -31,6 +32,13 @@ public class CategoryService {
         Category category = Category.createNew(registerCommand);
 
         return categoryRepository.save(category);
+    }
+
+    @Transactional
+    public void update(Long categoryId, CategoryUpdateCommand updateCommand) {
+        Category category = categoryRepository.getById(categoryId);
+        category.update(updateCommand);
+        categoryRepository.save(category);
     }
 
     public List<Category> search(CategorySearchQuery searchQuery) {

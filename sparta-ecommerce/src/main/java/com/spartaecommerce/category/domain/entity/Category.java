@@ -1,6 +1,7 @@
 package com.spartaecommerce.category.domain.entity;
 
 import com.spartaecommerce.category.domain.commnad.CategoryRegisterCommand;
+import com.spartaecommerce.category.domain.commnad.CategoryUpdateCommand;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,5 +41,15 @@ public class Category {
             null,
             null
         );
+    }
+
+    public void update(CategoryUpdateCommand updateCommand) {
+        if (updateCommand.name() == null || !updateCommand.name().isBlank()) {
+            this.name = updateCommand.name();
+        }
+
+        if (updateCommand.description() == null || !updateCommand.name().isBlank()) {
+            this.description = updateCommand.description();
+        }
     }
 }

@@ -2,16 +2,16 @@ package com.spartaecommerce.category.presentation.controller;
 
 import com.spartaecommerce.category.application.CategoryService;
 import com.spartaecommerce.category.domain.commnad.CategoryRegisterCommand;
+import com.spartaecommerce.category.domain.commnad.CategoryUpdateCommand;
 import com.spartaecommerce.category.domain.entity.Category;
 import com.spartaecommerce.category.domain.query.CategorySearchQuery;
 import com.spartaecommerce.category.presentation.controller.dto.request.CategoryRegisterRequest;
 import com.spartaecommerce.category.presentation.controller.dto.request.CategorySearchRequest;
+import com.spartaecommerce.category.presentation.controller.dto.request.CategoryUpdateRequest;
 import com.spartaecommerce.category.presentation.controller.dto.response.CategoryResponse;
 import com.spartaecommerce.common.domain.CommonResponse;
 import com.spartaecommerce.common.domain.IdResponse;
 import com.spartaecommerce.common.domain.PageResponse;
-import com.spartaecommerce.product.domain.entity.Product;
-import com.spartaecommerce.product.presentation.controller.dto.response.ProductResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("/categories")
-    public ResponseEntity<CommonResponse<IdResponse>> createProduct(
+    public ResponseEntity<CommonResponse<IdResponse>> create(
         @Valid @RequestBody CategoryRegisterRequest registerRequest
     ) {
         CategoryRegisterCommand registerCommand = registerRequest.toCommand();
@@ -52,5 +52,15 @@ public class CategoryController {
             .toList();
 
         return ResponseEntity.ok(CommonResponse.success(PageResponse.of(response)));
+    }
+
+    @PatchMapping("/categories/{categoryId}")
+    public ResponseEntity<CommonResponse<Void>> update(
+        @PathVariable Long categoryId,
+        @RequestBody CategoryUpdateRequest updateRequest
+    ) {
+        CategoryUpdateCommand updateCommand = updateRequest.toCommand();
+        categoryService.update(categoryId, updateCommand);
+        return ResponseEntity.ok(CommonResponse.success(null));
     }
 }
