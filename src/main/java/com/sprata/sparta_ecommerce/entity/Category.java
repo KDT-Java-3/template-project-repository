@@ -1,10 +1,8 @@
 package com.sprata.sparta_ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -26,7 +24,13 @@ public class Category extends Timestamped {
     @Column(nullable = false)
     private String description;
 
+    @Builder
     public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public void update(@NotBlank String name, String description) {
         this.name = name;
         this.description = description;
     }

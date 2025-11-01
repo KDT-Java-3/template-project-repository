@@ -1,4 +1,4 @@
-package com.sprata.sparta_ecommerce;
+package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
 import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
@@ -9,7 +9,6 @@ import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
-import com.sprata.sparta_ecommerce.service.ProductService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
