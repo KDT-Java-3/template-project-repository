@@ -1,4 +1,4 @@
-package com.sparta.restful_1week.domain.category.dto;
+package com.sparta.restful_1week.domain.product.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryInDTO {
-
+public class ProductInDTO {
     private Long id;
     private String name;
+    private BigDecimal price;
+    private Integer stock;
     private String description;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }
-
