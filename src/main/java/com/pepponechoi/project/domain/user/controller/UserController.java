@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/users")
+@RestController
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     // 필터링은 나중에...
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<UserResponse>> getAllUser() {
         List<UserResponse> userResponses = userService.getAllUsers();
         return ResponseEntity.ok().body(userResponses);
