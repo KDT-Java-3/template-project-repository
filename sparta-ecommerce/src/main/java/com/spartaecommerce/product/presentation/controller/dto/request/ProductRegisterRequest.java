@@ -14,6 +14,8 @@ public record ProductRegisterRequest(
     @Size(min = 1, max = 100)
     String name,
 
+    String description,
+
     @NotNull
     @DecimalMin(value = "0.0")
     BigDecimal price,
@@ -27,7 +29,7 @@ public record ProductRegisterRequest(
 
     public ProductRegisterCommand toCommand() {
         return new ProductRegisterCommand(
-            name, Money.from(price), stock, categoryId
+            name, description, Money.from(price), stock, categoryId
         );
     }
 }

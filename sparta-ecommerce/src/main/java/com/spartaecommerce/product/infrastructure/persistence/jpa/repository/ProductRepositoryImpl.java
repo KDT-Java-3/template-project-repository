@@ -25,7 +25,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final EntityManager entityManager;
 
     @Override
-    public Long register(Product product) {
+    public Long save(Product product) {
         ProductJpaEntity productJpaEntity = ProductJpaEntity.from(product);
         return productJpaRepository.save(productJpaEntity).getId();
     }

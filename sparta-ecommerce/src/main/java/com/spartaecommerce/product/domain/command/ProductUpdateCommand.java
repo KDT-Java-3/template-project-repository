@@ -2,7 +2,7 @@ package com.spartaecommerce.product.domain.command;
 
 import com.spartaecommerce.common.domain.Money;
 
-public record ProductRegisterCommand(
+public record ProductUpdateCommand(
     String name,
     String description,
     Money price,

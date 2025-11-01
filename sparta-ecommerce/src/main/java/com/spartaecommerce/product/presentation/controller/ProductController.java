@@ -5,10 +5,12 @@ import com.spartaecommerce.common.domain.IdResponse;
 import com.spartaecommerce.common.domain.PageResponse;
 import com.spartaecommerce.product.application.service.ProductService;
 import com.spartaecommerce.product.domain.command.ProductRegisterCommand;
+import com.spartaecommerce.product.domain.command.ProductUpdateCommand;
 import com.spartaecommerce.product.domain.entity.Product;
 import com.spartaecommerce.product.domain.query.ProductSearchQuery;
 import com.spartaecommerce.product.presentation.controller.dto.request.ProductRegisterRequest;
 import com.spartaecommerce.product.presentation.controller.dto.request.ProductSearchRequest;
+import com.spartaecommerce.product.presentation.controller.dto.request.ProductUpdateRequest;
 import com.spartaecommerce.product.presentation.controller.dto.response.ProductResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +63,16 @@ public class ProductController {
             .toList();
 
         return ResponseEntity.ok(CommonResponse.success(PageResponse.of(response)));
+    }
+
+    @PatchMapping("/products/{productId}")
+    public ResponseEntity<CommonResponse<Void>> updateProduct(
+        @PathVariable Long productId,
+        @Valid @RequestBody ProductUpdateRequest updateRequest
+    ) {
+        ProductUpdateCommand updateCommand = updateRequest.toCommand();
+        productService.update(productId, updateCommand);
+
+        return ResponseEntity.ok(CommonResponse.success(null));
     }
 }

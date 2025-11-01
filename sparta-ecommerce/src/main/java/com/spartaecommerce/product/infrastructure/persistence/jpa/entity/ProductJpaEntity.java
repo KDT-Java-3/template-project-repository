@@ -26,6 +26,10 @@ public class ProductJpaEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = false)
     private BigDecimal price;
 
@@ -44,8 +48,9 @@ public class ProductJpaEntity {
 
     public static ProductJpaEntity from(Product product) {
         return new ProductJpaEntity(
-            null,
+            product.getProductId(),
             product.getName(),
+            product.getDescription(),
             product.getPrice().amount(),
             product.getStock(),
             product.getCategoryId(),
@@ -58,6 +63,7 @@ public class ProductJpaEntity {
         return new Product(
             this.id,
             this.name,
+            this.description,
             Money.from(this.price),
             this.stock,
             this.categoryId,
