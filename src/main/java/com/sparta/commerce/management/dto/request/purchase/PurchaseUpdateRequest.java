@@ -4,8 +4,6 @@ import io.smallrye.common.constraint.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Data

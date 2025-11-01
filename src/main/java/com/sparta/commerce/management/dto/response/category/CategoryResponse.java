@@ -1,8 +1,9 @@
 package com.sparta.commerce.management.dto.response.category;
 
-import com.sparta.commerce.management.dto.response.product.ProductResponse;
 import com.sparta.commerce.management.entity.Category;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;

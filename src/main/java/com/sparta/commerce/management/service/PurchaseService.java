@@ -2,7 +2,6 @@ package com.sparta.commerce.management.service;
 
 import com.sparta.commerce.management.dto.request.purchase.PurchaseCreateRequest;
 import com.sparta.commerce.management.dto.request.purchase.PurchaseProductRequest;
-import com.sparta.commerce.management.dto.request.purchase.PurchaseSearchRequest;
 import com.sparta.commerce.management.dto.request.purchase.PurchaseUpdateRequest;
 import com.sparta.commerce.management.dto.response.purchase.PurchaseResponse;
 import com.sparta.commerce.management.entity.Product;
@@ -45,7 +44,7 @@ public class PurchaseService {
         Product product; //상품
 
         //전체 물건수 && 금액 개산
-        Long totalCount = 0L;
+        long totalCount = 0L;
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (PurchaseProductRequest ppr : request.getPurchaseProductRequests()) {
@@ -112,7 +111,7 @@ public class PurchaseService {
 
     //특정 사용자의 주문 목록
     public List<PurchaseResponse> findAllByUserId(UUID userId) {
-        return PurchaseResponse.getPurchaseList(purchaseRepository.findAllByUserId(userId));
+        return PurchaseResponse.getPurchaseList(purchaseRepository.findAllByUserId(String.valueOf(userId)));
     }
 
     //주문 상태 수정

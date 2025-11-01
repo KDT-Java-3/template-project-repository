@@ -1,6 +1,5 @@
 package com.sparta.commerce.management.dto.response.purchase;
 
-import com.sparta.commerce.management.dto.request.purchase.PurchaseCreateRequest;
 import com.sparta.commerce.management.entity.Purchase;
 import com.sparta.commerce.management.entity.PurchaseProduct;
 import lombok.AccessLevel;
@@ -10,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

@@ -12,7 +12,6 @@ import com.sparta.commerce.management.repository.RefundRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.UUID;
@@ -57,7 +56,7 @@ public class RefundService {
     }
 
     //특정 사용자의 환불 요청 목록을 조회
-    public List<RefundResponse> findAllByUserId(UUID userId){
-        return RefundResponse.getRefundResponseList(refundRepository.findAllByUserId(userId));
+    public List<RefundResponse> findAllByUserId(UUID purchaseUserId){
+        return RefundResponse.getRefundResponseList(refundRepository.findAllByPurchaseUserId(String.valueOf(purchaseUserId)));
     }
 }

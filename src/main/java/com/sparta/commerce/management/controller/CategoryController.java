@@ -3,7 +3,6 @@ package com.sparta.commerce.management.controller;
 import com.sparta.commerce.management.dto.request.category.CategoryCreateRequest;
 import com.sparta.commerce.management.dto.request.category.CategoryUpdateRequest;
 import com.sparta.commerce.management.dto.response.category.CategoryResponse;
-import com.sparta.commerce.management.entity.Category;
 import com.sparta.commerce.management.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

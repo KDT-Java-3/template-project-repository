@@ -1,13 +1,9 @@
 package com.sparta.commerce.management.controller;
 
 import com.sparta.commerce.management.dto.request.refund.RefundCreateRequest;
-import com.sparta.commerce.management.dto.request.refund.RefundSearchRequest;
 import com.sparta.commerce.management.dto.request.refund.RefundUpdateRequest;
-import com.sparta.commerce.management.dto.response.purchase.PurchaseResponse;
 import com.sparta.commerce.management.dto.response.refund.RefundResponse;
-import com.sparta.commerce.management.entity.Refund;
 import com.sparta.commerce.management.service.RefundService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

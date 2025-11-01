@@ -1,7 +1,6 @@
 package com.sparta.commerce.management.controller;
 
 import com.sparta.commerce.management.dto.request.purchase.PurchaseCreateRequest;
-import com.sparta.commerce.management.dto.request.purchase.PurchaseSearchRequest;
 import com.sparta.commerce.management.dto.request.purchase.PurchaseUpdateRequest;
 import com.sparta.commerce.management.dto.response.purchase.PurchaseResponse;
 import com.sparta.commerce.management.service.PurchaseService;

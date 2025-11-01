@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface RefundRepository extends JpaRepository<Refund, UUID> {
 
-    List<Refund> findAllByUserId(UUID userId);
+    List<Refund> findAllByPurchaseUserId(String purchaseUserId);
 }
