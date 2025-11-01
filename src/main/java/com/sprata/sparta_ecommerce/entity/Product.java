@@ -14,20 +14,33 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "category")
-public class Category extends Timestamped {
+@Table(name = "product")
+public class Product extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private String description;
 
-    public Category(String name, String description) {
+    @Column(nullable = false)
+    private Long price;
+
+    @Column(nullable = false)
+    private int stock;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    public Product(String name, String description, Long price, int stock, Category category) {
         this.name = name;
         this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
     }
 }

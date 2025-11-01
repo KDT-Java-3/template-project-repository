@@ -1,14 +1,19 @@
 package com.sprata.sparta_ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders") // 'order' is a reserved keyword in SQL
 public class Order extends Timestamped {
     @Id
