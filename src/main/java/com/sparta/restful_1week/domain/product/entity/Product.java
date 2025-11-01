@@ -1,6 +1,5 @@
 package com.sparta.restful_1week.domain.product.entity;
 
-import com.sparta.restful_1week.domain.category.dto.CategoryInDTO;
 import com.sparta.restful_1week.domain.category.entity.Category;
 import com.sparta.restful_1week.domain.product.dto.ProductInDTO;
 import jakarta.persistence.*;
@@ -31,10 +30,10 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(name = "stock", nullable = false)
+    @Column(nullable = false)
     private Integer stock;
 
     @Column(name = "description", nullable = false)
