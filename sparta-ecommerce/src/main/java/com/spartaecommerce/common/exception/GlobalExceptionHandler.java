@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         String errorCodeMessage = errorCode.getMessage();
         String customMessage = ex.getMessage();
 
-        String errorMessage = errorCodeMessage + "\n" + customMessage;
+        String errorMessage = errorCodeMessage + customMessage;
 
         return ResponseEntity
             .status(errorCode.getHttpStatus())

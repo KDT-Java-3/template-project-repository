@@ -1,6 +1,8 @@
 package com.spartaecommerce.product.domain.entity;
 
 import com.spartaecommerce.common.domain.Money;
+import com.spartaecommerce.common.exception.BusinessException;
+import com.spartaecommerce.common.exception.ErrorCode;
 import com.spartaecommerce.product.domain.command.ProductRegisterCommand;
 import com.spartaecommerce.product.domain.command.ProductUpdateCommand;
 import lombok.AccessLevel;
@@ -64,5 +66,16 @@ public class Product {
         if (updateCommand.categoryId() != null) {
             this.categoryId = updateCommand.categoryId();
         }
+    }
+
+    public void deductQuantity(Integer quantity) {
+        if (this.stock < quantity) {
+            throw new BusinessException(
+                ErrorCode.INVALID_REQUEST,
+                "Available: " + this.stock + ", Requested: " + quantity
+            );
+        }
+
+        this.stock -= quantity;
     }
 }

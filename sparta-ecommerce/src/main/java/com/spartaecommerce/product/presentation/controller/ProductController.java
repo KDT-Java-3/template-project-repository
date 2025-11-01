@@ -29,9 +29,9 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<CommonResponse<IdResponse>> create(
-        @Valid @RequestBody ProductRegisterRequest request
+        @Valid @RequestBody ProductRegisterRequest registerRequest
     ) {
-        ProductRegisterCommand registerCommand = request.toCommand();
+        ProductRegisterCommand registerCommand = registerRequest.toCommand();
 
         Long productId = productService.register(registerCommand);
 
