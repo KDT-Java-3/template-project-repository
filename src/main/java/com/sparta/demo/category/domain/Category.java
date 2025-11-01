@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 public class Category {
@@ -29,7 +31,10 @@ public class Category {
     private String description;
 
     public static Category create(String name, String description) {
-        return new Category(null, name, description);
+        return Category.builder()
+                .name(name)
+                .description(description)
+                .build();
     }
 
     public void update(String name, String description) {

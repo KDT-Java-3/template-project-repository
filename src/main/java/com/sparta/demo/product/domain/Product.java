@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 public class Product {
@@ -53,7 +55,13 @@ public class Product {
             BigDecimal price,
             int stock
     ) {
-        return new Product(null, category, description, name, price, stock);
+        return Product.builder()
+                .description(description)
+                .category(category)
+                .name(name)
+                .price(price)
+                .stock(stock)
+                .build();
     }
 
     public void update(String name, @Nullable String description, BigDecimal price, int stock, Category category) {
