@@ -1,8 +1,6 @@
 package com.sparta.restful_1week.domain.order.entity;
 
-import com.sparta.restful_1week.domain.category.entity.Category;
 import com.sparta.restful_1week.domain.order.dto.OrderInDTO;
-import com.sparta.restful_1week.domain.product.dto.ProductInDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,11 +9,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Table(name = "Order")
-@Entity
+@Table@Entity
 @Getter
 @Setter
 @DynamicInsert
@@ -28,23 +24,23 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(nullable = false)
     private String userId;
 
-    @Column(name = "product_id", nullable = false)
+    @Column(nullable = false)
     private String productId;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "shipping_address", nullable = false)
+    @Column(nullable = false)
     private String shippingAddress;
 
-    @Column(name = "created_At", nullable = false)
+    @Column(nullable = false)
     @CreationTimestamp
     LocalDateTime createdAt;
 
-    @Column(name = "updated_At", nullable = false)
+    @Column(nullable = false)
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
