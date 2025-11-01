@@ -13,16 +13,6 @@ public record ProductFindAllResponse(
         CategoryDto category
 ) {
 
-    public record CategoryDto(
-            Long id,
-            String name
-    ) {
-
-        public static CategoryDto of(Category category) {
-            return new CategoryDto(category.getId(), category.getName());
-        }
-    }
-
     public static ProductFindAllResponse of(Product product) {
         return new ProductFindAllResponse(
                 product.getId(),
@@ -32,5 +22,16 @@ public record ProductFindAllResponse(
                 product.getStock(),
                 product.getCategory() != null ? CategoryDto.of(product.getCategory()) : null
         );
+    }
+
+    public record CategoryDto(
+            Long id,
+            String name
+    ) {
+
+        public static CategoryDto of(Category category) {
+            return new CategoryDto(category.getId(), category.getName());
+        }
+
     }
 }
