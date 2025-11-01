@@ -1,7 +1,6 @@
 package com.sparta.restful_1week.domain.category.dto;
 
 import com.sparta.restful_1week.domain.category.entity.Category;
-import io.smallrye.common.constraint.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,19 +12,19 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryCretInDTO {
+public class CategoryOutDTO {
 
     private Long id;
     private String name;
     private String description;
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 
-    public Category toEntity() {
-        return Category.builder()
-                .name(this.name)
-                .description(this.description)
-                .build();
+    public CategoryOutDTO(Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
+        this.description = category.getDescription();
+        this.createdAt = category.getCreatedAt();
+        this.updatedAt = category.getUpdatedAt();
     }
-
 }
-

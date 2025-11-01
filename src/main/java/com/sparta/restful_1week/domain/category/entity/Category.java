@@ -1,47 +1,57 @@
 package com.sparta.restful_1week.domain.category.entity;
 
+import com.sparta.restful_1week.domain.category.dto.CategoryInDTO;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Table
+@Table(name = "Category")
 @Entity
 @Getter
+@Setter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "created_At", nullable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
+
+    @Column(name = "updated_At", nullable = false)
+    @UpdateTimestamp
+    LocalDateTime updatedAt;
 
     @Builder
-    public Category(
-            Long id,
-            String name,
-            String description,
-            LocalDateTime createdAt
-    ) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.createdAt = createdAt;
+    public Category(CategoryInDTO categoryInDTO) {
+        this.name = categoryInDTO.getName();
+        this.description = categoryInDTO.getDescription();
+        this.createdAt = categoryInDTO.getCreatedAt();
+        this.updatedAt = categoryInDTO.getUpdatedAt();
+    }
+
+    @Builder
+    public void updateCategory(CategoryInDTO categoryInDTO) {
+        this.name = categoryInDTO.getName();
+        this.description = categoryInDTO.getDescription();
+        this.updatedAt = categoryInDTO.getUpdatedAt();
     }
 
 }
