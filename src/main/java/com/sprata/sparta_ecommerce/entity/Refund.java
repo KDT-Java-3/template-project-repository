@@ -1,16 +1,12 @@
 package com.sprata.sparta_ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
-@Setter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,10 +30,15 @@ public class Refund extends Timestamped {
     @Column(nullable = false)
     private RefundStatus status;
 
+    @Builder
     public Refund(Long userId, Order order, String reason) {
         this.userId = userId;
         this.order = order;
         this.reason = reason;
         this.status = RefundStatus.PENDING;
+    }
+
+    public void updateStatus(RefundStatus status) {
+        this.status = status;
     }
 }

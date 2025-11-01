@@ -80,8 +80,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.updateStatus(OrderStatus.CANCELED);
-        Product product = order.getProduct();
-        product.updateStock(product.getStock() + order.getQuantity());
 
         return order.getId();
     }

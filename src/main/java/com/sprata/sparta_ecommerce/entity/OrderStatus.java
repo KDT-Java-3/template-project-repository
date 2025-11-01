@@ -10,9 +10,8 @@ public enum OrderStatus {
     ;
 
     public static OrderStatus find(ChangeOrderStatusRequestDto requestDto) {
-        String orderStatus = requestDto.getOrder_status().toUpperCase();
-        if(StringUtils.hasText(orderStatus)){
-            return OrderStatus.valueOf(orderStatus);
+        if(StringUtils.hasText(requestDto.getOrder_status())){
+            return OrderStatus.valueOf(requestDto.getOrder_status().toUpperCase());
         }else {
             throw new IllegalArgumentException("잘못된 주문 상태 입니다.");
         }
