@@ -69,6 +69,11 @@ public class Category {
         product.setCategory(this);
     }
 
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.setCategory(null);
+    }
+
     public void update(String name, String description) {
         this.name = name;
         this.description = description;

@@ -1,6 +1,7 @@
 package com.pepponechoi.project.domain.product.entity;
 
 import com.pepponechoi.project.domain.category.entity.Category;
+import com.pepponechoi.project.domain.product.dto.request.ProductUpdateRequest;
 import com.pepponechoi.project.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,12 +39,10 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    @PositiveOrZero
     private Long price;
 
     @Column
-    @PositiveOrZero
-    private Integer stock;
+    private Long stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -53,4 +53,31 @@ public class Product {
     @JoinColumn(name = "user_id")
     @Setter
     private User user;
+
+    @Builder
+    public Product(String name, Long price, Long stock, Category category, User user) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+        this.user = user;
+        category.addProduct(this);
+        user.addProduct(this);
+    }
+
+    public void update(ProductUpdateRequest request, Category category, User user) {
+        this.name = request.getName();
+        this.price = request.getPrice();
+        this.stock = request.getStock();
+        if (category != null) {
+            category.removeProduct(this);
+            this.category = category;
+            category.addProduct(this);
+        }
+        if (user != null) {
+            user.removeProduct(this);
+            this.user = user;
+            user.addProduct(this);
+        }
+    }
 }

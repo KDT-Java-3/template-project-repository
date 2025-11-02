@@ -58,6 +58,11 @@ public class User {
         product.setUser(this);
     }
 
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.setUser(null);
+    }
+
     @Builder
     public User(String email, String username, String password) {
         this.email = email;
