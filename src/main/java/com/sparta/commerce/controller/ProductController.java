@@ -28,8 +28,11 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> modifyProduct(
+            @PathVariable Long id,
             @RequestBody ModifyProductDto dto
     ) {
-        return ResponseEntity.ok(productFacade.modifyProduct(dto));
+        return ResponseEntity.ok(
+                productFacade.modifyProduct(id, dto)
+        );
     }
 }

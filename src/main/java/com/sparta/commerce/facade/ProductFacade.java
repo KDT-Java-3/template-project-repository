@@ -22,8 +22,11 @@ public class ProductFacade {
         return productService.findProductById(productId);
     }
 
-    public ProductDto modifyProduct(ModifyProductDto dto) {
-        productService.modifyProduct(dto);
-        return productService.findProductById(dto.id());
+    public ProductDto modifyProduct(
+            Long id,
+            ModifyProductDto dto
+    ) {
+        productService.modifyProduct(id, dto);
+        return productService.findProductById(id);
     }
 }

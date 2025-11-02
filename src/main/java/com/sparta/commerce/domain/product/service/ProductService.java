@@ -45,8 +45,11 @@ public class ProductService {
     }
 
     @Transactional
-    public void modifyProduct(ModifyProductDto dto) {
-        Product product = productRepository.findById(dto.id())
+    public void modifyProduct(
+            Long id,
+            ModifyProductDto dto
+    ) {
+        Product product = productRepository.findById(id)
                 .orElseThrow(NotFoundProductException::new);
 
         product.changeProduct(dto);
