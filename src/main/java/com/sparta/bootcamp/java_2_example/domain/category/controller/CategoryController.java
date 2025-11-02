@@ -18,6 +18,7 @@ import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCateg
 import com.sparta.bootcamp.java_2_example.domain.category.service.CategoryCommandService;
 import com.sparta.bootcamp.java_2_example.domain.category.service.CategoryQueryService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,18 +36,17 @@ public class CategoryController {
 	private final CategoryQueryService categoryQueryService;
 	private final CategoryCommandService categoryCommandService;
 
-
 	@PostMapping
 	public ResponseEntity<ResponseCategory> createCategory(
 
+		@Valid
 		@RequestBody
 		RequestCreateCategory requestCreate
 
 	) {
 
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(categoryCommandService.createCategory(requestCreate));
 	}
-
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ResponseCategory> updateCategory(
@@ -54,14 +54,14 @@ public class CategoryController {
 		@PathVariable
 		Long id,
 
+		@Valid
 		@RequestBody
 		RequestUpdateCategory requestUpdate
 
 	) {
 
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(categoryCommandService.updateCategory(id, requestUpdate));
 	}
-
 
 	@GetMapping
 	public ResponseEntity<Page<ResponseCategory>> getCategories(
@@ -71,8 +71,7 @@ public class CategoryController {
 
 	) {
 
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(categoryQueryService.getCategories(search));
 	}
-
 
 }
