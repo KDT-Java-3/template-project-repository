@@ -53,4 +53,13 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
+    public void decreaseStock(Integer quantity) {
+        if(this.stock - quantity < 0) throw new IllegalArgumentException("재고가 부족합니다.");
+        this.stock -= quantity;
+    }
+
+    public void increaseStock(Integer quantity) {
+        if(quantity < 1) throw new IllegalArgumentException("1 이상의 부터 증가가 가능합니다.");
+        this.stock += quantity;
+    }
 }
