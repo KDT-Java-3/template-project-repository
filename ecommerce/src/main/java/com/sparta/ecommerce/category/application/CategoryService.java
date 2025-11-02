@@ -28,7 +28,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse patchCategory(Long id, CategoryPatchRequest patchRequest) {
+    public CategoryResponse updateCategory(Long id, CategoryUpdateRequest patchRequest) {
         Category category = categoryJpaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 

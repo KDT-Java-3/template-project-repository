@@ -4,6 +4,7 @@ import com.sparta.ecommerce.category.domain.Category;
 import com.sparta.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @Entity
 @Table
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends BaseEntity {
@@ -42,4 +44,13 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public void update(String name, String description, BigDecimal price, Integer stock, Category category) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+    }
+
 }

@@ -8,3 +8,6 @@ CREATE TABLE product(
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+create index idx_category_price on product(category_id, price);
+create index idx_price on product(price);

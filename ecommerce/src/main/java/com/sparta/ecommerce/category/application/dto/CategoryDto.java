@@ -19,7 +19,6 @@ public class CategoryDto {
 
 
     @Getter
-    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CategoryCreateRequest{
@@ -38,7 +37,7 @@ public class CategoryDto {
     }
 
     @Getter
-    public static class CategoryPatchRequest extends CategoryCreateRequest{
+    public static class CategoryUpdateRequest extends CategoryCreateRequest{
     }
 
     @Getter

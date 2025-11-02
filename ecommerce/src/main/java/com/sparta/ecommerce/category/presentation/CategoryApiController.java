@@ -40,9 +40,9 @@ public class CategoryApiController {
     public ResponseEntity<CategoryResponse> updateCategory(
             @PathVariable Long id,
             @RequestBody @Valid
-            CategoryPatchRequest patchRequest
+            CategoryUpdateRequest updateRequest
     ){
-        CategoryResponse result = categoryService.patchCategory(id, patchRequest);
+        CategoryResponse result = categoryService.updateCategory(id, updateRequest);
         return ResponseEntity.ok(result);
     }
 
