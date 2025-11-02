@@ -1,4 +1,4 @@
-package com.ynverse.ecommerce;
+package com.ynv.ecommerce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

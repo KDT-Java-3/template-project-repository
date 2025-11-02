@@ -1,4 +1,4 @@
-package com.ynverse.ecommerce;
+package com.ynv.ecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
