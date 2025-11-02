@@ -20,10 +20,13 @@ public class ProductService {
 
     private final CategoryRepository categoryRepository;
 
-    public ProductDto findProductById(Long id) {
-        Product product = productRepository.findById(id)
+    public Product findProductEntityById(Long id) {
+        return productRepository.findById(id)
                 .orElseThrow(NotFoundProductException::new);
+    }
 
+    public ProductDto findProductById(Long id) {
+        Product product = findProductEntityById(id);
         return ProductDto.of(product);
     }
 

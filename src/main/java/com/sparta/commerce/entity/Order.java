@@ -3,13 +3,16 @@ package com.sparta.commerce.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.commerce.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Entity
 @Table(name = "orders")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
     @Id
