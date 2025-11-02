@@ -82,6 +82,10 @@ public class Order {
         this.status = OrderStatus.CANCELED;
     }
 
+    public boolean isComplete() {
+        return this.status == OrderStatus.COMPLETED;
+    }
+
     public List<OrderItem> getOrderItems() {
         return Collections.unmodifiableList(orderItems);
     }

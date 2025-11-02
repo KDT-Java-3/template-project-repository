@@ -15,7 +15,10 @@ public enum ErrorCode {
     ENTITY_ALREADY_EXISTS(409, "ENTITY_ALREADY_EXISTS", "The entity already exists."),
 
     // order
-    ORDER_INVALID_STATE_TRANSITION(400, "ORDER_INVALID_STATE_TRANSITION", "The order status cannot be changed to the requested status.");
+    ORDER_INVALID_STATE_TRANSITION(400, "ORDER_INVALID_STATE_TRANSITION", "The order status cannot be changed to the requested status."),
+
+    // refund
+    REFUND_INVALID_STATE_TRANSITION(400, "REFUND_INVALID_STATE_TRANSITION", "The refund status cannot be changed to the requested status.");
 
     private final int httpStatus;
     private final String code;
