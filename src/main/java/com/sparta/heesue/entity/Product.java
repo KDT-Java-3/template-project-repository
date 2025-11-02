@@ -57,4 +57,23 @@ public class Product {
         this.stockQuantity = stockQuantity;
         this.category = category;
     }
+
+    public void update(String name, String description, BigDecimal price,
+                       Integer stockQuantity, Category category) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+        if (price != null) {
+            this.price = price;
+        }
+        if (stockQuantity != null) {
+            this.stockQuantity = stockQuantity;
+        }
+        if (category != null) {
+            this.category = category;
+        }
+    }
 }
