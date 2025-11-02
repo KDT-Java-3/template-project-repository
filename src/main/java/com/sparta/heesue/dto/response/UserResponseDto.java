@@ -2,8 +2,10 @@ package com.sparta.heesue.dto.response;
 
 import com.sparta.heesue.entity.User;
 import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class UserResponseDto {
     private Long id;
     private String name;
@@ -11,7 +13,7 @@ public class UserResponseDto {
     private String phone;
     private LocalDateTime createdAt;
 
-    public UserResponse(User user) {
+    public UserResponseDto(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
