@@ -24,6 +24,7 @@ public class DevDataInitializer implements CommandLineRunner {
                 .name("전자제품")
                 .build();
 
+        
         categoryRepository.save(category);
     }
 }
