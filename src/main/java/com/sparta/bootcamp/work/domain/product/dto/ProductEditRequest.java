@@ -2,6 +2,7 @@ package com.sparta.bootcamp.work.domain.product.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,20 +11,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductEditRequest {
 
-    @NotBlank(message = "ID 필수입니다.")
+    @NotNull(message = "ID 필수입니다.")
     private Long id;
 
     @NotBlank(message = "이름은 필수입니다.")
     @Size(min = 2, max = 50)
     private String name;
 
-    @NotBlank(message = "가격은 필수입니다.")
+    @NotNull(message = "가격은 필수입니다.")
     private Double price;
 
-    @NotBlank(message = "수량은 필수입니다.")
+    @NotNull(message = "수량은 필수입니다.")
     private Integer stock;
 
-    @NotBlank(message = "카테고리 ID 필수입니다.")
+    @NotNull(message = "카테고리 ID 필수입니다.")
     private Long categoryId;
 
     private String description;

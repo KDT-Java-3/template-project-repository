@@ -2,6 +2,7 @@ package com.sparta.bootcamp.work.domain.order.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderRequest {
 
-    @NotBlank
+    @NotNull
     private Long userId;
 
-    @NotBlank
+    @NotNull
     private Long productId;
 
-    @NotBlank
+    @NotNull
     private Integer quantity;
 
     @NotBlank

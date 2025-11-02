@@ -19,7 +19,7 @@ public class OrderController {
 
 
     @GetMapping("/order")
-    public ResponseEntity<List<OrderDto>> editOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<List<OrderDto>> getOrder(@ModelAttribute OrderRequest orderRequest) {
         return ResponseEntity.ok(orderService.getOrders(orderRequest) );
     }
 

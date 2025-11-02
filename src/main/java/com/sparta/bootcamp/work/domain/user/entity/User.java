@@ -22,7 +22,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
-@Table
+@Table(name = "users")
 @Builder
 @Entity
 @Getter
@@ -54,8 +54,9 @@ public class User {
   @UpdateTimestamp
   LocalDateTime updatedAt;
 
-  @OneToMany(fetch = FetchType.LAZY)
-  List<Order> Orders = new ArrayList<>();
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @Builder.Default
+  List<Order> orders = new ArrayList<>();
 
   public void setName(String name) {
     if (StringUtils.hasText(name)) {

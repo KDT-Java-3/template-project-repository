@@ -19,12 +19,12 @@ public class ProductController {
 
 
     @GetMapping("/product")
-    public ResponseEntity<ProductDto> getProductOne(@RequestBody ProductSearchRequest productSearchRequest) {
+    public ResponseEntity<ProductDto> getProductOne(@ModelAttribute ProductSearchRequest productSearchRequest) {
         return ResponseEntity.ok(productService.getProductOne(productSearchRequest));
     }
 
 
-    @GetMapping("/products")
+    @GetMapping("/product/all")
     public ResponseEntity<List<ProductDto>> getProduct() {
         return ResponseEntity.ok(productService.getProductAll());
     }

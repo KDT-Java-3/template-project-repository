@@ -2,7 +2,7 @@ package com.sparta.bootcamp.work.domain.order.dto;
 
 
 import com.sparta.bootcamp.work.common.enums.OrderStatus;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderEditRequest {
 
-    @NotBlank
+    @NotNull
     private Long userId;
 
     private Long orderId;
 
-    @NotBlank
+    @NotNull
     private OrderStatus orderStatus;
 }
