@@ -1,6 +1,7 @@
 package com.pepponechoi.project.domain.category.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.pepponechoi.project.domain.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,8 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,11 +54,19 @@ public class Category {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
+
     @Builder
     public Category(String name, String description, Category parent) {
         this.name = name;
         this.description = description;
         this.parent = parent;
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+        product.setCategory(this);
     }
 
     public void update(String name, String description) {
