@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCategory;
+import com.sparta.bootcamp.java_2_example.domain.category.entity.Category;
+import com.sparta.bootcamp.java_2_example.domain.category.repository.CategoryRepository;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestCreateProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestUpdateProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.response.ResponseProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.entity.Product;
 import com.sparta.bootcamp.java_2_example.domain.product.repository.ProductRepository;
 import com.sparta.bootcamp.java_2_example.domain.product.service.ProductCommandService;
 import com.sparta.bootcamp.java_2_example.domain.product.service.ProductQueryService;
@@ -28,10 +31,16 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductService implements ProductQueryService, ProductCommandService {
 
 	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
 
 	@Override
 	public ResponseProduct createProduct(RequestCreateProduct requestCreate) {
-		return null;
+		Category category = categoryRepository.findById(requestCreate.getCategoryId())
+			.orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+		Product savedProduct = productRepository.save(Product.of(category, requestCreate));
+
+		return ResponseProduct.of(savedProduct);
 	}
 
 	@Override

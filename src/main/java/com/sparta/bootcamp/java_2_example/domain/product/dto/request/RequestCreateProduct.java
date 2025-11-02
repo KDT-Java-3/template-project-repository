@@ -1,5 +1,7 @@
 package com.sparta.bootcamp.java_2_example.domain.product.dto.request;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,5 +13,15 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RequestCreateProduct {
+
+	private Long categoryId;
+
+	private String productName;
+
+	private String description;
+
+	private BigDecimal price;
+
+	private Integer stock;
 
 }

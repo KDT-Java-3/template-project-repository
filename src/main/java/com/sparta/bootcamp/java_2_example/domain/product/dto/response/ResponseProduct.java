@@ -1,8 +1,8 @@
 package com.sparta.bootcamp.java_2_example.domain.product.dto.response;
 
-import static java.util.Objects.*;
+import java.math.BigDecimal;
 
-import com.sparta.bootcamp.java_2_example.domain.category.entity.Category;
+import com.sparta.bootcamp.java_2_example.domain.product.entity.Product;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,17 +18,22 @@ public class ResponseProduct {
 
 	private Long id;
 
-	private Long parentId;
+	private Long categoryId;
 
 	private String name;
 
-	public static ResponseProduct of(Category category) {
-		Category parent = category.getParent();
+	private BigDecimal price;
+
+	private Integer stock;
+
+	public static ResponseProduct of(Product product) {
 		return ResponseProduct.builder()
-					.id(category.getId())
-					.name(category.getName())
-					.parentId(isNull(parent) ? null : parent.getId())
-					.build();
+			.id(product.getId())
+			.categoryId(product.getCategory().getId())
+			.name(product.getName())
+			.price(product.getPrice())
+			.stock(product.getStock())
+			.build();
 	}
 
 }
