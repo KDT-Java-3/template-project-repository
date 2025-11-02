@@ -4,6 +4,8 @@ import com.spartaecommerce.common.domain.Money;
 import com.spartaecommerce.order.domain.entity.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,12 +25,24 @@ public class OrderItemJpaEntity {
     @Column(name = "order_id", insertable = false, updatable = false)
     private Long orderId;
 
+    @Column(nullable = false)
     private Long productId;
+
+    @Column(nullable = false)
     private String productName;
+
+    @Column(nullable = false)
     private BigDecimal productPrice;
+
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Column
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     public static OrderItemJpaEntity from(OrderItem orderItem) {

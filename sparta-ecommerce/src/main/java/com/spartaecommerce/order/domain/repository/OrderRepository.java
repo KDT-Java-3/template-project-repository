@@ -10,4 +10,6 @@ public interface OrderRepository {
     Long save(Order order);
 
     List<Order> search(OrderSearchQuery searchQuery);
+
+    Order getById(Long orderId);
 }

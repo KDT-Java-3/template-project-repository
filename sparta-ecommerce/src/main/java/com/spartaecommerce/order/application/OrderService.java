@@ -2,6 +2,7 @@ package com.spartaecommerce.order.application;
 
 import com.spartaecommerce.order.application.dto.OrderInfo;
 import com.spartaecommerce.order.domain.command.OrderCreateCommand;
+import com.spartaecommerce.order.domain.command.OrderStatusUpdateCommand;
 import com.spartaecommerce.order.domain.entity.Order;
 import com.spartaecommerce.order.domain.query.OrderSearchQuery;
 import com.spartaecommerce.order.domain.repository.OrderRepository;
@@ -37,6 +38,13 @@ public class OrderService {
         );
 
         return orderRepository.save(order);
+    }
+
+    @Transactional
+    public void updateOrderStatus(OrderStatusUpdateCommand updateCommand) {
+        Order order = orderRepository.getById(updateCommand.orderId());
+        order.updateOrderStatus(updateCommand.orderStatus());
+        orderRepository.save(order);
     }
 
     public List<OrderInfo> search(OrderSearchQuery searchQuery) {

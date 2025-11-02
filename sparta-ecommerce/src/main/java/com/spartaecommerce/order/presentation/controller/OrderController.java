@@ -6,10 +6,11 @@ import com.spartaecommerce.common.domain.PageResponse;
 import com.spartaecommerce.order.application.OrderService;
 import com.spartaecommerce.order.application.dto.OrderInfo;
 import com.spartaecommerce.order.domain.command.OrderCreateCommand;
-import com.spartaecommerce.order.domain.entity.Order;
+import com.spartaecommerce.order.domain.command.OrderStatusUpdateCommand;
 import com.spartaecommerce.order.domain.query.OrderSearchQuery;
 import com.spartaecommerce.order.presentation.controller.dto.request.OrderCreateRequest;
 import com.spartaecommerce.order.presentation.controller.dto.request.OrderSearchRequest;
+import com.spartaecommerce.order.presentation.controller.dto.request.OrderStatusUpdateRequest;
 import com.spartaecommerce.order.presentation.controller.dto.response.OrderResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,17 @@ public class OrderController {
             .toList();
 
         return ResponseEntity.ok(CommonResponse.success(PageResponse.of(orderResponses)));
+    }
+
+    @PatchMapping("/orders/{orderId}")
+    public ResponseEntity<CommonResponse<Void>> updateOrderStatus(
+        @PathVariable Long orderId,
+        @Valid @RequestBody OrderStatusUpdateRequest updateRequest
+    ) {
+        OrderStatusUpdateCommand updateCommand = updateRequest.toCommand(orderId);
+
+        orderService.updateOrderStatus(updateCommand);
+
+        return ResponseEntity.ok(CommonResponse.success(null));
     }
 }

@@ -1,6 +1,7 @@
 package com.spartaecommerce.order.domain.entity;
 
 import com.spartaecommerce.common.domain.Money;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

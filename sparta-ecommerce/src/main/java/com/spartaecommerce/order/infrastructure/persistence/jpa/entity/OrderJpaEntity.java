@@ -5,6 +5,8 @@ import com.spartaecommerce.order.domain.entity.OrderItem;
 import com.spartaecommerce.order.domain.entity.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,13 +24,22 @@ public class OrderJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
+    @Column(nullable = false)
     private Long userId;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Column(nullable = false)
     private String shippingAddress;
 
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Column
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @OneToMany(

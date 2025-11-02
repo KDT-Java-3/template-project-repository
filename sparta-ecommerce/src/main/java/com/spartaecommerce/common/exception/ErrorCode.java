@@ -12,9 +12,12 @@ public enum ErrorCode {
 
     // jpa
     ENTITY_NOT_FOUND(404, "ENTITY_NOT_FOUND", "The requested entity does not exist."),
-    ENTITY_ALREADY_EXISTS(409, "ENTITY_ALREADY_EXISTS", "The entity already exists.");
+    ENTITY_ALREADY_EXISTS(409, "ENTITY_ALREADY_EXISTS", "The entity already exists."),
+
+    // order
+    ORDER_INVALID_STATE_TRANSITION(400, "ORDER_INVALID_STATE_TRANSITION", "The order status cannot be changed to the requested status.");
 
     private final int httpStatus;
     private final String code;
     private final String message;
-}
+    }
