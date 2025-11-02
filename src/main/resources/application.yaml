@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: project_01
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/project_01?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+      minimum-idle: 5
+  
+  jpa:
+    hibernate:
+#      **ddl-auto**:
+#        - `create`: 매번 테이블을 새로 생성
+#        - `update`: 테이블 스키마를 자동으로 업데이트
+#        - `validate`: 스키마 검증만 수행
+#        - `none`: 아무것도 하지 않음
+      #      ddl-auto: update  # 개발 환경에서는 update, 운영에서는 validate 사용
+      ddl-auto: create
+    show-sql: true
+    format-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+        highlight_sql: true
+    defer-datasource-initialization: true
+  
+#  sql:
+#    init:
+#      mode: always  # 필요한 경우에만 사용
+
+#  flyway:
+#    enabled: true
+#    baseline-on-migrate: true
+#    locations: classpath:db/migration
+#    encoding: UTF-8
+#    sql-migration-prefix: V
+#    sql-migration-separator: __
+#    sql-migration-suffixes: .sql
+#    validate-on-migrate: true
+#    clean-disabled: true  # 운영환경에서는 반드시 true로 설정
+
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.orm.jpa: DEBUG
