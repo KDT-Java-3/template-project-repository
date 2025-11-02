@@ -38,3 +38,7 @@ out/
 
 ### claude ###
 CLAUDE.md
+
+### Parent Directory ###
+../.idea/
+../README.md
