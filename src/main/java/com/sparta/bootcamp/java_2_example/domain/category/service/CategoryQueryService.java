@@ -1,5 +1,7 @@
 package com.sparta.bootcamp.java_2_example.domain.category.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.sparta.bootcamp.java_2_example.domain.category.dto.response.ResponseCategory;
@@ -12,6 +14,6 @@ import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCateg
  */
 public interface CategoryQueryService {
 
-	Page<ResponseCategory> getCategories(SearchCategory search);
+	List<ResponseCategory> getCategories(SearchCategory search);
 
 }

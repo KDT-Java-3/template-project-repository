@@ -2,10 +2,9 @@ package com.sparta.bootcamp.java_2_example.domain.category.service.impl;
 
 import static java.util.Objects.*;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.sparta.bootcamp.java_2_example.domain.category.dto.request.RequestCreateCategory;
@@ -61,7 +60,8 @@ public class CategoryService implements CategoryQueryService, CategoryCommandSer
 	}
 
 	@Override
-	public Page<ResponseCategory> getCategories(SearchCategory search) {
-		return null;
+	public List<ResponseCategory> getCategories(SearchCategory search) {
+		 return categoryRepository.findAll().stream().map(ResponseCategory::of).toList();
 	}
+
 }

@@ -1,6 +1,7 @@
 package com.sparta.bootcamp.java_2_example.domain.category.controller;
 
-import org.springframework.data.domain.Page;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -64,7 +65,7 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<ResponseCategory>> getCategories(
+	public ResponseEntity<List<ResponseCategory>> getCategories(
 
 		@ModelAttribute
 		SearchCategory search
