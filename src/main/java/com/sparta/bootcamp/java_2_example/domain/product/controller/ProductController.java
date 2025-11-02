@@ -1,7 +1,24 @@
 package com.sparta.bootcamp.java_2_example.domain.product.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCategory;
+import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestCreateProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestUpdateProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.dto.response.ResponseProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.service.ProductCommandService;
+import com.sparta.bootcamp.java_2_example.domain.product.service.ProductQueryService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,5 +31,57 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
+
+	private final ProductQueryService productQueryService;
+	private final ProductCommandService productCommandService;
+
+	@PostMapping
+	public ResponseEntity<ResponseProduct> createProduct(
+
+		@Valid
+		@RequestBody
+		RequestCreateProduct requestCreate
+
+	) {
+
+		return ResponseEntity.ok(productCommandService.createProduct(requestCreate));
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<ResponseProduct> updateProduct(
+
+		@PathVariable
+		Long id,
+
+		@Valid
+		@RequestBody
+		RequestUpdateProduct requestUpdate
+
+	) {
+
+		return ResponseEntity.ok(productCommandService.updateProduct(id, requestUpdate));
+	}
+
+	@GetMapping
+	public ResponseEntity<List<ResponseProduct>> getProducts(
+
+		@ModelAttribute
+		SearchCategory search
+
+	) {
+
+		return ResponseEntity.ok(productQueryService.getProducts(search));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ResponseProduct> getProduct(
+
+		@PathVariable
+		Long id
+
+	) {
+
+		return ResponseEntity.ok(productQueryService.getProduct(id));
+	}
 
 }
