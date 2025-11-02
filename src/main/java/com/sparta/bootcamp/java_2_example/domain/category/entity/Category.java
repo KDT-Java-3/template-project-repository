@@ -1,6 +1,15 @@
 package com.sparta.bootcamp.java_2_example.domain.category.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sparta.bootcamp.java_2_example.domain.category.dto.request.RequestCreateCategory;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,23 +19,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 
+@Builder
 @Table
 @Entity
 @Getter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
 
@@ -50,13 +57,11 @@ public class Category {
   @UpdateTimestamp
   LocalDateTime updatedAt;
 
-  @Builder
-  public Category(
-      String name,
-      Category parent
-  ) {
-    this.name = name;
-    this.parent = parent;
+  public static Category of(RequestCreateCategory requestCreate, Category parent) {
+    return Category.builder()
+                   .name(requestCreate.getName())
+                   .parent(parent)
+                   .build();
   }
-  
+
 }
