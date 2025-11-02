@@ -3,6 +3,7 @@ package com.sparta.commerce.controller;
 import com.sparta.commerce.facade.ProductFacade;
 import com.sparta.commerce.domain.product.dto.ModifyProductDto;
 import com.sparta.commerce.domain.product.dto.SaveProductDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<?> saveProduct(
-            @RequestBody SaveProductDto dto
+            @RequestBody @Valid SaveProductDto dto
     ) {
         return ResponseEntity.ok(productFacade.saveProduct(dto));
     }
@@ -29,7 +30,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<?> modifyProduct(
             @PathVariable Long id,
-            @RequestBody ModifyProductDto dto
+            @RequestBody @Valid ModifyProductDto dto
     ) {
         return ResponseEntity.ok(
                 productFacade.modifyProduct(id, dto)
