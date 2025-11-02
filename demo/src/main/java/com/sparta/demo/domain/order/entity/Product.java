@@ -2,10 +2,7 @@ package com.sparta.demo.domain.order.entity;
 
 import com.sparta.demo.domain.order.dto.request.UpdateProductRequest;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -21,7 +18,7 @@ import java.time.LocalDateTime;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -34,6 +31,7 @@ public class Product {
     private Category category;
 
     @Column(nullable = false)
+    @Setter
     private Integer stock;
 
     @Column(nullable = false)
