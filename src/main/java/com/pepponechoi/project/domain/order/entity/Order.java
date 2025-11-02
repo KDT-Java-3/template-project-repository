@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -63,6 +64,7 @@ public class Order {
     @Column
     private LocalDateTime updatedAt;
 
+    @Builder
     public Order(
         User user,
         Product product,
@@ -78,5 +80,11 @@ public class Order {
         user.addOrder(this);
         product.addOrder(this);
         product.removeStock(quantity);
+    }
+
+    public void changeStatus(OrderStatus status) {
+        if (status.equals(OrderStatus.PENDING)) {
+            this.status = status;
+        }
     }
 }

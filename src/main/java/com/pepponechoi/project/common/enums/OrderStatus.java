@@ -10,4 +10,8 @@ public enum OrderStatus {
     OrderStatus(String description) {
         this.description = description;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

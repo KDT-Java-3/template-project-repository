@@ -29,27 +29,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse create(ProductCreateRequest request) {
-        if  (request.getCategoryId() == null || categoryRepository.existsById(request.getCategoryId())) {
-            // 원래는 예외를 던져야 함.
-            return null;
-        }
-
         Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
-
-        if  (request.getUserId() == null || userRepository.existsById(request.getUserId())) {
-            // 원래는 예외를 던져야 함.
+        if (category == null) {
             return null;
         }
 
         User user = userRepository.findById(request.getUserId()).orElse(null);
+        if (user == null) {
+            return null;
+        }
 
-        Product product = Product.builder()
-            .name(request.getName())
-            .price(request.getPrice())
-            .stock(request.getStock())
-            .category(category)
-            .user(user)
-            .build();
+        Product product = new Product(
+            request.getName(),
+            request.getPrice(),
+            request.getStock(),
+            category,
+            user
+        );
 
         productRepository.save(product);
 
@@ -64,80 +60,113 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> list(ProductReadRequest request) {
-        if (request.getCategoryId() != null || categoryRepository.existsById(request.getCategoryId())) {
+        if (request.getPriseFrom() != null && request.getPriseTo() != null
+            && request.getPriseFrom() > request.getPriseTo()) {
             return null;
         }
 
-        if (request.getPriseFrom() > request.getPriseTo()) {
-            return null;
+        if (request.getCategoryId() != null) {
+            if (!categoryRepository.existsById(request.getCategoryId())) {
+                return null;
+            }
+            return productRepository.findAllByCategory_Id(request.getCategoryId())
+                .stream()
+                .map(this::toProductResponse)
+                .toList();
         }
 
-        // 일단 단일 조건으로 구현.
-        if (request.getCategoryId() != null && categoryRepository.existsById(request.getCategoryId())) {
-            return productRepository.findAllByCategory_Id(request.getCategoryId()).stream().map(
-                product -> new ProductResponse(
-                    product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getStock()
-                )
-            ).toList();
-        }
-
-        if (request.getPriseTo() >= 0 || request.getPriseFrom() >= 0) {
+        if (request.getPriseFrom() != null && request.getPriseTo() != null) {
             return productRepository.findAllByPriceBetween(
-                request.getPriseFrom(), request.getPriseTo()
-            ).stream().map(
-                product -> new ProductResponse(
-                    product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getStock()
+                    request.getPriseFrom(),
+                    request.getPriseTo()
                 )
-            ).toList();
+                .stream()
+                .map(this::toProductResponse)
+                .toList();
         }
 
-        if (request.getQ() != null) {
+        if (request.getQ() != null && !request.getQ().isBlank()) {
             List<Product> findByName = productRepository.findAllByNameContains(request.getQ());
             List<Product> findByDescription = productRepository.findAllByDescriptionContains(request.getQ());
+
             Set<Product> all = new HashSet<>();
             all.addAll(findByName);
             all.addAll(findByDescription);
 
             return all.stream()
-                .map(product -> new ProductResponse(
-                    product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getStock()
-                ))
+                .map(this::toProductResponse)
                 .toList();
         }
 
-        // 만일 조건이 없는경우 전체 출력
-        return productRepository.findAll().stream().map(
-            product -> new ProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getStock()
-            )
-        ).toList();
+        return productRepository.findAll()
+            .stream()
+            .map(this::toProductResponse)
+            .toList();
     }
 
     @Override
     public ProductResponse get(Long id) {
-        if  (id == null) {
+        if (id == null) {
             return null;
         }
+
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
             return null;
         }
+
+        return toProductResponse(product);
+    }
+
+    @Override
+    @Transactional
+    public Boolean update(Long id, ProductUpdateRequest request) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            return false;
+        }
+
+        Category category = product.getCategory();
+        if (request.getCategoryId() != null) {
+            Category newCategory = categoryRepository.findById(request.getCategoryId()).orElse(null);
+            if (newCategory == null) {
+                return false;
+            }
+            category = newCategory;
+        }
+
+        User user = product.getUser();
+        product.update(request, category, user);
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean delete(Long id, Long userId) {
+        // 1. Product 조회
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            return false;
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return false;
+        }
+
+        if (!product.getUser().getId().equals(userId)) {
+            return false;
+        }
+
+        product.getCategory().removeProduct(product);
+        product.getUser().removeProduct(product);
+        productRepository.delete(product);
+
+        return true;
+    }
+
+    private ProductResponse toProductResponse(Product product) {
         return new ProductResponse(
             product.getId(),
             product.getName(),
@@ -146,47 +175,4 @@ public class ProductServiceImpl implements ProductService {
             product.getStock()
         );
     }
-
-    @Override
-    @Transactional
-    public Boolean update(Long id, ProductUpdateRequest request) {
-        if (request.getCategoryId() != null && !categoryRepository.existsById(request.getCategoryId())) {
-            return false;
-        }
-
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            return false;
-        }
-
-        Category category = product.getCategory();
-        User user = product.getUser();
-
-        if (request.getCategoryId() != null && categoryRepository.existsById(request.getCategoryId())) {
-            category = categoryRepository.findById(request.getCategoryId()).orElse(null);
-        }
-
-        product.update(request, category, user);
-        return true;
-    }
-
-    @Override
-    @Transactional
-    public Boolean delete(Long id, Long userId) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            return false;
-        }
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null || !product.getUser().getId().equals(userId)) {
-            return false;
-        }
-        // CASCADE 필요
-        product.getCategory().removeProduct(product);
-        product.getUser().removeProduct(product);
-        productRepository.delete(product);
-        return true;
-    }
-
-
 }
