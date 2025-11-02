@@ -1,0 +1,43 @@
+package com.sparta.project1.domain.product.repository;
+
+import com.sparta.project1.domain.category.domain.Category;
+import com.sparta.project1.domain.product.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    @Query("""
+                select p from Product p where (1 = 1) and
+                ((
+                    :name is not null
+                    and p.name like concat('%', :name, '%')
+                ) or (
+                    :minPrice is not null and :maxPrice is null
+                    and p.price >= :minPrice
+                ) or (
+                    :maxPrice is not null and :minPrice is null
+                    and p.price <= :maxPrice
+                ) or (
+                    :minPrice is not null and :maxPrice is not null
+                    and p.price >= :minPrice
+                    and p.price <= :maxPrice
+                ) or (
+                    :category is not null
+                    and p.category.id in :category
+                ))
+            """)
+    Page<Product> findAllByKeywords(@Param("name") String name,
+                                    @Param("minPrice") Long minPrice,
+                                    @Param("maxPrice") Long maxPrice,
+                                    @Param("category") List<Long> category,
+                                    Pageable pageable);
+
+    @Query("select p from Product p where p.id in :productIds")
+    List<Product> findAllById(@Param("productIds") List<Long> productIds);
+}
