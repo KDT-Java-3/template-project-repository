@@ -63,12 +63,11 @@ public class OrderController {
 
     @Operation(summary = "주문 상태 변경", description = "주문의 상태를 변경합니다.")
     @PatchMapping("/{id}/status")
-    public ResponseEntity<OrderResponse> updateOrderStatus(
+    public ResponseEntity<Void> updateOrderStatus(
             @PathVariable Long id,
             @RequestParam OrderStatus status) {
-        OrderDto orderDto = orderService.updateOrderStatus(id, status);
-        OrderResponse response = OrderResponse.from(orderDto);
-        return ResponseEntity.ok(response);
+        orderService.updateOrderStatus(id, status);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "주문 취소", description = "주문을 취소합니다. (PENDING 상태만 가능)")

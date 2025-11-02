@@ -63,36 +63,40 @@ public class OrderService {
     }
 
     public OrderDto getOrder(Long id) {
-        Order order = orderRepository.findById(id)
+        // N+1 해결: OrderItems와 Product를 함께 조회
+        Order order = orderRepository.findByIdWithItemsAndProducts(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
         return OrderDto.from(order);
     }
 
     public List<OrderDto> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUser_Id(userId).stream()
+        // N+1 해결: OrderItems와 Product를 함께 조회
+        return orderRepository.findByUserIdWithItemsAndProducts(userId).stream()
                 .map(OrderDto::from)
                 .collect(Collectors.toList());
     }
 
     public List<OrderDto> getOrdersByUserIdAndStatus(Long userId, OrderStatus status) {
-        return orderRepository.findByUser_IdAndStatus(userId, status).stream()
+        // N+1 해결: OrderItems와 Product를 함께 조회
+        return orderRepository.findByUserIdAndStatusWithItemsAndProducts(userId, status).stream()
                 .map(OrderDto::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public OrderDto updateOrderStatus(Long id, OrderStatus status) {
+    public void updateOrderStatus(Long id, OrderStatus status) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
         order.updateStatus(status);
-        return OrderDto.from(order);
+        return;
     }
 
     @Transactional
     public void cancelOrder(Long id) {
-        Order order = orderRepository.findById(id)
+        // N+1 해결: OrderItems와 Product를 함께 조회
+        Order order = orderRepository.findByIdWithItemsAndProducts(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
 
