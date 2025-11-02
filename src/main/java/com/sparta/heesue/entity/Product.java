@@ -35,6 +35,17 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    public void decreaseStock(int quantity) {
+        if (this.stockQuantity < quantity) {
+            throw new IllegalStateException("재고가 부족합니다.");
+        }
+        this.stockQuantity -= quantity;
+    }
+
+    public void increaseStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
