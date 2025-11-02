@@ -1,4 +1,4 @@
-package com.sparta.commerce.repository;
+package com.sparta.commerce.domain.user.repository;
 
 import com.sparta.commerce.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
