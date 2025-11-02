@@ -7,10 +7,7 @@ import com.sparta.week01project.domain.product.dto.ProductDto;
 import com.sparta.week01project.domain.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +21,10 @@ public class ProductController {
     public ProductResponse saveProduct(@Valid @RequestBody ProductCreateRequest request) {
         ProductDto product = productService.createProduct(productWebMapper.toProductDto(request));
         return productWebMapper.toProductResponse(product);
+    }
+
+    @GetMapping("/{id}")
+    public ProductResponse getProductById(@PathVariable Long id) {
+        return null;
     }
 }
