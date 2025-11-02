@@ -2,18 +2,22 @@ package com.spartaecommerce.order.presentation.controller;
 
 import com.spartaecommerce.common.domain.CommonResponse;
 import com.spartaecommerce.common.domain.IdResponse;
+import com.spartaecommerce.common.domain.PageResponse;
 import com.spartaecommerce.order.application.OrderService;
+import com.spartaecommerce.order.application.dto.OrderInfo;
 import com.spartaecommerce.order.domain.command.OrderCreateCommand;
+import com.spartaecommerce.order.domain.entity.Order;
+import com.spartaecommerce.order.domain.query.OrderSearchQuery;
 import com.spartaecommerce.order.presentation.controller.dto.request.OrderCreateRequest;
+import com.spartaecommerce.order.presentation.controller.dto.request.OrderSearchRequest;
+import com.spartaecommerce.order.presentation.controller.dto.response.OrderResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -33,5 +37,18 @@ public class OrderController {
         return ResponseEntity
             .created(URI.create("/api/v1/orders/" + orderId))
             .body(CommonResponse.create(orderId));
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<CommonResponse<PageResponse<OrderResponse>>> getOrder(
+        OrderSearchRequest searchRequest
+    ) {
+        OrderSearchQuery searchQuery = searchRequest.toQuery();
+        List<OrderInfo> orders = orderService.search(searchQuery);
+        List<OrderResponse> orderResponses = orders.stream()
+            .map(OrderResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(CommonResponse.success(PageResponse.of(orderResponses)));
     }
 }

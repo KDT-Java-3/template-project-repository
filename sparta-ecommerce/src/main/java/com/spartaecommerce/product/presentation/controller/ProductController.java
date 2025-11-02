@@ -56,7 +56,6 @@ public class ProductController {
         ProductSearchRequest searchRequest
     ) {
         ProductSearchQuery searchQuery = searchRequest.toQuery();
-
         List<Product> products = productService.search(searchQuery);
         List<ProductResponse> response = products.stream()
             .map(ProductResponse::from)

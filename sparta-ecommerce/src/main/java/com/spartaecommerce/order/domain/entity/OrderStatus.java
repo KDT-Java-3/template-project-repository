@@ -1,5 +1,5 @@
 package com.spartaecommerce.order.domain.entity;
 
 public enum OrderStatus {
-    PENDING, COMPLETED, CANCELED, ORDERED
+    PENDING, COMPLETED, CANCELED
 }

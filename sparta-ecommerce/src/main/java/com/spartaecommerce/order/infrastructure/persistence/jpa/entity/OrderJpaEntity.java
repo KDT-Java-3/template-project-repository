@@ -1,14 +1,11 @@
 package com.spartaecommerce.order.infrastructure.persistence.jpa.entity;
 
 import com.spartaecommerce.order.domain.entity.Order;
+import com.spartaecommerce.order.domain.entity.OrderItem;
 import com.spartaecommerce.order.domain.entity.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderJpaEntity {
@@ -26,11 +24,7 @@ public class OrderJpaEntity {
 
     private Long userId;
 
-    private LocalDateTime orderedAt;
-
     private OrderStatus status;
-
-    private BigDecimal totalAmount;
 
     private String shippingAddress;
 
@@ -42,7 +36,7 @@ public class OrderJpaEntity {
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "order_id")  // OrderItem 테이블의 FK
+    @JoinColumn(name = "order_id")
     private List<OrderItemJpaEntity> orderItems = new ArrayList<>();
 
     public static OrderJpaEntity from(Order order) {
@@ -50,16 +44,30 @@ public class OrderJpaEntity {
             .map(OrderItemJpaEntity::from)
             .toList();
 
-        return new OrderJpaEntity(
-            order.getOrderId(),
-            order.getUserId(),
-            order.getOrderedAt(),
-            order.getStatus(),
-            order.getTotalAmount().amount(),
-            order.getShippingAddress(),
-            order.getCreatedAt(),
-            order.getUpdatedAt(),
-            orderItemJpaEntities
-        );
+        return OrderJpaEntity.builder()
+            .orderId(order.getOrderId())
+            .userId(order.getUserId())
+            .status(order.getStatus())
+            .shippingAddress(order.getShippingAddress())
+            .createdAt(order.getCreatedAt())
+            .updatedAt(order.getUpdatedAt())
+            .orderItems(orderItemJpaEntities)
+            .build();
+    }
+
+    public Order toDomain() {
+        List<OrderItem> orderItemList = this.orderItems.stream()
+            .map(OrderItemJpaEntity::toDomain)
+            .toList();
+
+        return Order.builder()
+            .orderId(this.orderId)
+            .userId(this.userId)
+            .status(this.status)
+            .orderItems(orderItemList)
+            .shippingAddress(this.shippingAddress)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
+            .build();
     }
 }
