@@ -1,6 +1,5 @@
-package com.sparta.project.domain.category.entity;
+package com.sparta.project.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Table
@@ -21,19 +21,27 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column(nullable = false)
     private String name;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Category parent;
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    private Integer stock;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -44,12 +52,17 @@ public class Category {
     LocalDateTime updatedAt;
 
     @Builder
-    public Category(
+    public Product(
+            Category category,
             String name,
-            Category parent
+            String description,
+            BigDecimal price,
+            Integer stock
     ) {
+        this.category = category;
         this.name = name;
-        this.parent = parent;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
     }
-
 }

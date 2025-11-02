@@ -1,6 +1,5 @@
-package com.sparta.project.domain.user.entity;
+package com.sparta.project.entity;
 
-import com.sparta.project.domain.purcharse.entity.Purchase;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

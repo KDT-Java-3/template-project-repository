@@ -1,8 +1,7 @@
-package com.sparta.project.domain.purcharse.entity;
+package com.sparta.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.project.common.enums.PurchaseStatus;
-import com.sparta.project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
