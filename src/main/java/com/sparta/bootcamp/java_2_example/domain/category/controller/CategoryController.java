@@ -1,10 +1,22 @@
 package com.sparta.bootcamp.java_2_example.domain.category.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.bootcamp.java_2_example.domain.category.dto.request.RequestCreateCategory;
+import com.sparta.bootcamp.java_2_example.domain.category.dto.request.RequestUpdateCategory;
+import com.sparta.bootcamp.java_2_example.domain.category.dto.response.ResponseCategory;
+import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCategory;
 import com.sparta.bootcamp.java_2_example.domain.category.service.CategoryCommandService;
 import com.sparta.bootcamp.java_2_example.domain.category.service.CategoryQueryService;
-import com.sparta.bootcamp.java_2_example.domain.category.service.impl.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +29,50 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api/v1/categories")
 public class CategoryController {
 
 	private final CategoryQueryService categoryQueryService;
 	private final CategoryCommandService categoryCommandService;
+
+
+	@PostMapping
+	public ResponseEntity<ResponseCategory> createCategory(
+
+		@RequestBody
+		RequestCreateCategory requestCreate
+
+	) {
+
+		return ResponseEntity.ok(null);
+	}
+
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<ResponseCategory> updateCategory(
+
+		@PathVariable
+		Long id,
+
+		@RequestBody
+		RequestUpdateCategory requestUpdate
+
+	) {
+
+		return ResponseEntity.ok(null);
+	}
+
+
+	@GetMapping
+	public ResponseEntity<Page<ResponseCategory>> getCategories(
+
+		@ModelAttribute
+		SearchCategory search
+
+	) {
+
+		return ResponseEntity.ok(null);
+	}
+
 
 }
