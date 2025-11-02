@@ -45,7 +45,15 @@ public class ProductService implements ProductQueryService, ProductCommandServic
 
 	@Override
 	public ResponseProduct updateProduct(Long id, RequestUpdateProduct requestUpdate) {
-		return null;
+		Product product = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+		Category category = categoryRepository.findById(requestUpdate.getCategoryId())
+			.orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+		product.update(category, requestUpdate);
+
+		return ResponseProduct.of(product);
 	}
 
 	@Override

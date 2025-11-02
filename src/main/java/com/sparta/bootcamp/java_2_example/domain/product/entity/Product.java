@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.sparta.bootcamp.java_2_example.domain.category.entity.Category;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestCreateProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestUpdateProduct;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -75,6 +76,14 @@ public class Product {
 			.price(requestCreate.getPrice())
 			.stock(requestCreate.getStock())
 			.build();
+	}
+
+	public void update(Category category, RequestUpdateProduct product) {
+		this.category = category;
+		this.name = product.getProductName();
+		this.description = product.getDescription();
+		this.price = product.getPrice();
+		this.stock = product.getStock();
 	}
 
 }
