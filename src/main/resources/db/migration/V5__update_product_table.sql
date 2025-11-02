@@ -1,0 +1,1 @@
+ALTER TABLE product ADD user_id BIGINT NOT NULL;

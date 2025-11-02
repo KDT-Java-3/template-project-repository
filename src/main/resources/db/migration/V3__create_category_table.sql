@@ -1,0 +1,10 @@
+-- V3__create_category_table.sql (수정본)
+
+CREATE TABLE category (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- ✅ AUTO_INCREMENT 추가
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    parent_id BIGINT DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

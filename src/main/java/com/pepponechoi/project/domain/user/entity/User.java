@@ -1,0 +1,102 @@
+package com.pepponechoi.project.domain.user.entity;
+
+import com.pepponechoi.project.domain.order.entity.Order;
+import com.pepponechoi.project.domain.product.entity.Product;
+import com.pepponechoi.project.domain.refund.entity.Refund;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
+
+@Entity
+@Getter
+@DynamicInsert
+@DynamicUpdate
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Refund> refunds = new ArrayList<>();
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+        product.setUser(this);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.setUser(null);
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        order.setUser(this);
+    }
+
+    public void removeOrder(Order order) {
+        this.orders.remove(order);
+        order.setUser(null);
+    }
+
+    public void addRefund(Refund refund) {
+        this.refunds.add(refund);
+        refund.setUser(this);
+    }
+
+    public void removeRefund(Refund refund) {
+        this.refunds.remove(refund);
+        refund.setUser(null);
+    }
+
+    @Builder
+    public User(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+
+}
