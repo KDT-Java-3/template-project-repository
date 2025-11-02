@@ -48,4 +48,8 @@ public class Category {
         this.name = name;
         this.parent = parent;
     }
+
+    public void update(String name, String description) {
+        if (name != null && !name.isBlank()) this.name = name;
+    }
 }
