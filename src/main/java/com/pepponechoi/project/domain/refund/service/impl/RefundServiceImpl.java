@@ -59,8 +59,8 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     @Transactional
-    public Boolean update(RefundUpdateRequest request) {
-        Refund refund = refundRepository.findById(request.getOrderId()).orElse(null);
+    public Boolean update(Long id, RefundUpdateRequest request) {
+        Refund refund = refundRepository.findById(id).orElse(null);
         if (refund == null) {
             return false;
         }

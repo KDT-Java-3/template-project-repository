@@ -75,8 +75,8 @@ public class Refund {
     public void approve() {
         if (this.status == RefundStatus.PENDING) {
             this.status = RefundStatus.APPROVED;
+            this.order.getProduct().addStock(this.order.getQuantity());
         }
-        this.order.getProduct().addStock(this.order.getQuantity());
     }
 
     // 비즈니스 메서드: 환불 거절

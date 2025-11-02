@@ -5,15 +5,16 @@ import com.pepponechoi.project.domain.refund.dto.request.RefundReadRequest;
 import com.pepponechoi.project.domain.refund.dto.request.RefundUpdateRequest;
 import com.pepponechoi.project.domain.refund.dto.response.RefundResponse;
 import com.pepponechoi.project.domain.refund.service.RefundService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,11 +36,11 @@ public class RefundController {
         return ResponseEntity.ok(responses);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Boolean> updateRefund(
-        @RequestBody RefundUpdateRequest request
-    ) {
-        Boolean response = refundService.update(request);
+        @RequestBody RefundUpdateRequest request,
+        @PathVariable Long id) {
+        Boolean response = refundService.update(id, request);
         return ResponseEntity.ok(response);
     }
 }

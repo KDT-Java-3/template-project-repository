@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class RefundUpdateRequest {
-    @NotBlank(message = "주문 ID는 필수입니다.")
-    private Long orderId;
     @NotBlank(message = "환불 요청 승인여부는 필수입니다.")
     private RefundStatus status;
 }

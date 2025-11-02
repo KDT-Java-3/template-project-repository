@@ -9,5 +9,5 @@ import java.util.List;
 public interface RefundService {
     RefundResponse createRefund(RefundCreateRequest request);
     List<RefundResponse> getRefundsByUser(RefundReadRequest user);
-    Boolean update(RefundUpdateRequest request);
+    Boolean update(Long id, RefundUpdateRequest request);
 }

@@ -4,8 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RefundReadRequest {
     @NotBlank(message = "유저의 ID는 필수입니다.")
