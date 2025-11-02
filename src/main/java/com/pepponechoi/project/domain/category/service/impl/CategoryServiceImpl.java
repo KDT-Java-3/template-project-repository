@@ -6,6 +6,8 @@ import com.pepponechoi.project.domain.category.dto.response.CategoryResponse;
 import com.pepponechoi.project.domain.category.entity.Category;
 import com.pepponechoi.project.domain.category.repository.CategoryRepository;
 import com.pepponechoi.project.domain.category.service.CategoryService;
+import com.pepponechoi.project.domain.product.dto.response.ProductResponse;
+import com.pepponechoi.project.domain.product.entity.Product;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,14 +29,38 @@ public class CategoryServiceImpl implements CategoryService {
             .build();
         categoryRepository.save(category);
 
-        return new CategoryResponse(category.getId(), category.getName(), category.getDescription());
+        return new CategoryResponse(
+            category.getId(),
+            category.getName(),
+            category.getDescription(),
+            category.getProducts().stream().map(
+            (Product p) -> new
+                ProductResponse(
+                    p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getPrice(),
+                p.getStock()))
+                .toList()
+        );
     }
 
     @Override
     public List<CategoryResponse> getAll() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map((Category c) -> new CategoryResponse(c.getId(),
-            c.getName(), c.getDescription())).toList();
+        return categories.stream().map((Category c) -> new CategoryResponse(
+            c.getId(),
+            c.getName(),
+            c.getDescription(),
+            c.getProducts().stream().map(
+                    (Product p) -> new
+                        ProductResponse(
+                        p.getId(),
+                        p.getName(),
+                        p.getDescription(),
+                        p.getPrice(),
+                        p.getStock())).toList()
+            )).toList();
     }
 
     @Override
@@ -44,7 +70,18 @@ public class CategoryServiceImpl implements CategoryService {
             // 원래는 예외를 던져야 함.
             return null;
         }
-        return new CategoryResponse(category.getId(), category.getName(), category.getDescription());
+        return new CategoryResponse(category.getId(),
+            category.getName(),
+            category.getDescription(),
+            category.getProducts().stream().map(
+                    (Product p) -> new
+                        ProductResponse(
+                        p.getId(),
+                        p.getName(),
+                        p.getDescription(),
+                        p.getPrice(),
+                        p.getStock()))
+                .toList());
     }
 
     @Override
@@ -53,6 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id).orElse(null);
         if (category == null) {
             // 원래는 예외를 던져야 함.
+            return;
         }
         category.update(request.getName(), request.getDescription());
     }
@@ -63,6 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id).orElse(null);
         if (category == null) {
             // 원래는 예외를 던져야 함
+            return;
         }
         categoryRepository.delete(category);
     }
