@@ -1,6 +1,7 @@
 package com.sparta.demo.service;
 
 import com.sparta.demo.domain.order.Order;
+import com.sparta.demo.domain.order.OrderStatus;
 import com.sparta.demo.domain.refund.Refund;
 import com.sparta.demo.domain.refund.RefundStatus;
 import com.sparta.demo.domain.user.User;
@@ -29,13 +30,20 @@ public class RefundService {
 
     @Transactional
     public RefundDto createRefund(RefundCreateDto dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다. ID: " + dto.getUserId()));
+
         Order order = orderRepository.findById(dto.getOrderId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + dto.getOrderId()));
 
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다. ID: " + dto.getUserId()));
+        // COMPLETED 상태의 주문만 환불 요청 가능
+        if (order.getStatus() != OrderStatus.COMPLETED) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "COMPLETED 상태의 주문만 환불 요청이 가능합니다. 현재 상태: " + order.getStatus());
+        }
 
         Refund refund = Refund.create(order, user, dto.getReason());
         Refund savedRefund = refundRepository.save(refund);

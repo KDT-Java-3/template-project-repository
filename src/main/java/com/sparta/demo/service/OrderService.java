@@ -96,6 +96,13 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
 
+        // PENDING 상태의 주문만 취소 가능
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "PENDING 상태의 주문만 취소할 수 있습니다. 현재 상태: " + order.getStatus());
+        }
+
         try {
             order.cancel();
             order.getOrderItems().forEach(orderItem -> {

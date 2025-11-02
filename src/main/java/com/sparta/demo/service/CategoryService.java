@@ -23,7 +23,19 @@ public class CategoryService {
 
     @Transactional
     public CategoryDto createCategory(CategoryCreateDto dto) {
-        Category category = Category.create(dto.getName(), dto.getDescription());
+        Category category;
+
+        if (dto.getParentId() != null) {
+            // 부모 카테고리 ID가 있는 경우 - 하위 카테고리 생성
+            Category parent = categoryRepository.findById(dto.getParentId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "부모 카테고리를 찾을 수 없습니다. ID: " + dto.getParentId()));
+            category = Category.createWithParent(dto.getName(), dto.getDescription(), parent);
+        } else {
+            // 부모 카테고리 ID가 없는 경우 - 최상위 카테고리 생성
+            category = Category.create(dto.getName(), dto.getDescription());
+        }
+
         Category savedCategory = categoryRepository.save(category);
         return CategoryDto.from(savedCategory);
     }

@@ -15,8 +15,11 @@ public class CategoryRequest {
 
     private String description;
 
-    public CategoryRequest(String name, String description) {
+    private Long parentId;  // 부모 카테고리 ID (선택사항, null이면 최상위 카테고리)
+
+    public CategoryRequest(String name, String description, Long parentId) {
         this.name = name;
         this.description = description;
+        this.parentId = parentId;
     }
 }

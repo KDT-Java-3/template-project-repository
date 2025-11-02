@@ -11,11 +11,13 @@ import lombok.Getter;
 public class CategoryCreateDto {
     private String name;
     private String description;
+    private Long parentId;  // 부모 카테고리 ID (선택사항)
 
     public static CategoryCreateDto from(CategoryRequest request) {
         return new CategoryCreateDto(
                 request.getName(),
-                request.getDescription()
+                request.getDescription(),
+                request.getParentId()
         );
     }
 }
