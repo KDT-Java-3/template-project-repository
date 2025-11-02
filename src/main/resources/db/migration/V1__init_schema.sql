@@ -1,10 +1,10 @@
 -- Users Table
-CREATE TABLE users (
+CREATE TABLE user (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     phone VARCHAR(20),
-    created_at TIMESTAP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -33,7 +33,7 @@ CREATE TABLE product (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Orders Table
-CREATE TABLE order (
+CREATE TABLE `order` (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'pending',
@@ -41,7 +41,7 @@ CREATE TABLE order (
     shipping_address TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
     INDEX idx_user_id (user_id),
     INDEX idx_status (status),
     INDEX idx_created_at (created_at)
@@ -55,7 +55,7 @@ CREATE TABLE order_item (
     quantity INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES `order`(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(id),
     INDEX idx_order_id (order_id),
     INDEX idx_product_id (product_id)
@@ -70,8 +70,8 @@ CREATE TABLE refund (
     status VARCHAR(20) NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (order_id) REFERENCES order(id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (order_id) REFERENCES `order`(id),
     INDEX idx_user_id (user_id),
     INDEX idx_order_id (order_id),
     INDEX idx_status (status)
