@@ -48,6 +48,17 @@ public class Order {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    public void cancel() {
+        if (this.status != OrderStatus.PENDING) {
+            throw new IllegalStateException("주문 취소는 PENDING 상태에서만 가능합니다.");
+        }
+        this.status = OrderStatus.CANCELED;
+        
+        // 재고 복원
+        Product product = this.product;
+        product.setStock(product.getStock() + this.quantity);
+    }
+
     public enum OrderStatus {
         PENDING, COMPLETED, CANCELED
     }

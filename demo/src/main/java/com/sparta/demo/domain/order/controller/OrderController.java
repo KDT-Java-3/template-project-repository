@@ -34,4 +34,10 @@ public class OrderController {
         return orderService.updateOrderStatus(request);
     }
 
+    // 취소
+    @DeleteMapping("/{id}")
+    public OrderResponse cancelOrder(@PathVariable Long id) throws Exception {
+        return orderService.cancelOrder(id);
+    }
+
 }

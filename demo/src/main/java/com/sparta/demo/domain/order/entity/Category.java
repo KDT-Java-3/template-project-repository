@@ -30,8 +30,7 @@ public class Category {
     @Column(nullable = true)
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> products;
 
     @Column(nullable = false, updatable = false)
