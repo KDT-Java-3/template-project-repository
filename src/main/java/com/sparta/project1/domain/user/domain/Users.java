@@ -18,7 +18,7 @@ public class Users extends BaseEntity {
     private Long id;
 
     @Column(length = 50, nullable = false)
-    private String name;
+    private String username;
 
     @Column(length = 50)
     private String nickname;
@@ -29,7 +29,7 @@ public class Users extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
-    @Column(nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
 
@@ -45,8 +45,8 @@ public class Users extends BaseEntity {
         return new Users(name, nickname, email, UserRole.USER, passwordHash);
     }
 
-    Users(String name, String nickname, String email, UserRole role, String passwordHash) {
-        this.name = name;
+    Users(String username, String nickname, String email, UserRole role, String passwordHash) {
+        this.username = username;
         this.nickname = nickname;
         this.email = email;
         this.role = role;

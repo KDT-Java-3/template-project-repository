@@ -1,0 +1,1 @@
+ALTER TABLE category MODIFY COLUMN parent_id BIGINT NULL;
