@@ -5,6 +5,7 @@ import com.pepponechoi.project.domain.order.dto.request.OrderCreateRequest;
 import com.pepponechoi.project.domain.order.dto.request.OrderDeleteRequest;
 import com.pepponechoi.project.domain.order.dto.response.OrderResponse;
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 
 public interface OrderService {
     OrderResponse create(OrderCreateRequest request);

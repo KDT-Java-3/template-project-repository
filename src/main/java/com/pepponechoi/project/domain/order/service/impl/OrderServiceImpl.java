@@ -59,11 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> findAllByUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            return null;
-        }
 
-        List<Order> orders = orderRepository.findAllByUser_Id(userId);
+        List<Order> orders = orderRepository.findAllByUser_IdFetch(userId);
         if (orders.isEmpty()) {
             return null;
         }

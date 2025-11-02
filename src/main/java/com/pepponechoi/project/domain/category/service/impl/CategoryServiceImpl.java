@@ -47,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponse> getAll() {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAllFetch();
         return categories.stream().map((Category c) -> new CategoryResponse(
             c.getId(),
             c.getName(),
@@ -65,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse getById(Long id) {
-        Category category = categoryRepository.findById(id).orElse(null);
+        Category category = categoryRepository.findByIdFetch(id).orElse(null);
         if (category == null) {
             // 원래는 예외를 던져야 함.
             return null;

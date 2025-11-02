@@ -66,9 +66,6 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (request.getCategoryId() != null) {
-            if (!categoryRepository.existsById(request.getCategoryId())) {
-                return null;
-            }
             return productRepository.findAllByCategory_Id(request.getCategoryId())
                 .stream()
                 .map(this::toProductResponse)
