@@ -8,10 +8,5 @@ import java.util.List;
 
 public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, Long> {
 
-    List<ProductJpaEntity> findByCategoryIdAndPriceBetweenAndNameContaining(
-        Long categoryId,
-        BigDecimal minPrice,
-        BigDecimal maxPrice,
-        String keyword
-    );
+    List<ProductJpaEntity> findAllByIdIn(List<Long> productIds);
 }

@@ -70,22 +70,15 @@ public class Order {
         this.status = newStatus;
     }
 
-    public void complete() {
-        if (this.status != OrderStatus.PENDING) {
-            throw new IllegalStateException(
-                "PENDING 상태의 주문만 완료할 수 있습니다. 현재 상태: " + this.status
+    public void cancel() {
+        if (this.status == OrderStatus.CANCELED) {
+            throw new BusinessException(
+                ErrorCode.ORDER_INVALID_STATE_TRANSITION,
+                "This order has already been canceled."
             );
         }
-        this.status = OrderStatus.COMPLETED;
-    }
 
-    public void cancel() {
-        if (this.status == OrderStatus.COMPLETED) {
-            throw new IllegalStateException("완료된 주문은 취소할 수 없습니다.");
-        }
-        if (this.status == OrderStatus.CANCELED) {
-            throw new IllegalStateException("이미 취소된 주문입니다.");
-        }
+        validateStatusTransition(this.status, OrderStatus.CANCELED);
         this.status = OrderStatus.CANCELED;
     }
 

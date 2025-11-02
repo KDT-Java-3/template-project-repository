@@ -11,6 +11,7 @@ public interface ProductRepository {
 
     Product getById(Long productId);
 
-    List<Product> search(ProductSearchQuery searchQuery);
+    List<Product> findAllByIdIn(List<Long> productIds);
 
+    List<Product> search(ProductSearchQuery searchQuery);
 }

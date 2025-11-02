@@ -54,7 +54,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orders/{orderId}")
-    public ResponseEntity<CommonResponse<Void>> updateOrderStatus(
+    public ResponseEntity<Void> updateOrderStatus(
         @PathVariable Long orderId,
         @Valid @RequestBody OrderStatusUpdateRequest updateRequest
     ) {
@@ -62,6 +62,14 @@ public class OrderController {
 
         orderService.updateOrderStatus(updateCommand);
 
-        return ResponseEntity.ok(CommonResponse.success(null));
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @PostMapping("/orders/{orderId}/cancel")
+    public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
+        orderService.cancel(orderId);
+        return ResponseEntity.noContent()
+            .build();
     }
 }

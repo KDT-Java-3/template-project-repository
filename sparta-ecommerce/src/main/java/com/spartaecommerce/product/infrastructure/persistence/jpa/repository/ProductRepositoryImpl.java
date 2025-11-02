@@ -42,6 +42,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> findAllByIdIn(List<Long> productIds) {
+        return productJpaRepository.findAllByIdIn(productIds).stream()
+            .map(ProductJpaEntity::toDomain)
+            .toList();
+    }
+
+    @Override
     public List<Product> search(ProductSearchQuery searchQuery) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ProductJpaEntity> criteriaQuery = criteriaBuilder.createQuery(ProductJpaEntity.class);

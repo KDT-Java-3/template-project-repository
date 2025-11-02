@@ -78,4 +78,15 @@ public class Product {
 
         this.stock -= quantity;
     }
+
+    public void restoreQuantity(Integer quantity) {
+        if (quantity == null || quantity <= 0) {
+            throw new BusinessException(
+                ErrorCode.INVALID_REQUEST,
+                "Restore quantity must be greater than 0"
+            );
+        }
+
+        this.stock += quantity;
+    }
 }
