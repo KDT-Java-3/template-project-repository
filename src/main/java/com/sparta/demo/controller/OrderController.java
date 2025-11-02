@@ -1,0 +1,79 @@
+package com.sparta.demo.controller;
+
+import com.sparta.demo.domain.order.OrderStatus;
+import com.sparta.demo.dto.order.*;
+import com.sparta.demo.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Tag(name = "Order", description = "주문 관리 API")
+@RestController
+@RequestMapping("/api/orders")
+@RequiredArgsConstructor
+public class OrderController {
+
+    private final OrderService orderService;
+
+    @Operation(summary = "주문 생성", description = "새로운 주문을 생성합니다.")
+    @PostMapping
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest request) {
+        OrderCreateDto dto = OrderCreateDto.from(request);
+        OrderDto orderDto = orderService.createOrder(dto);
+        OrderResponse response = OrderResponse.from(orderDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "주문 단건 조회", description = "ID로 주문을 조회합니다.")
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable Long id) {
+        OrderDto orderDto = orderService.getOrder(id);
+        OrderResponse response = OrderResponse.from(orderDto);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "사용자별 주문 조회", description = "특정 사용자의 모든 주문을 조회합니다.")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable Long userId) {
+        List<OrderDto> orderDtos = orderService.getOrdersByUserId(userId);
+        List<OrderResponse> responses = orderDtos.stream()
+                .map(OrderResponse::from)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
+
+    @Operation(summary = "사용자별 주문 상태 조회", description = "특정 사용자의 특정 상태 주문을 조회합니다.")
+    @GetMapping("/user/{userId}/status/{status}")
+    public ResponseEntity<List<OrderResponse>> getOrdersByUserIdAndStatus(
+            @PathVariable Long userId,
+            @PathVariable OrderStatus status) {
+        List<OrderDto> orderDtos = orderService.getOrdersByUserIdAndStatus(userId, status);
+        List<OrderResponse> responses = orderDtos.stream()
+                .map(OrderResponse::from)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
+
+    @Operation(summary = "주문 상태 변경", description = "주문의 상태를 변경합니다.")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> updateOrderStatus(
+            @PathVariable Long id,
+            @RequestParam OrderStatus status) {
+        orderService.updateOrderStatus(id, status);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "주문 취소", description = "주문을 취소합니다. (PENDING 상태만 가능)")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelOrder(@PathVariable Long id) {
+        orderService.cancelOrder(id);
+        return ResponseEntity.noContent().build();
+    }
+}
