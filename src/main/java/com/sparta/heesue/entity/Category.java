@@ -1,4 +1,4 @@
-package com.example.heesue.domain.member.entity;
+package com.sparta.heesue.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
