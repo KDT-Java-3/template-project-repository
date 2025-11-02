@@ -40,6 +40,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(request.getId())
                 .orElseThrow(()-> new Exception("카테고리가 존재하지 않습니다."));
         category.updateValues(request);
+        categoryRepository.save(category);
         return CategoryResponse.buildFromEntity(category);
     }
 
