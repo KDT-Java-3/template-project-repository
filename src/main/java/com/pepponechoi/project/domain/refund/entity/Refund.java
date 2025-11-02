@@ -29,7 +29,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @DynamicInsert
 @DynamicUpdate
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Refund {
 
     @Id
