@@ -1,7 +1,6 @@
 package com.sparta.bootcamp.java_2_example.domain.purchase.dto.response;
 
 import com.sparta.bootcamp.java_2_example.domain.purchase.entity.PurchaseProduct;
-import com.sparta.bootcamp.java_2_example.domain.user.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

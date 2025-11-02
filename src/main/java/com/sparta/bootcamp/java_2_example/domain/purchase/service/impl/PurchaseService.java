@@ -89,8 +89,12 @@ public class PurchaseService implements PurchaseQueryService, PurchaseCommandSer
 	}
 
 	@Override
-	public List<ResponsePurchase> getPurchaseByUser(Long userId) {
-		return List.of();
+	public List<ResponsePurchase> getPurchaseByUser(String email) {
+		return purchaseProductRepository.findAllByUserEmail(email)
+			.orElseThrow(() -> new IllegalArgumentException("PurchaseProduct not found"))
+			.stream()
+			.map(ResponsePurchase::of)
+			.toList();
 	}
 
 }

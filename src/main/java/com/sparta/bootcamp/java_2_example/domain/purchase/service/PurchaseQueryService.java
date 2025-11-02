@@ -11,6 +11,6 @@ import com.sparta.bootcamp.java_2_example.domain.purchase.dto.response.ResponseP
  */
 public interface PurchaseQueryService {
 
-	List<ResponsePurchase> getPurchaseByUser(Long userId);
+	List<ResponsePurchase> getPurchaseByUser(String eamil);
 
 }

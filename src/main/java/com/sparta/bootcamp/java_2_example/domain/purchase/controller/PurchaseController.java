@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.bootcamp.java_2_example.common.enums.PurchaseStatus;
@@ -47,14 +46,14 @@ public class PurchaseController {
 		return ResponseEntity.ok(purchaseCommandService.createPurchase(request));
 	}
 
-	@GetMapping("/user/{userId}")
+	@GetMapping("/user/{email}")
 	public ResponseEntity<List<ResponsePurchase>> getPurchaseByUser(
 
 		@PathVariable
-		Long userId
+		String email
 
 	) {
-		return ResponseEntity.ok(purchaseQueryService.getPurchaseByUser(userId));
+		return ResponseEntity.ok(purchaseQueryService.getPurchaseByUser(email));
 	}
 
 	@PatchMapping("/status/{purchaseId}/{status}")
