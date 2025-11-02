@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCategory;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestCreateProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestUpdateProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.response.ResponseProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.dto.search.SearchProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.service.ProductCommandService;
 import com.sparta.bootcamp.java_2_example.domain.product.service.ProductQueryService;
 
@@ -68,7 +68,7 @@ public class ProductController {
 	public ResponseEntity<List<ResponseProduct>> getProducts(
 
 		@ModelAttribute
-		SearchCategory search
+		SearchProduct search
 
 	) {
 

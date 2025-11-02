@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.sparta.bootcamp.java_2_example.domain.category.dto.search.SearchCategory;
 import com.sparta.bootcamp.java_2_example.domain.category.entity.Category;
 import com.sparta.bootcamp.java_2_example.domain.category.repository.CategoryRepository;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestCreateProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.request.RequestUpdateProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.dto.response.ResponseProduct;
+import com.sparta.bootcamp.java_2_example.domain.product.dto.search.SearchProduct;
 import com.sparta.bootcamp.java_2_example.domain.product.entity.Product;
 import com.sparta.bootcamp.java_2_example.domain.product.repository.ProductRepository;
 import com.sparta.bootcamp.java_2_example.domain.product.service.ProductCommandService;
@@ -56,9 +56,12 @@ public class ProductService implements ProductQueryService, ProductCommandServic
 		return ResponseProduct.of(product);
 	}
 
+	// TODO : 검색조건 추가 필요
 	@Override
-	public List<ResponseProduct> getProducts(SearchCategory search) {
-		return List.of();
+	public List<ResponseProduct> getProducts(SearchProduct search) {
+		return productRepository.findAll().stream()
+			.map(ResponseProduct::of)
+			.toList();
 	}
 
 	@Override
