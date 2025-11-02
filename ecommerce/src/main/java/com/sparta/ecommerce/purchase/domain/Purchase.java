@@ -43,17 +43,22 @@ public class Purchase extends BaseEntity {
     private String shippingAddress;
 
     public void changeStatus(PurchaseStatus status, Product product) {
-
-        if(this.status != PurchaseStatus.PENDING && status == PurchaseStatus.PENDING) {
-            throw new IllegalArgumentException("Pending 상태로 변경은 불가능합니다.");
-        }else if((status == PurchaseStatus.COMPLETED || status == PurchaseStatus.CANCELLED) && this.status != PurchaseStatus.PENDING) {
-            throw new IllegalArgumentException("Pending 일때만 상태 변경이 가능합니다.");
-        }
+        // 환불과 주문과의 취소 로직 충돌 발생 하위 조건 주석처리
+//        if(this.status != PurchaseStatus.PENDING && status == PurchaseStatus.PENDING) {
+//            throw new IllegalArgumentException("Pending 상태로 변경은 불가능합니다.");
+//        }else if((status == PurchaseStatus.COMPLETED || status == PurchaseStatus.CANCELLED) && this.status != PurchaseStatus.PENDING) {
+//            throw new IllegalArgumentException("Pending 일때만 상태 변경이 가능합니다.");
+//        }
+        if(this.status == status) throw new IllegalArgumentException("동일한 상태로 변경은 불가능합니다.");
 
         this.status = status;
 
         if(status == PurchaseStatus.CANCELLED) {
             product.increaseStock(this.quantity);
         }
+    }
+
+    public void checkCompleted() {
+        if(status != PurchaseStatus.COMPLETED) throw new IllegalArgumentException("완료 상태인 주문만 환불 요청이 가능합니다.");
     }
 }
