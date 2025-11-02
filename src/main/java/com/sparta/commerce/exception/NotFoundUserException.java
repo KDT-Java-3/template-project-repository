@@ -4,19 +4,19 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class NotFoundProductException extends RuntimeException {
+public class NotFoundUserException extends RuntimeException {
 
     private HttpStatus status;
 
     private String message;
 
-    public NotFoundProductException() {
+    public NotFoundUserException() {
         super();
-        this.message = "존재하지 않는 상품입니다.";
+        this.message = "존재하지 않는 유저입니다.";
         this.status = HttpStatus.NOT_FOUND;
     }
 
-    public NotFoundProductException(String message) {
+    public NotFoundUserException(String message) {
         super(message);
         this.status = HttpStatus.NOT_FOUND;
     }

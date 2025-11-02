@@ -15,30 +15,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
-        log.error("Exception: {}",e.getMessage(),  e);
+        log.error("Exception: {}", e.getMessage(),  e);
 
         ExceptionResponse errorResponse = ExceptionResponse.of(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "서버 내부 오류가 발생했습니다."
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(errorResponse);
-    }
-
-    @ExceptionHandler(NotFoundProductException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFoundProductException(
-            final NotFoundProductException e
-    ) {
-
-        ExceptionResponse errorResponse = ExceptionResponse.of(
-                e.getStatus(),
                 e.getMessage()
         );
 
         return ResponseEntity
-                .status(e.getStatus())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorResponse);
     }
 
@@ -59,6 +44,40 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(NotFoundProductException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundProductException(
+            final NotFoundProductException e
+    ) {
+        return commonCustomResponseEntity(
+                e.getStatus(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler(NotFoundUserException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundUserException(
+            final NotFoundUserException e
+    ) {
+        return commonCustomResponseEntity(
+                e.getStatus(),
+                e.getMessage()
+        );
+    }
+
+    private ResponseEntity<ExceptionResponse> commonCustomResponseEntity(
+            final HttpStatus status,
+            final String message
+    ) {
+        ExceptionResponse errorResponse = ExceptionResponse.of(
+                status,
+                message
+        );
+
+        return ResponseEntity
+                .status(status)
                 .body(errorResponse);
     }
 
