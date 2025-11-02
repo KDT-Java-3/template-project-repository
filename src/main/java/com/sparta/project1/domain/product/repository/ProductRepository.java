@@ -29,10 +29,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     and p.price <= :maxPrice
                 ) or (
                     :category is not null
-                    and p.category in :category
+                    and p.category.id in :category
                 ))
             """)
-    Page<Product> findAllByKeywords(String name, Long minPrice, Long maxPrice, List<Category> category,
+    Page<Product> findAllByKeywords(@Param("name") String name,
+                                    @Param("minPrice") Long minPrice,
+                                    @Param("maxPrice") Long maxPrice,
+                                    @Param("category") List<Long> category,
                                     Pageable pageable);
 
     @Query("select p from Product p where p.id in :productIds")

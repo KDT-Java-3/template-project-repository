@@ -14,24 +14,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CategoryService {
+public class CategoryFindService {
     private final CategoryRepository categoryRepository;
 
-    public void register(CategoryRegisterRequest request) {
-        Category parent = null;
-        if (request.parentId() != null) {
-            parent = categoryRepository.findById(request.parentId())
-                    .orElseThrow(() -> new NoSuchElementException("parent category not found"));
-        }
-
-        Category category = Category.register(request.name(), request.description(), parent);
-
-        categoryRepository.save(category);
+    public Category getById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException("category not found"));
     }
 
-    @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         List<Category> categories = categoryRepository.findAllByFetch();
 
@@ -41,6 +33,10 @@ public class CategoryService {
         }
 
         return categoryTree;
+    }
+
+    public List<Long> findAllByParentId(Long parentId) {
+        return categoryRepository.findAllByParentId(parentId);
     }
 
     public void getCategoryTree(Category category, List<CategoryResponse> categoryResponse) {
@@ -56,13 +52,5 @@ public class CategoryService {
                 }
             }
         }
-    }
-
-    public void updateCategory(Long id, CategoryUpdateRequest request) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("category not found"));
-        category.updateCategory(request.name(), request.description());
-
-        categoryRepository.save(category);
     }
 }

@@ -52,7 +52,8 @@ CREATE TABLE refund
     user_id     BIGINT      NOT NULL,
     status      VARCHAR(50) NOT NULL DEFAULT 'PENDING',
     reason      MEDIUMTEXT  NULL,
-    created_at  DATETIME             DEFAULT CURRENT_TIMESTAMP,
+    created_at  DATETIME                DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     approved_at DATETIME    NULL,
     rejected_at DATETIME    NULL,
     FOREIGN KEY (order_id) REFERENCES orders (id),
@@ -67,6 +68,8 @@ CREATE TABLE product_order
     order_id   BIGINT         NOT NULL,
     quantity   INTEGER        NOT NULL,
     price      DECIMAL(10, 2) NOT NULL,
+    created_at  DATETIME                DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME                DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (order_id) REFERENCES orders (id)
 )

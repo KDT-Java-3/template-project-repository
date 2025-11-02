@@ -16,16 +16,16 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(value = """
                 with recursive cte as (
                     select
-                        id, name, description, parent_id, created_at, updated_at
+                        id
                     from category where id = 1
                     union all
                     select
-                        c.id, c.name, c.description, c.parent_id, c.created_at, c.updated_at
+                        c.id
                     from category c left join cte on cte.id = c.parent_id
                     where c.parent_id = cte.id
                 )
-                select id, name, description, parent_id, created_at, updated_at
+                select id
                 from cte
             """, nativeQuery = true)
-    List<Category> findAllByParentId(@Param("parentId") Long parentId);
+    List<Long> findAllByParentId(@Param("parentId") Long parentId);
 }

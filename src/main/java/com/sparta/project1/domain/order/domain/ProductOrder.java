@@ -3,13 +3,11 @@ package com.sparta.project1.domain.order.domain;
 import com.sparta.project1.domain.BaseEntity;
 import com.sparta.project1.domain.product.domain.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "product_order")

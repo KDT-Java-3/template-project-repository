@@ -3,6 +3,7 @@ package com.sparta.project1.domain.product.service;
 import com.sparta.project1.domain.PageResponse;
 import com.sparta.project1.domain.category.domain.Category;
 import com.sparta.project1.domain.category.repository.CategoryRepository;
+import com.sparta.project1.domain.category.service.CategoryFindService;
 import com.sparta.project1.domain.product.api.dto.ProductRegisterRequest;
 import com.sparta.project1.domain.product.api.dto.ProductResponse;
 import com.sparta.project1.domain.product.domain.Product;
@@ -19,25 +20,17 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductFindService {
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryFindService categoryFindService;
 
-    public void register(ProductRegisterRequest request) {
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new NoSuchElementException("category not found"));
-
-        Product product = Product.register(request.name(), request.price(), request.description(), request.stock(), category);
-        productRepository.save(product);
-    }
-
-    @Transactional(readOnly = true)
     public ProductResponse getProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("product not found"));
@@ -54,14 +47,13 @@ public class ProductService {
         );
     }
 
-    @Transactional(readOnly = true)
     public PageResponse<ProductResponse> getListByKeyword(String name, Long minPrice, Long maxPrice, Long categoryId, int page, int size) {
-        List<Category> category = null;
+        List<Long> categories = new ArrayList<>();
         if (categoryId != null) {
-            category = categoryRepository.findAllByParentId(categoryId);
+            categories = categoryFindService.findAllByParentId(categoryId);
         }
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
-        Page<Product> products = productRepository.findAllByKeywords(name, minPrice, maxPrice, category, pageable);
+        Page<Product> products = productRepository.findAllByKeywords(name, minPrice, maxPrice, categories, pageable);
 
         List<Product> productList = products.getContent();
         List<ProductResponse> contents = productList.stream()
@@ -79,33 +71,13 @@ public class ProductService {
         return PageResponse.of(products, contents);
     }
 
-    public void updateProduct(Long id, ProductRegisterRequest request) {
-        Product product = productRepository.findById(id)
+    public Product getById(Long productId) {
+        return productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("product not found"));
-
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new NoSuchElementException("category not found"));
-
-        product.updateProduct(
-                request.name(),
-                request.price(),
-                request.description(),
-                request.stock(),
-                category
-        );
-
-        productRepository.save(product);
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void minusProductStock(List<ProductOrderInfo> productOrderInfos) {
-        List<Product> products = productOrderInfos.stream()
-                .map(p -> {
-                    Product product = p.product();
-                    product.minusStock(p.quantity());
-                    return product;
-                })
-                .toList();
-        productRepository.saveAll(products);
+    public List<Product> getAllByIds(List<Long> productIds) {
+        return productRepository.findAllById(productIds);
     }
 }
+
