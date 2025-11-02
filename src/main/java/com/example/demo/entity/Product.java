@@ -66,4 +66,23 @@ public class Product {
         this.price = price;
         this.stock = stock;
     }
+
+    // 업데이트 메서드
+    public void update(String name, String description, BigDecimal price, Integer stock, Category category) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+        if (price != null) {
+            this.price = price;
+        }
+        if (stock != null) {
+            this.stock = stock;
+        }
+        if (category != null) {
+            this.category = category;
+        }
+    }
 }
