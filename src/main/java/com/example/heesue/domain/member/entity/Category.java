@@ -10,6 +10,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,17 +24,17 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, length = 100)
-    private String email;
+    // 부모 카테고리 (N:1) - 여러 카테고리가 하나의 부모를 가짐
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
 
-    @Column(nullable = false, length = 255)
-    private String password;
-
-    @Column(nullable = false, length = 20)
-    private String phone;
+    // 자식 카테고리들 (1:N) - 하나의 카테고리가 여러 자식을 가짐
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Category> children = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -42,10 +44,8 @@ public class Category {
     private LocalDateTime updatedAt;
 
     @Builder
-    public User(String name, String email, String password, String phone) {
+    public Category(String name, Category parent) {
         this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
+        this.parent = parent;
     }
 }
