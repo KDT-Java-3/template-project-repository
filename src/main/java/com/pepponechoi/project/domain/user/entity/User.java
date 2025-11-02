@@ -1,5 +1,6 @@
 package com.pepponechoi.project.domain.user.entity;
 
+import com.pepponechoi.project.domain.order.entity.Order;
 import com.pepponechoi.project.domain.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,6 +52,9 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
     private List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
@@ -61,6 +65,16 @@ public class User {
     public void removeProduct(Product product) {
         this.products.remove(product);
         product.setUser(null);
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        order.setUser(this);
+    }
+
+    public void removeOrder(Order order) {
+        this.orders.remove(order);
+        order.setUser(null);
     }
 
     @Builder

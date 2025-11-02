@@ -1,6 +1,7 @@
 package com.pepponechoi.project.domain.product.entity;
 
 import com.pepponechoi.project.domain.category.entity.Category;
+import com.pepponechoi.project.domain.order.entity.Order;
 import com.pepponechoi.project.domain.product.dto.request.ProductUpdateRequest;
 import com.pepponechoi.project.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -11,9 +12,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,6 +61,9 @@ public class Product {
     @Setter
     private User user;
 
+    @OneToMany(mappedBy = "product")
+    private List<Order> orders;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -90,5 +97,23 @@ public class Product {
             this.user = user;
             user.addProduct(this);
         }
+    }
+
+    public void addStock(@Positive Long quantity) {
+        this.stock += quantity;
+    }
+
+    public void removeStock(@Positive Long quantity) {
+        this.stock -= quantity;
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        order.setProduct(this);
+    }
+
+    public void removeOrder(Order order) {
+        this.orders.remove(order);
+        order.setProduct(null);
     }
 }
