@@ -2,8 +2,8 @@ package com.sparta.bootcamp.java_2_example.domain.user.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.sparta.bootcamp.java_2_example.domain.purchase.service.PurchaseCommandService;
-import com.sparta.bootcamp.java_2_example.domain.purchase.service.PurchaseQueryService;
+import com.sparta.bootcamp.java_2_example.domain.user.service.UserCommandService;
+import com.sparta.bootcamp.java_2_example.domain.user.service.UserQueryService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService implements PurchaseQueryService, PurchaseCommandService {
+public class UserService implements UserQueryService, UserCommandService {
 
 }

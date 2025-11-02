@@ -2,6 +2,8 @@ package com.sparta.bootcamp.java_2_example.domain.user.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.bootcamp.java_2_example.domain.purchase.service.PurchaseQueryService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,4 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
+
+
+
+
 }
