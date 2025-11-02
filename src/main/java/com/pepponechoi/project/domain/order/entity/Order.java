@@ -2,6 +2,7 @@ package com.pepponechoi.project.domain.order.entity;
 
 import com.pepponechoi.project.common.enums.OrderStatus;
 import com.pepponechoi.project.domain.product.entity.Product;
+import com.pepponechoi.project.domain.refund.entity.Refund;
 import com.pepponechoi.project.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +14,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,6 +68,9 @@ public class Order {
     @Column
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "order")
+    private List<Refund> refunds = new ArrayList<>();
+
     @Builder
     public Order(
         User user,
@@ -86,5 +93,17 @@ public class Order {
         if (status.equals(OrderStatus.PENDING)) {
             this.status = status;
         }
+    }
+
+    public void addRefund(Refund refund) {
+        if (!this.refunds.contains(refund)) {
+            this.refunds.add(refund);
+            refund.setOrder(this);
+        }
+    }
+
+    public void removeRefund(Refund refund) {
+        this.refunds.remove(refund);
+        refund.setOrder(null);
     }
 }

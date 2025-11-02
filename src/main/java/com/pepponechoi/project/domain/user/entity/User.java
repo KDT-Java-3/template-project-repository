@@ -2,6 +2,7 @@ package com.pepponechoi.project.domain.user.entity;
 
 import com.pepponechoi.project.domain.order.entity.Order;
 import com.pepponechoi.project.domain.product.entity.Product;
+import com.pepponechoi.project.domain.refund.entity.Refund;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -57,6 +58,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Product> products = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Refund> refunds = new ArrayList<>();
+
     public void addProduct(Product product) {
         this.products.add(product);
         product.setUser(this);
@@ -77,10 +81,22 @@ public class User {
         order.setUser(null);
     }
 
+    public void addRefund(Refund refund) {
+        this.refunds.add(refund);
+        refund.setUser(this);
+    }
+
+    public void removeRefund(Refund refund) {
+        this.refunds.remove(refund);
+        refund.setUser(null);
+    }
+
     @Builder
     public User(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
     }
+
+
 }
