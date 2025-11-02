@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor
 public class Product {
 
@@ -25,6 +29,7 @@ public class Product {
     private Long id;
 
     private String name;
+    private String description;
     private BigDecimal price;
     private Integer stock;
 
@@ -43,11 +48,19 @@ public class Product {
     public static Product fromDto(ProductDto productDto) {
         return Product.builder()
                 .name(productDto.getName())
+                .description(productDto.getDescription())
                 .price(productDto.getPrice())
                 .stock(productDto.getStock())
                 .category(Category.builder()
                                     .id(productDto.getCategoryId())
                                     .build())
                 .build();
+    }
+
+    public void update(Product product) {
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
+        this.stock = product.getStock();
     }
 }

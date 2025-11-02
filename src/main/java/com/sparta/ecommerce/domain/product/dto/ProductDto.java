@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class ProductDto {
 
     private String name;
+    private String description;
     private BigDecimal price;
     private Integer stock;
     private Long categoryId;
@@ -17,6 +18,7 @@ public class ProductDto {
     public static ProductDto fromRequest(ProductRequestDto productRequestDto) {
         return ProductDto.builder()
                 .name(productRequestDto.getName())
+                .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
                 .stock(productRequestDto.getStock())
                 .categoryId(productRequestDto.getCategoryId())

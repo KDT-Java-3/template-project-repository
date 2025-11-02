@@ -7,4 +7,8 @@ public interface ProductService {
 
     ProductResponseDto registerProduct(ProductDto productDto);
 
+    ProductResponseDto retrieveProduct(Long productId);
+
+    ProductResponseDto modifyProduct(Long productId, ProductDto productDto);
+
 }
