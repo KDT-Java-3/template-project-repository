@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ThreadUtils;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
@@ -60,6 +61,12 @@ public class Product extends BaseEntity {
         this.description = description;
         this.stock = stock;
         this.category = category;
+    }
+
+    public void checkStockRemaining(Integer stock) {
+        if (this.stock < stock) {
+            throw new OutOfStockException("out of stock, productId" + this.id);
+        }
     }
 
     public void minusStock(Integer stock) {
