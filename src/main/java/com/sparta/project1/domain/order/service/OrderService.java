@@ -16,6 +16,7 @@ import com.sparta.project1.domain.product.repository.ProductRepository;
 import com.sparta.project1.domain.user.domain.Users;
 import com.sparta.project1.domain.user.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UsersRepository usersRepository;
     private final ProductOrderRepository productOrderRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public void order(OrderRequest request) {
         List<ProductOrderRequest> productRequest = request.products();
@@ -70,6 +72,8 @@ public class OrderService {
         }
 
         productOrderRepository.saveAll(productOrders);
+        // product quantity 빼기
+        eventPublisher.publishEvent(productOrderInfos);
     }
 
 

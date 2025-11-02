@@ -6,6 +6,7 @@ import com.sparta.project1.domain.category.repository.CategoryRepository;
 import com.sparta.project1.domain.product.api.dto.ProductRegisterRequest;
 import com.sparta.project1.domain.product.api.dto.ProductResponse;
 import com.sparta.project1.domain.product.domain.Product;
+import com.sparta.project1.domain.product.domain.ProductOrderInfo;
 import com.sparta.project1.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.RoundingMode;
 import java.util.List;
@@ -92,5 +95,17 @@ public class ProductService {
         );
 
         productRepository.save(product);
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void minusProductStock(List<ProductOrderInfo> productOrderInfos) {
+        List<Product> products = productOrderInfos.stream()
+                .map(p -> {
+                    Product product = p.product();
+                    product.minusStock(p.quantity());
+                    return product;
+                })
+                .toList();
+        productRepository.saveAll(products);
     }
 }
