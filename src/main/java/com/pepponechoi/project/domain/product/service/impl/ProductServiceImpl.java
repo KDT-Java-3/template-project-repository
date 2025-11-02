@@ -148,6 +148,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Boolean update(Long id, ProductUpdateRequest request) {
         if (request.getCategoryId() != null && !categoryRepository.existsById(request.getCategoryId())) {
             return false;
@@ -170,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Boolean delete(Long id, Long userId) {
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
