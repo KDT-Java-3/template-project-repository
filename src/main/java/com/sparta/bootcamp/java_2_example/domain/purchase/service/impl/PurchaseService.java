@@ -52,24 +52,40 @@ public class PurchaseService implements PurchaseQueryService, PurchaseCommandSer
 
 		// 수량이 남았는지
 		product.validateQuantity(request.getQuantity());
-
+		product.minusStock(request.getQuantity());
 
 		Purchase purchase = purchaseRepository.save(of(request, user, product));
 
 		PurchaseProduct purchaseProduct = purchaseProductRepository.save(PurchaseProduct.of(request, purchase, product));
 
-		return ResponsePurchase.of(user, purchaseProduct);
+		return ResponsePurchase.of(purchaseProduct);
 
 	}
 
 	@Override
 	public ResponsePurchase updatePurchaseStatus(Long purchaseId, PurchaseStatus status) {
-		return null;
+
+		PurchaseProduct purchaseProduct = purchaseProductRepository.findById(purchaseId)
+			.orElseThrow(() -> new IllegalArgumentException("Purchase not found"));
+
+		Purchase purchase = purchaseProduct.getPurchase();
+
+		purchase.changeStatus(status);
+
+		return ResponsePurchase.of(purchaseProduct);
+
 	}
 
 	@Override
 	public ResponsePurchase cancelPurchase(Long purchaseId) {
-		return null;
+		PurchaseProduct purchaseProduct = purchaseProductRepository.findById(purchaseId)
+			.orElseThrow(() -> new IllegalArgumentException("Purchase not found"));
+
+		Purchase purchase = purchaseProduct.getPurchase();
+
+		purchase.changeStatus(PurchaseStatus.CANCELED);
+
+		return ResponsePurchase.of(purchaseProduct);
 	}
 
 	@Override

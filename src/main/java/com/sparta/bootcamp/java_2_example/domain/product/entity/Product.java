@@ -92,5 +92,9 @@ public class Product {
 		}
 	}
 
+	public void minusStock(Integer quantity) {
+		this.stock -= quantity;
+	}
+
 }
 

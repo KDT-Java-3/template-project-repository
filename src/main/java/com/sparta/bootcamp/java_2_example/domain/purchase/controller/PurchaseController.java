@@ -57,16 +57,19 @@ public class PurchaseController {
 		return ResponseEntity.ok(purchaseQueryService.getPurchaseByUser(userId));
 	}
 
-	@PatchMapping("/{purchaseId}/status")
+	@PatchMapping("/status/{purchaseId}/{status}")
 	public ResponseEntity<ResponsePurchase> updatePurchaseStatus(
 
 		@PathVariable
 		Long purchaseId,
 
-		@RequestParam
+		@PathVariable
 		PurchaseStatus status
 
 	) {
+		if(!PurchaseStatus.PENDING.equals(status)) {
+			throw new IllegalArgumentException("Invalid purchase status");
+		}
 
 		return ResponseEntity.ok(purchaseCommandService.updatePurchaseStatus(purchaseId, status));
 	}

@@ -75,4 +75,8 @@ public class Purchase {
 					.build();
 	}
 
+	public void changeStatus(PurchaseStatus status) {
+		this.status = status;
+	}
+
 }

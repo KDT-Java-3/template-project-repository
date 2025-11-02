@@ -1,6 +1,7 @@
 package com.sparta.bootcamp.java_2_example.domain.purchase.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sparta.bootcamp.java_2_example.common.enums.PurchaseStatus;
 import com.sparta.bootcamp.java_2_example.domain.product.entity.Product;
 import com.sparta.bootcamp.java_2_example.domain.purchase.dto.request.RequestPurchase;
 
@@ -76,5 +77,6 @@ public class PurchaseProduct {
         .price(product.getPrice())
         .build();
   }
+
 
 }

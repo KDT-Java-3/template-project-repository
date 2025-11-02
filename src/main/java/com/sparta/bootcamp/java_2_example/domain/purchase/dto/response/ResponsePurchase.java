@@ -27,10 +27,10 @@ public class ResponsePurchase {
 
 	private String shippingAddress;
 
-	public static ResponsePurchase of(User user, PurchaseProduct purchaseProduct) {
+	public static ResponsePurchase of(PurchaseProduct purchaseProduct) {
 		return ResponsePurchase.builder()
 			.purchaseId(purchaseProduct.getId())
-			.email(user.getEmail())
+			.email(purchaseProduct.getPurchase().getUser().getEmail())
 			.productId(purchaseProduct.getProduct().getId())
 			.quantity(purchaseProduct.getQuantity())
 			.shippingAddress(purchaseProduct.getShippingAddress())
