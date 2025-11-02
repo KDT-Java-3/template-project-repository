@@ -3,6 +3,7 @@ package com.sparta.bootcamp.java_2_example.domain.category.service.impl;
 import static java.util.Objects.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,15 @@ public class CategoryService implements CategoryQueryService, CategoryCommandSer
 
 	@Override
 	public ResponseCategory updateCategory(Long id, RequestUpdateCategory requestUpdate) {
-		return null;
+		Optional<Category> byId = categoryRepository.findById(id);
+		if (byId.isEmpty()) {
+			throw new IllegalArgumentException("Category with id " + id + " does not exist");
+		}
+
+		Category category = byId.get();
+		category.update(requestUpdate);
+
+		return ResponseCategory.of(category);
 	}
 
 	@Override

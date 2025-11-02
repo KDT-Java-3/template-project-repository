@@ -1,5 +1,6 @@
 package com.sparta.bootcamp.java_2_example.domain.category.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -8,5 +9,9 @@ import lombok.Getter;
  * @since : 2025. 11. 2.
  */
 @Getter
+@AllArgsConstructor
 public class RequestUpdateCategory {
+
+	private String name;
+
 }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.bootcamp.java_2_example.domain.category.dto.request.RequestCreateCategory;
+import com.sparta.bootcamp.java_2_example.domain.category.dto.request.RequestUpdateCategory;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,6 +63,10 @@ public class Category {
                    .name(requestCreate.getName())
                    .parent(parent)
                    .build();
+  }
+
+  public void update(RequestUpdateCategory requestUpdate) {
+    this.name = requestUpdate.getName();
   }
 
 }
