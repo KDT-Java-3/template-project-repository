@@ -63,7 +63,11 @@ public class ProductService implements ProductQueryService, ProductCommandServic
 
 	@Override
 	public ResponseProduct getProduct(Long id) {
-		return null;
+		Product product = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+
+		return ResponseProduct.of(product);
 	}
 
 }
