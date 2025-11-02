@@ -12,6 +12,11 @@ public class ProductSpecification {
     public static Specification<Product> withFilters(Long categoryId, String name,
                                                       BigDecimal minPrice, BigDecimal maxPrice) {
         return (root, query, criteriaBuilder) -> {
+            // COUNT 쿼리가 아닐 때만 fetch join 적용
+            if (query.getResultType() == Product.class) {
+                root.fetch("category", jakarta.persistence.criteria.JoinType.LEFT);
+            }
+
             var predicates = new ArrayList<Predicate>();
 
             // 카테고리 필터
@@ -37,7 +42,7 @@ public class ProductSpecification {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
             }
 
-            return criteriaBuilder.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 }
