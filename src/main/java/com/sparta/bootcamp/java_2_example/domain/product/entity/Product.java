@@ -86,4 +86,11 @@ public class Product {
 		this.stock = product.getStock();
 	}
 
+	public void validateQuantity(Integer quantity) {
+		if ((this.stock - quantity) < 0) {
+			throw new IllegalArgumentException("Quantity must be greater than or equal to zero.");
+		}
+	}
+
 }
+

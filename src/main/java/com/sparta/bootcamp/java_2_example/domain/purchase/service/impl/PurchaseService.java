@@ -1,16 +1,24 @@
 package com.sparta.bootcamp.java_2_example.domain.purchase.service.impl;
 
+import static com.sparta.bootcamp.java_2_example.domain.purchase.entity.Purchase.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.sparta.bootcamp.java_2_example.common.enums.PurchaseStatus;
+import com.sparta.bootcamp.java_2_example.domain.product.entity.Product;
+import com.sparta.bootcamp.java_2_example.domain.product.repository.ProductRepository;
 import com.sparta.bootcamp.java_2_example.domain.purchase.dto.request.RequestPurchase;
 import com.sparta.bootcamp.java_2_example.domain.purchase.dto.response.ResponsePurchase;
+import com.sparta.bootcamp.java_2_example.domain.purchase.entity.Purchase;
+import com.sparta.bootcamp.java_2_example.domain.purchase.entity.PurchaseProduct;
 import com.sparta.bootcamp.java_2_example.domain.purchase.repository.PurchaseProductRepository;
 import com.sparta.bootcamp.java_2_example.domain.purchase.repository.PurchaseRepository;
 import com.sparta.bootcamp.java_2_example.domain.purchase.service.PurchaseCommandService;
 import com.sparta.bootcamp.java_2_example.domain.purchase.service.PurchaseQueryService;
+import com.sparta.bootcamp.java_2_example.domain.user.entity.User;
+import com.sparta.bootcamp.java_2_example.domain.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +37,29 @@ public class PurchaseService implements PurchaseQueryService, PurchaseCommandSer
 
 	private final PurchaseProductRepository purchaseProductRepository;
 	private final PurchaseRepository purchaseRepository;
+	private final ProductRepository productRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public ResponsePurchase createPurchase(RequestPurchase request) {
-		return null;
+		// 존재하는 user 인지
+		User user = userRepository.findByEmail(request.getEmail())
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+		// 존재하는 product 인지
+		Product product = productRepository.findById(request.getProductId())
+			.orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+		// 수량이 남았는지
+		product.validateQuantity(request.getQuantity());
+
+
+		Purchase purchase = purchaseRepository.save(of(request, user, product));
+
+		PurchaseProduct purchaseProduct = purchaseProductRepository.save(PurchaseProduct.of(request, purchase, product));
+
+		return ResponsePurchase.of(user, purchaseProduct);
+
 	}
 
 	@Override

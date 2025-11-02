@@ -12,9 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RequestPurchase {
 
-	private String userId;
+	private String email;
 
-	private String productId;
+	private Long productId;
 
 	private Integer quantity;
 

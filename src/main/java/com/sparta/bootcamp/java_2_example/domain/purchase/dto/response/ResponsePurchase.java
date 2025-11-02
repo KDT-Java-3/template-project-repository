@@ -1,6 +1,10 @@
 package com.sparta.bootcamp.java_2_example.domain.purchase.dto.response;
 
+import com.sparta.bootcamp.java_2_example.domain.purchase.entity.PurchaseProduct;
+import com.sparta.bootcamp.java_2_example.domain.user.entity.User;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -8,10 +12,29 @@ import lombok.Getter;
  * @package : com.sparta.bootcamp.java_2_example.domain.purchase.dto.request
  * @since : 2025. 11. 2.
  */
+@Builder
 @Getter
 @AllArgsConstructor
 public class ResponsePurchase {
 
-	// user_id, product_id, quantity, shipping_address.
+	private Long purchaseId;
+
+	private String email;
+
+	private Long productId;
+
+	private Integer quantity;
+
+	private String shippingAddress;
+
+	public static ResponsePurchase of(User user, PurchaseProduct purchaseProduct) {
+		return ResponsePurchase.builder()
+			.purchaseId(purchaseProduct.getId())
+			.email(user.getEmail())
+			.productId(purchaseProduct.getProduct().getId())
+			.quantity(purchaseProduct.getQuantity())
+			.shippingAddress(purchaseProduct.getShippingAddress())
+			.build();
+	}
 
 }
