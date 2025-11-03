@@ -8,6 +8,7 @@ import com.sparta.ecommerce.domain.product.service.ProductService;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,39 +21,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping({"/api/products"})
+@RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
     @GetMapping({"/{id}"})
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
-        ProductReadRequest dto = new ProductReadRequest(id, (Long)null, (BigDecimal)null, (BigDecimal)null, (String)null);
+        ProductReadRequest dto = new ProductReadRequest(id, null, null, null, null);
         dto.setId(id);
-        ProductResponse response = this.productService.readProduct(dto);
+        ProductResponse response = productService.readProduct(dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getProducts(@RequestParam(required = false) Long categoryId, @RequestParam(required = false) String name, @RequestParam(required = false) BigDecimal minPrice, @RequestParam(required = false) BigDecimal maxPrice) {
-        ProductReadRequest dto = new ProductReadRequest((Long)null, categoryId, minPrice, maxPrice, name);
-        List<ProductResponse> responses = this.productService.raedProducts(dto);
+        ProductReadRequest dto = new ProductReadRequest(null, categoryId, minPrice, maxPrice, name);
+        List<ProductResponse> responses = productService.raedProducts(dto);
         return ResponseEntity.ok(responses);
     }
 
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductCreateRequest dto) {
-        ProductResponse response = this.productService.createProduct(dto);
+        ProductResponse response = productService.createProduct(dto);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping({"/{id}"})
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest dto) {
         dto.setId(id);
-        ProductResponse response = this.productService.updateProduct(dto);
+        ProductResponse response = productService.updateProduct(dto);
         return ResponseEntity.ok(response);
-    }
-
-    @Generated
-    public ProductController(final ProductService productService) {
-        this.productService = productService;
     }
 }

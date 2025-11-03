@@ -8,6 +8,7 @@ import com.sparta.ecommerce.domain.order.entity.OrderStatus;
 import com.sparta.ecommerce.domain.order.service.OrderService;
 import java.util.List;
 import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,24 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping({"/api/orders"})
+@RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
     public ResponseEntity<OrderUpsertDto> createOrder(@RequestBody OrderCreateRequest dto) {
-        OrderUpsertDto res = this.orderService.createOrder(dto);
+        OrderUpsertDto res = orderService.createOrder(dto);
         return ResponseEntity.ok(res);
     }
 
     @GetMapping({"/{id}"})
     public ResponseEntity<List<OrderResponse>> readOrdersByUser(@PathVariable Long id) {
-        List<OrderResponse> res = this.orderService.readOrderByUser(id);
+        List<OrderResponse> res = orderService.readOrderByUser(id);
         return ResponseEntity.ok(res);
     }
 
     @PutMapping
     public ResponseEntity<OrderUpsertDto> updateOrderStatus(@RequestBody OrderUpdateStateRequest dto) {
-        OrderUpsertDto res = this.orderService.updateState(dto);
+        OrderUpsertDto res = orderService.updateState(dto);
         return ResponseEntity.ok(res);
     }
 
@@ -45,12 +47,7 @@ public class OrderController {
         OrderUpdateStateRequest req = new OrderUpdateStateRequest();
         req.setId(id);
         req.setOrderStatus(OrderStatus.canceled);
-        OrderUpsertDto res = this.orderService.updateState(req);
+        OrderUpsertDto res = orderService.updateState(req);
         return ResponseEntity.ok(res);
-    }
-
-    @Generated
-    public OrderController(final OrderService orderService) {
-        this.orderService = orderService;
     }
 }

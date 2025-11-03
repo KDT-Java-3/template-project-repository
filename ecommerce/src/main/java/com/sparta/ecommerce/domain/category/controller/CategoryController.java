@@ -6,6 +6,7 @@ import com.sparta.ecommerce.domain.category.dto.CategoryUpdateRequest;
 import com.sparta.ecommerce.domain.category.service.CategoryService;
 import java.util.List;
 import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping({"/api/categories"})
+@RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -37,10 +39,5 @@ public class CategoryController {
         dto.setId(id);
         CategoryResponse response = this.categoryService.updateCategory(dto);
         return ResponseEntity.ok(response);
-    }
-
-    @Generated
-    public CategoryController(final CategoryService categoryService) {
-        this.categoryService = categoryService;
     }
 }
