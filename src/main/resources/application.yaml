@@ -18,7 +18,7 @@ spring:
 #    enabled: true # Flyway 활성화
 #    # 마이그레이션 파일 위치 지정 (기본값)
 #    locations: classpath:db/migration
-#    default-schema: demo
+#    default-schema: commerce
 
 # Swagger UI 설정 (Springdoc)
 springdoc:
