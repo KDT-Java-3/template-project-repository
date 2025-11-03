@@ -1,24 +1,24 @@
 spring:
   application:
-    name: week1
+    name: week1-commerce
 
   datasource:
-    url: jdbc:mysql://localhost:3306/demo
+    url: jdbc:mysql://localhost:3306/commerce
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
-  flyway:
-    enabled: true # Flyway 활성화
-    # 마이그레이션 파일 위치 지정 (기본값)
-    locations: classpath:db/migration
-    default-schema: demo
+#  flyway:
+#    enabled: true # Flyway 활성화
+#    # 마이그레이션 파일 위치 지정 (기본값)
+#    locations: classpath:db/migration
+#    default-schema: demo
 
 # Swagger UI 설정 (Springdoc)
 springdoc:
