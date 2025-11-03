@@ -1,6 +1,6 @@
-package com.example.demo.domain.category.entity;
+package com.example.demo.domain.user.entity;
 
-import com.example.demo.common.util.BaseEntity;
+import com.example.demo.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
