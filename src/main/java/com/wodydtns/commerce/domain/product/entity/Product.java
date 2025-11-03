@@ -1,5 +1,7 @@
 package com.wodydtns.commerce.domain.product.entity;
 
+import java.time.LocalDateTime;
+
 import com.wodydtns.commerce.domain.category.entity.Category;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -44,6 +46,9 @@ public class Product {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     @Builder
     public Product(Long id, String name, Integer price, Integer stock, String description, Long categoryId) {
         this.id = id;
@@ -66,5 +71,4 @@ public class Product {
     public boolean hasStock() {
         return this.stock > 0;
     }
-
 }
