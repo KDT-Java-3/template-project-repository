@@ -56,4 +56,12 @@ public class ProductService {
         return ProductResponse.buildFromEntity(product);
     }
 
+    // 검색
+    public List<ProductResponse> searchProducts(Long categoryId, java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice, String keyword) {
+        List<Product> products = productRepository.searchProducts(categoryId, minPrice, maxPrice, keyword);
+        return products.stream()
+                .map(ProductResponse::buildFromEntity)
+                .toList();
+    }
+
 }

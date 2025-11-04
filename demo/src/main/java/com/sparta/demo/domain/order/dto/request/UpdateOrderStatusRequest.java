@@ -9,7 +9,7 @@ import lombok.Setter;
 public class UpdateOrderStatusRequest {
     @Setter
     private Long id;
-    @NotNull
+    @Setter
     private Order.OrderStatus oldStatus;
     @NotNull
     private Order.OrderStatus newStatus;

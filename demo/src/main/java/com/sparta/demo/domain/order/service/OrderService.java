@@ -24,7 +24,7 @@ public class OrderService {
 
     // 등록
     public OrderResponse createOrder(CreateOrderRequest request) throws Exception {
-        Product product = productRepository.findById(request.getUserId()).orElseThrow(() ->
+        Product product = productRepository.findById(request.getProductId()).orElseThrow(() ->
                 new Exception("상품 정보를 찾을 수 없습니다."));
         User user = userRepository.findById(request.getUserId()).orElseThrow(() ->
             new Exception("유저 정보를 찾을 수 없습니다."));
@@ -55,6 +55,10 @@ public class OrderService {
     public OrderResponse updateOrderStatus(UpdateOrderStatusRequest request) throws Exception {
         Order order = orderRepository.findById(request.getId())
                 .orElseThrow(()-> new Exception("존재하지 않는 주문입니다."));
+        
+        // 현재 주문 상태를 oldStatus로 설정
+        request.setOldStatus(order.getStatus());
+        
         if(request.isChangeable()){
             order.setStatus(request.getNewStatus());
         } else{
@@ -62,5 +66,20 @@ public class OrderService {
         }
         orderRepository.save(order);
         return OrderResponse.buildFromEntity(order);
+    }
+
+    // 취소
+    public OrderResponse cancelOrder(Long orderId) throws Exception {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new Exception("존재하지 않는 주문입니다."));
+        
+        try {
+            order.cancel();
+            productRepository.save(order.getProduct());
+            orderRepository.save(order);
+            return OrderResponse.buildFromEntity(order);
+        } catch (IllegalStateException e) {
+            throw new Exception(e.getMessage());
+        }
     }
 }

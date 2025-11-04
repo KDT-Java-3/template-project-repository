@@ -1,6 +1,7 @@
 package com.sparta.demo.domain.order.controller;
 
 import com.sparta.demo.domain.order.dto.request.CreateProductRequest;
+import com.sparta.demo.domain.order.dto.request.SearchProductRequest;
 import com.sparta.demo.domain.order.dto.request.UpdateProductRequest;
 import com.sparta.demo.domain.order.dto.response.ProductResponse;
 import com.sparta.demo.domain.order.service.ProductService;
@@ -33,7 +34,16 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
-    //TODO: 검색 기능 추가
+    // 검색 기능
+    @GetMapping("/search")
+    public List<ProductResponse> searchProducts(@ModelAttribute SearchProductRequest request) {
+        return productService.searchProducts(
+                request.getCategoryId(),
+                request.getMinPrice(),
+                request.getMaxPrice(),
+                request.getKeyword()
+        );
+    }
 
     // 수정
     @PutMapping("/{id}")
