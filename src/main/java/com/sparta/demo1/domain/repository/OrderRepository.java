@@ -1,8 +1,8 @@
-package com.sparta.demo1.domain.order.repository;
+package com.sparta.demo1.domain.repository;
 
-import com.sparta.demo1.domain.order.entity.Order;
-import com.sparta.demo1.domain.order.entity.OrderStatus;
-import com.sparta.demo1.domain.user.entity.User;
+import com.sparta.demo1.domain.entity.Order;
+import com.sparta.demo1.domain.entity.OrderStatus;
+import com.sparta.demo1.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

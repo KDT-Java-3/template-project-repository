@@ -1,9 +1,9 @@
-package com.sparta.demo1.domain.refund.repository;
+package com.sparta.demo1.domain.repository;
 
-import com.sparta.demo1.domain.order.entity.Order;
-import com.sparta.demo1.domain.refund.entity.Refund;
-import com.sparta.demo1.domain.refund.entity.RefundStatus;
-import com.sparta.demo1.domain.user.entity.User;
+import com.sparta.demo1.domain.entity.Order;
+import com.sparta.demo1.domain.entity.Refund;
+import com.sparta.demo1.domain.entity.RefundStatus;
+import com.sparta.demo1.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

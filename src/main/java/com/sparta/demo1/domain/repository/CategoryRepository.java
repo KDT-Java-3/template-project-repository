@@ -1,6 +1,6 @@
-package com.sparta.demo1.domain.category.repository;
+package com.sparta.demo1.domain.repository;
 
-import com.sparta.demo1.domain.category.entity.Category;
+import com.sparta.demo1.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

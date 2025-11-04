@@ -1,4 +1,4 @@
-package com.sparta.demo1.domain.order.entity;
+package com.sparta.demo1.domain.entity;
 
 public enum OrderStatus {
   PENDING("대기중"),

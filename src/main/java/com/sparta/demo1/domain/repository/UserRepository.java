@@ -1,6 +1,6 @@
-package com.sparta.demo1.domain.user.repository;
+package com.sparta.demo1.domain.repository;
 
-import com.sparta.demo1.domain.user.entity.User;
+import com.sparta.demo1.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

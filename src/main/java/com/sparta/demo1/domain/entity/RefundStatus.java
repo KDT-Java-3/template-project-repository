@@ -1,4 +1,4 @@
-package com.sparta.demo1.domain.refund.entity;
+package com.sparta.demo1.domain.entity;
 
 public enum RefundStatus {
   PENDING,   // 대기 중

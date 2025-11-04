@@ -1,12 +1,9 @@
-package com.sparta.demo1.domain.order.entity;
+package com.sparta.demo1.domain.entity;
 
-import com.sparta.demo1.domain.product.entity.Product;
-import com.sparta.demo1.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,32 +16,27 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "orders")
-public class Order {
-
+@Table(name = "product")
+public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @JoinColumn(name = "user_id")
+  @Column(nullable = false)
+  private String name;
+
+  @Column(columnDefinition = "TEXT")
+  private String description;
+
+  @Column(nullable = false)
+  private Long price;
+
+  @Column(nullable = false)
+  private Long stock;
+
   @ManyToOne(fetch = FetchType.LAZY)
-  @Setter
-  private User user;
-
-  @JoinColumn(name = "product_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  @Setter
-  private Product product;
-
-  @Column(nullable = false)
-  private Long quantity;
-
-  @Column(nullable = false)
-  private String shippingAddress;
-
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private OrderStatus orderStatus;
+  @JoinColumn(name = "category_id")
+  private Category category;
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
