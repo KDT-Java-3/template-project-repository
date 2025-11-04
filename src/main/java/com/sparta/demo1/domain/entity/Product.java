@@ -46,4 +46,15 @@ public class Product {
   @Column
   private LocalDateTime updatedAt;
 
+  // 비즈니스 로직
+  public void decreaseStock(Long quantity) {
+    if (this.stock < quantity) {
+      throw new IllegalStateException("재고가 부족합니다.");
+    }
+    this.stock -= quantity;
+  }
+
+  public void increaseStock(Long quantity) {
+    this.stock += quantity;
+  }
 }
