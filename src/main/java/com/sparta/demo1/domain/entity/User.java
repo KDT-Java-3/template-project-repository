@@ -52,4 +52,16 @@ public class User {
     this.passwordHash = passwordHash;
   }
 
+  // 비즈니스 로직
+  public void updateUserInfo(String username, String email, String passwordHash) {
+    if (username != null) {
+      this.username = username;
+    }
+    if (email != null) {
+      this.email = email;
+    }
+    if (passwordHash != null) {
+      this.passwordHash = passwordHash;
+    }
+  }
 }

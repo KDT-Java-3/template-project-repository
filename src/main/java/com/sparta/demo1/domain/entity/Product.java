@@ -2,6 +2,7 @@ package com.sparta.demo1.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,6 +47,21 @@ public class Product {
   @Column
   private LocalDateTime updatedAt;
 
+  @Builder
+  public Product(
+      Category category,
+      String name,
+      String description,
+      Long price,
+      Long stock
+  ) {
+    this.category = category;
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.stock = stock;
+  }
+
   // 비즈니스 로직
   public void decreaseStock(Long quantity) {
     if (this.stock < quantity) {
@@ -56,5 +72,24 @@ public class Product {
 
   public void increaseStock(Long quantity) {
     this.stock += quantity;
+  }
+
+  public void updateCategory(Category category) {
+    this.category = category;
+  }
+
+  public void updateProductInfo(String name, String description, Long price, Long stock) {
+    if (name != null) {
+      this.name = name;
+    }
+    if (description != null) {
+      this.description = description;
+    }
+    if (price != null) {
+      this.price = price;
+    }
+    if (stock != null) {
+      this.stock = stock;
+    }
   }
 }
