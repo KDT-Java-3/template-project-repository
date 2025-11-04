@@ -108,6 +108,141 @@
 
 ![erd](/src/main/resources/static/image/sparta-week1.png)
 
+```
+Table users {
+  id              bigint [pk, increment]
+  username        varchar(50) [not null]
+  email           varchar(255) [not null, unique]
+  password_hash   varchar(255) [not null]
+  created_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (email) [unique, name: 'uq_users_email']
+  }
+}
+
+Table categories {
+  id              bigint [pk, increment]
+  name            varchar(100) [not null, unique]
+  description     text
+  created_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (name) [unique, name: 'uq_categories_name']
+  }
+}
+
+Table products {
+  id              bigint [pk, increment]
+  name            varchar(150) [not null]
+  description     text
+  price           decimal(10,2) [not null]
+  stock           int [not null, default: 0]
+  category_id     bigint [not null]
+  created_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (category_id) [name: 'idx_products_category_id']
+    (name)        [name: 'idx_products_name']
+    (price)       [name: 'idx_products_price']
+  }
+}
+
+Table orders {
+  id                bigint [pk, increment]
+  user_id           bigint [not null]
+  status            varchar(20) [not null, note: 'pending|completed|canceled']
+  order_date        datetime [not null, default: `CURRENT_TIMESTAMP`]
+  shipping_address  text [not null]
+  created_at        datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at        datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (user_id)    [name: 'idx_orders_user_id']
+    (status)     [name: 'idx_orders_status']
+    (order_date) [name: 'idx_orders_order_date']
+  }
+}
+
+Table order_items {
+  id              bigint [pk, increment]
+  order_id        bigint [not null]
+  product_id      bigint [not null]
+  quantity        int [not null]
+  unit_price      decimal(10,2) [not null, note: 'price at ordering time']
+  created_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (order_id)              [name: 'idx_order_items_order_id']
+    (product_id)            [name: 'idx_order_items_product_id']
+    (order_id, product_id)  [unique, name: 'uq_order_items_order_product']
+  }
+}
+
+Table refunds {
+  id              bigint [pk, increment]
+  user_id         bigint [not null]
+  order_id        bigint [not null]
+  status          varchar(20) [not null, note: 'pending|approved|rejected']
+  reason          text [not null]
+  requested_at    datetime [not null, default: `CURRENT_TIMESTAMP`]
+  processed_at    datetime
+  created_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at      datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (user_id)      [name: 'idx_refunds_user_id']
+    (order_id)     [name: 'idx_refunds_order_id']
+    (status)       [name: 'idx_refunds_status']
+    (requested_at) [name: 'idx_refunds_requested_at']
+  }
+}
+
+Table roles {
+  id          bigint [pk, increment]
+  name        varchar(100) [not null, unique, note: 'e.g., ROLE_USER, ROLE_ADMIN']
+  description text
+  created_at  datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at  datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (name) [unique, name: 'uq_roles_name']
+  }
+}
+
+Table user_roles {
+  id          bigint [pk, increment] // 단일 PK (합성 PK 대신)
+  user_id     bigint [not null]
+  role_id     bigint [not null]
+  granted_at  datetime [not null, default: `CURRENT_TIMESTAMP`]
+  granted_by  bigint // 역할 부여 관리자 (선택)
+
+  Indexes {
+    (user_id, role_id) [unique, name: 'uq_user_roles_user_role']
+    (user_id)          [name: 'idx_user_roles_user_id']
+    (role_id)          [name: 'idx_user_roles_role_id']
+  }
+}
+
+/* Relationships */
+Ref: products.category_id > categories.id
+
+Ref: orders.user_id > users.id
+Ref: order_items.order_id > orders.id
+Ref: order_items.product_id > products.id
+
+Ref: refunds.user_id > users.id
+Ref: refunds.order_id > orders.id
+
+Ref: user_roles.user_id > users.id
+Ref: user_roles.role_id > roles.id
+Ref: user_roles.granted_by > users.id
+```
+
 ---
 
 ## 자료
