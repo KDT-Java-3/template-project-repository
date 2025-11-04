@@ -1,6 +1,7 @@
 package com.jaehyuk.week_01_project.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -10,24 +11,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
-        info = @Info(title = "My API Docs", description = "API 명세서", version = "v1")
+        info = @Info(
+                title = "재직자 JAVA 프로젝트 1주차",
+                description = "클라우드 융합 자바 개발 업스킬링 과정 3기",
+                version = "v1",
+                contact = @Contact(
+                        name = "이재혁",
+                        email = "jaehyuk.dev@gmail.com",
+                        url = "https://github.com/jaehyuk-dev"
+                )
+        )
 )
 @Configuration
 public class SwaggerConfig {
-
-    @Bean
-    public OpenAPI openAPI() {
-        String jwtSchemeName = "jwtAuth";
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
-        Components components = new Components()
-                .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
-                        .name(jwtSchemeName)
-                        .type(SecurityScheme.Type.HTTP) // HTTP 방식
-                        .scheme("bearer") // bearer 토큰 방식
-                        .bearerFormat("JWT")); // 토큰 형식
-
-        return new OpenAPI()
-                .addSecurityItem(securityRequirement)
-                .components(components);
-    }
 }

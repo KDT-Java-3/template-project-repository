@@ -42,4 +42,4 @@ server:
 springdoc:
   swagger-ui:
     enabled: true
-    url: /docs
+    path: /docs
