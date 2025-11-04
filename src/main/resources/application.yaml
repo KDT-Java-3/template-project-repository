@@ -14,8 +14,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
-#  flyway:
-#    enabled: true # Flyway 활성화
+  flyway:
+    enabled: false  # Flyway 비활성화 (현재는 ddl-auto: create 사용)
 #    # 마이그레이션 파일 위치 지정 (기본값)
 #    locations: classpath:db/migration
 #    default-schema: commerce
