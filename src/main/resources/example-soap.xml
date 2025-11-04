@@ -1,0 +1,12 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <getUser>
+            <id>123</id>
+        </getUser>
+    </soapenv:Body>
+</soapenv:Envelope>
+
+<!--  RESTFUL
+GET /user/123
+-->

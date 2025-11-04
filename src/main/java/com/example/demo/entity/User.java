@@ -58,4 +58,14 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    @Builder(builderClassName = "CreateUserBuilderWithNoPassword")
+    public User(
+            String name,
+            String email
+    ) {
+        this.name = name;
+        this.email = email;
+        this.passwordHash = name+ "111" + email;
+    }
+
 }

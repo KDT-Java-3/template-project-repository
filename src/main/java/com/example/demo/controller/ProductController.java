@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.common.ApiResponse;
 import com.example.demo.controller.dto.ProductRequestDto;
 import com.example.demo.controller.dto.ProductResponseDto;
+import com.example.demo.controller.mapper.ProductMapper;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +23,11 @@ public class ProductController {
     // prefix = /api/products
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductMapper productMapper) {
         this.productService = productService;
+        this.productMapper = productMapper;
     }
 
     // 전체 상품 조회
@@ -40,8 +43,16 @@ public class ProductController {
     }
 
     // 상품 생성
+    // ProductRequestDto -> ProductServiceInputDto
+    // ProductServiceInputDto -> Entity
+    // Entity -> ProductServiceOutputDto
+    // ProductServiceOutputDto -> ProductResponseDto
     @PostMapping
-    public ApiResponse<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto request) {
+    public ApiResponse<ProductResponseDto> create(
+            @Valid @RequestBody ProductRequestDto request
+    ) {
+        productMapper.toService(request);
+
         return ApiResponse.success(productService.create(request));
     }
 

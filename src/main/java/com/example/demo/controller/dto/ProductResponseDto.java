@@ -15,7 +15,8 @@ public class ProductResponseDto {
     Long id;
     Long categoryId;
     String name;
-    String description;
+//    @Builder.Default
+    String description = "우리가게 첫 오픈기념 물품들";
     BigDecimal price;
     Integer stock;
 
@@ -32,5 +33,6 @@ public class ProductResponseDto {
                 .createdAt(product.getCreatedAt())
                 .build();
     }
+    // productMapper.fromEntity(product);
 
 }

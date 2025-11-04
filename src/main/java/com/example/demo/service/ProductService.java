@@ -8,6 +8,7 @@ import com.example.demo.entity.Category;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
@@ -54,11 +55,17 @@ public class ProductService {
         );
     }
 
+    @Transactional
     public ProductResponseDto create(ProductRequestDto request) {
-        // 중복체크
+        // 조회하는 유저에 대한 validation
+        // 상품에 대한 validation -> ex) 국가별 물품 종속 관계
+        //TODO: 중복체크
         if (productRepository.existsByName(request.getName())) {
             throw new RuntimeException("product already have");
+            //TODO: update
         }
+        //TODO: 상품 이동에대한 update
+
         // DTO -> Entity
         // Entity -> productRepository
         Category category = categoryRepository.findById(request.getCategoryId())

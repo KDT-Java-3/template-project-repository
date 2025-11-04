@@ -2,6 +2,7 @@ package com.example.demo.controller.dto;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.service.dto.ProductServiceInputDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -34,6 +35,12 @@ public class ProductRequestDto {
                 .description(this.description)
                 .price(this.price)
                 .stock(this.stock)
+                .build();
+    }
+
+    public ProductServiceInputDto toService() {
+        return ProductServiceInputDto.builder()
+                // 내가 넣을 데이터 쭉
                 .build();
     }
 }
