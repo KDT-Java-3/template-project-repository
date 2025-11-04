@@ -53,7 +53,6 @@ public class RefundServiceImpl implements RefundService {
 
         Product product = order.getProduct();
         product.updateStock(product.getStock() + order.getQuantity());
-
         refund.updateStatus(status);
 
         return new RefundResponseDto(refund);

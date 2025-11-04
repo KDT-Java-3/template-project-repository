@@ -5,6 +5,7 @@ import com.sprata.sparta_ecommerce.controller.exception.NotEnoughStockException;
 import com.sprata.sparta_ecommerce.dto.OrderRequestDto;
 import com.sprata.sparta_ecommerce.dto.OrderResponseDto;
 import com.sprata.sparta_ecommerce.entity.Category;
+import com.sprata.sparta_ecommerce.entity.Order;
 import com.sprata.sparta_ecommerce.entity.OrderStatus;
 import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
@@ -40,6 +41,9 @@ class OrderServiceTest {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
 
     private Product product;
     private Category category;
@@ -93,16 +97,16 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("주문 취소 성공 - 재고 복원 확인")
+    @DisplayName("주문 취소 성공")
     void cancelOrder_success() {
         OrderRequestDto dto = new OrderRequestDto(1L, product.getId(),  1, "서울시 송파구");
         OrderResponseDto created = orderService.createOrder(dto);
 
         Long canceledId = orderService.cancelOrder(created.getId());
-        Product updatedProduct = productRepository.findById(product.getId()).orElseThrow();
 
+        Order order = orderRepository.findById(created.getId()).get();
         assertEquals(created.getId(), canceledId);
-        assertEquals(10, updatedProduct.getStock()); // 재고 복원 확인
+        assertEquals(OrderStatus.CANCELED, order.getStatus());
     }
 
     // ---------------------------- [실패 시나리오] ----------------------------

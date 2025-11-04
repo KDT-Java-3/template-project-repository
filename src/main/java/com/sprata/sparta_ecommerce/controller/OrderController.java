@@ -34,7 +34,7 @@ public class OrderController {
         return ResponseEntity.ok(ResponseDto.success(responseDtos, "주문 목록 조회 성공"));
     }
 
-    @PatchMapping("/{orderId}/status")
+    @PutMapping("/{orderId}/status")
     public ResponseEntity<ResponseDto<?>> updateOrderStatus(@PathVariable Long orderId,
                                                             @Valid @RequestBody ChangeOrderStatusRequestDto requestDto
                                                             ) {
