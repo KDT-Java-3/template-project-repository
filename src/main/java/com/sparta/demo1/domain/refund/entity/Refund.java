@@ -1,12 +1,12 @@
-package com.sparta.demo1.domain.order;
+package com.sparta.demo1.domain.refund.entity;
 
-import com.sparta.demo1.domain.product.Product;
-import com.sparta.demo1.domain.user.User;
+import com.sparta.demo1.domain.order.entity.Order;
+import com.sparta.demo1.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -15,43 +15,47 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "refunds")
 @Getter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "orders")
-public class Order {
+public class Refund {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @JoinColumn(name = "user_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  @Setter
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @JoinColumn(name = "product_id")
   @ManyToOne(fetch = FetchType.LAZY)
-  @Setter
-  private Product product;
+  @JoinColumn(name = "order_id", nullable = false)
+  private Order order;
 
-  @Column(nullable = false)
-  private Long quantity;
-
-  @Column(nullable = false)
-  private String shippingAddress;
+  @Column(nullable = false, columnDefinition = "TEXT")
+  private String reason;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private OrderStatus orderStatus;
+  @Column(nullable = false, length = 20)
+  private RefundStatus status = RefundStatus.PENDING;
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
   @UpdateTimestamp
-  @Column
+  @Column(nullable = false)
   private LocalDateTime updatedAt;
+
+  @Builder
+  public Refund(User user, Order order, String reason) {
+    this.user = user;
+    this.order = order;
+    this.reason = reason;
+    this.status = RefundStatus.PENDING;
+  }
+
 
 }

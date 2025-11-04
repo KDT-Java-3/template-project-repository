@@ -1,4 +1,4 @@
-package com.sparta.demo1.domain.user;
+package com.sparta.demo1.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
-package com.sparta.demo1.domain.category;
+package com.sparta.demo1.domain.category.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sparta.demo1.domain.product.Product;
+import com.sparta.demo1.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
