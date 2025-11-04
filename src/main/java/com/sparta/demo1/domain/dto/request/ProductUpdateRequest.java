@@ -1,0 +1,21 @@
+package com.sparta.demo1.domain.dto.request;
+
+import jakarta.validation.constraints.Min;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class ProductUpdateRequest {
+
+  private String name;
+  private String description;
+
+  @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
+  private Long price;
+
+  @Min(value = 0, message = "재고는 0 이상이어야 합니다.")
+  private Long stock;
+
+  private Long categoryId;
+}

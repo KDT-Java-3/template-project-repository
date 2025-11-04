@@ -1,7 +1,6 @@
-package com.sparta.demo1.domain.category;
+package com.sparta.demo1.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sparta.demo1.domain.product.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,10 +48,27 @@ public class Category {
   @OneToMany(mappedBy = "category")
   private List<Product> products = new ArrayList<>();
 
+  @OneToMany(mappedBy = "parent")
+  private List<Category> children = new ArrayList<>();
+
   @Builder
   public Category(String name, String description, Category parent) {
     this.name = name;
     this.description = description;
     this.parent = parent;
+  }
+
+  // 비즈니스 로직
+  public void updateParent(Category parent) {
+    this.parent = parent;
+  }
+
+  public void updateCategoryInfo(String name, String description) {
+    if (name != null) {
+      this.name = name;
+    }
+    if (description != null) {
+      this.description = description;
+    }
   }
 }

@@ -1,7 +1,5 @@
-package com.sparta.demo1.domain.refund;
+package com.sparta.demo1.domain.entity;
 
-import com.sparta.demo1.domain.order.Order;
-import com.sparta.demo1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,5 +55,18 @@ public class Refund {
     this.status = RefundStatus.PENDING;
   }
 
+  // 비즈니스 로직
+  public void approve() {
+    if (this.status != RefundStatus.PENDING) {
+      throw new IllegalStateException("대기 중인 환불만 승인할 수 있습니다.");
+    }
+    this.status = RefundStatus.APPROVED;
+  }
 
+  public void reject() {
+    if (this.status != RefundStatus.PENDING) {
+      throw new IllegalStateException("대기 중인 환불만 거부할 수 있습니다.");
+    }
+    this.status = RefundStatus.REJECTED;
+  }
 }
