@@ -19,37 +19,11 @@ repositories {
 }
 
 dependencies {
-    // 스프링부트 패키지는 버전을 명시해주지 않아도 org.springframework.boot의 명시된 버전에 맞게 가져옴
-    implementation('org.springframework.boot:spring-boot-starter-web') {
-        // spring-boot-starter-tomcat을 제외함 (스프링은 tomcat을 내장해서 바로 사용하기 때문에 톰캣을 제외함)
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-    }
-    // tomcat 대신 경량 웹 서버인 undertow 사용
-    implementation 'org.springframework.boot:spring-boot-starter-undertow'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-    // Swagger: 개발한 REST API의 명세를 자동으로 생성하고, 웹 UI를 통해 API를 직접 테스트해 볼 수 있는 강력한 문서화 도구
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-mysql'
-
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    compileOnly 'org.projectlombok:lombok'
-
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

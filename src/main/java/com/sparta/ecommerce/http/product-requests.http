@@ -1,9 +1,0 @@
-POST http://localhost:8080/product
-Content-Type: application/json
-
-{
-  "name": "상품",
-  "price": 1000,
-  "stock": 5,
-  "categoryId": 1
-}
