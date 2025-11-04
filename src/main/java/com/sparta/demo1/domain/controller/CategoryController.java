@@ -1,4 +1,4 @@
-package com.sparta.demo1.controller;
+package com.sparta.demo1.domain.controller;
 
 import com.sparta.demo1.domain.dto.request.CategoryCreateRequest;
 import com.sparta.demo1.domain.dto.request.CategoryUpdateRequest;
