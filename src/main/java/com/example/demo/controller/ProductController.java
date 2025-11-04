@@ -1,0 +1,64 @@
+package com.example.demo.controller;
+
+
+import com.example.demo.common.ApiResponse;
+import com.example.demo.controller.dto.ProductRequestDto;
+import com.example.demo.controller.dto.ProductResponseDto;
+import com.example.demo.service.ProductService;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/products")
+//@RequiredArgsConstructor
+public class ProductController {
+    // prefix = /api/products
+
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    // 전체 상품 조회
+    @GetMapping
+    public ApiResponse<List<ProductResponseDto>> getAll() {
+        return ApiResponse.success(productService.getAll());
+    }
+
+    // 단일 상품 조회
+    @GetMapping("/{id}")
+    public ApiResponse<ProductResponseDto> getById(@PathVariable Long id) {
+        return ApiResponse.success(productService.getById(id));
+    }
+
+    // 상품 생성
+    @PostMapping
+    public ApiResponse<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto request) {
+        return ApiResponse.success(productService.create(request));
+    }
+
+    //TODO: 수강생분들이 직접 해보기
+//    // 상품 수정
+//    @PutMapping("/{id}")
+//    public ApiResponse<ProductResponseDto> update(@PathVariable Long id,
+//                                               @Valid @RequestBody ProductRequestDto request) {
+//        return ApiResponse.success(productService.update(id, request));
+//    }
+//
+//    // 상품 삭제
+//    @DeleteMapping("/{id}")
+//    public ApiResponse<Void> delete(@PathVariable Long id) {
+//        productService.delete(id);
+//        return ApiResponse.success();
+//    }
+
+
+}

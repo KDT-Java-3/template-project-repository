@@ -1,0 +1,24 @@
+package com.example.demo.service.dto;
+
+
+import com.example.demo.controller.dto.CreateUserRequestDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateUserServiceDto {
+    private Long id;
+    private String username;
+    private String email;
+    private String password;
+
+    // 변환함수
+    public static CreateUserServiceDto fromRequest(CreateUserRequestDto request) {
+        return CreateUserServiceDto.builder(); //
+    }
+}
