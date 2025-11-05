@@ -77,4 +77,30 @@ public class Product {
         }
         this.stock -= quantity;
     }
+
+    public void updateDetails(
+            Category category,
+            String name,
+            String description,
+            BigDecimal price,
+            Integer stock
+    ) {
+        if (category == null) {
+            throw new IllegalArgumentException("category must not be null");
+        }
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name must not be blank");
+        }
+        if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("price must be positive");
+        }
+        if (stock == null || stock < 0) {
+            throw new IllegalArgumentException("stock must be zero or greater");
+        }
+        this.category = category;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
 }

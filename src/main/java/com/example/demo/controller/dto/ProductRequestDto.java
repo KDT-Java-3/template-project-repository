@@ -1,18 +1,24 @@
 package com.example.demo.controller.dto;
 
-import com.example.demo.entity.Category;
-import com.example.demo.entity.Product;
-import com.example.demo.service.dto.ProductServiceInputDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductRequestDto {
+
+    @NotNull(message = "카테고리 ID는 필수입니다.")
     Long categoryId;
 
     @NotBlank(message = "상품명은 필수입니다.")
@@ -27,20 +33,4 @@ public class ProductRequestDto {
     @NotNull(message = "재고는 필수입니다")
     @PositiveOrZero(message = "재고는 0 이상이어야 합니다")
     Integer stock;
-
-    public Product toEntity(Category category) {
-        return Product.builder()
-                .category(category)
-                .name(this.name)
-                .description(this.description)
-                .price(this.price)
-                .stock(this.stock)
-                .build();
-    }
-
-    public ProductServiceInputDto toService() {
-        return ProductServiceInputDto.builder()
-                // 내가 넣을 데이터 쭉
-                .build();
-    }
 }
