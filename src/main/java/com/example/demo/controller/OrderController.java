@@ -7,7 +7,6 @@ import com.example.demo.service.OrderService;
 import com.example.demo.service.dto.OrderResultDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +26,6 @@ public class OrderController {
     ) {
         // TODO 인증이 붙는다면 SecurityContextHolder에서 사용자 정보를 가져오도록 변경합니다.
         OrderResultDto result = orderService.createOrder(request.toServiceDto());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(OrderResponse.from(result)));
+        return ApiResponse.created(OrderResponse.from(result));
     }
 }
-

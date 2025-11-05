@@ -8,7 +8,6 @@ import com.example.demo.mapper.ProductMapper;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +51,7 @@ public class ProductController {
             @Valid @RequestBody ProductRequestDto request
     ) {
         ProductResponseDto response = productService.create(productMapper.toService(request));
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
+        return ApiResponse.created(response);
     }
 
     // 상품 수정

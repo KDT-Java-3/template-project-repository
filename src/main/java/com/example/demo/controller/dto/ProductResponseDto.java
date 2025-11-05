@@ -23,4 +23,6 @@ public class ProductResponseDto {
     Integer stock;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    String stockStatus;
+    String displayName;
 }
