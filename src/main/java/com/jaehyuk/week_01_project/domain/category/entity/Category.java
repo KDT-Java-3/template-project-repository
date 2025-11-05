@@ -37,6 +37,9 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = true)
+    private String description;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -51,8 +54,14 @@ public class Category {
     LocalDateTime updatedAt;
 
     @Builder
-    public Category(String name, Category parent) {
+    public Category(String name, String description, Category parent) {
         this.name = name;
+        this.description = description;
         this.parent = parent;
+    }
+
+    public void update(String name, String description){
+        this.name = name;
+        this.description = description;
     }
 }

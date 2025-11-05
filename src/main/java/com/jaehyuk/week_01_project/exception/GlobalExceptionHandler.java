@@ -1,5 +1,6 @@
 package com.jaehyuk.week_01_project.exception;
 
+import com.jaehyuk.week_01_project.exception.custom.CategoryNotFoundException;
 import com.jaehyuk.week_01_project.exception.custom.DuplicateEmailException;
 import com.jaehyuk.week_01_project.exception.custom.InvalidPasswordException;
 import com.jaehyuk.week_01_project.exception.custom.UserNotFoundException;
@@ -66,6 +67,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
+                .body(error);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(
+            CategoryNotFoundException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(error);
     }
 }
