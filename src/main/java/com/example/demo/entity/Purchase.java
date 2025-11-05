@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import com.example.demo.PurchaseStatus;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,8 +34,37 @@ public class Purchase {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(nullable = false)
     private Integer quantity;
-    private Integer totalPrice;
-    private LocalDateTime purchasedAt;
-}
 
+    @Column(nullable = false, precision = 15, scale = 2)
+    private BigDecimal unitPrice;
+
+    @Column(nullable = false, precision = 18, scale = 2)
+    private BigDecimal totalPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private PurchaseStatus status;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime purchasedAt;
+
+    @Builder
+    public Purchase(
+            User user,
+            Product product,
+            Integer quantity,
+            BigDecimal unitPrice,
+            BigDecimal totalPrice,
+            PurchaseStatus status
+    ) {
+        this.user = user;
+        this.product = product;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+        this.status = status;
+    }
+}

@@ -18,14 +18,5 @@ public class UserService {
         userJpaRepository.save(user);
     }
 
-    public UserDto getUser() {
-
-         // 리턴값 -> User
-        return UserDto.fromEntity(
-                userJpaRepository.findAll().get(0),
-                1,
-                2
-        );
-    }
 
 }

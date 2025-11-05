@@ -1,11 +1,8 @@
 package com.example.demo.controller;
 
-
 import com.example.demo.controller.dto.CreateUserRequestDto;
+import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import com.example.demo.service.dto.CreateUserServiceDto;
-import org.aspectj.weaver.ast.Test;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +18,16 @@ public class TestController {
         this.userService = userService;
     }
 
-    // /test/hello
     @PostMapping("/hello")
     public String hello(@RequestBody CreateUserRequestDto request) {
-        userService.createUser(
-                CreateUserServiceDto.fromRequest(
-                        request
-                )
-        )
+        userService.save(
+                User.builder()
+                        .name(request.getUsername())
+                        .email(request.getEmail())
+                        .passwordHash(request.getPassword())
+                        .build()
+        );
+        return "ok";
     }
-
-
 }
+

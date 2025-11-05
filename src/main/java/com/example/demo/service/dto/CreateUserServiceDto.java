@@ -17,8 +17,4 @@ public class CreateUserServiceDto {
     private String email;
     private String password;
 
-    // 변환함수
-    public static CreateUserServiceDto fromRequest(CreateUserRequestDto request) {
-        return CreateUserServiceDto.builder(); //
-    }
 }

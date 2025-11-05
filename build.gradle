@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql'
 
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+//    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 

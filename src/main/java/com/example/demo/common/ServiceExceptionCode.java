@@ -8,7 +8,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ServiceExceptionCode {
     // 서비스 로직에서 필요한 Exception들을 Enum
-    NOT_FOUND_PRODUCT("상품을 찾을수 없습니다");
+    NOT_FOUND_PRODUCT("상품을 찾을수 없습니다"),
+    NOT_FOUND_USER("사용자를 찾을 수 없습니다"),
+    INSUFFICIENT_PRODUCT_STOCK("상품 재고가 부족합니다"),
+    INVALID_ORDER_QUANTITY("주문 수량이 올바르지 않습니다");
 
     final String message;
 }
