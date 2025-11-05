@@ -78,6 +78,13 @@ public class Product {
         this.stock -= quantity;
     }
 
+    public void increaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("quantity must be greater than zero");
+        }
+        this.stock += quantity;
+    }
+
     public void updateDetails(
             Category category,
             String name,

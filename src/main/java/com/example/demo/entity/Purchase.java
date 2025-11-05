@@ -67,4 +67,12 @@ public class Purchase {
         this.totalPrice = totalPrice;
         this.status = status;
     }
+
+    public void markCompleted() {
+        this.status = PurchaseStatus.COMPLETED;
+    }
+
+    public void markRefunded() {
+        this.status = PurchaseStatus.REFUNDED;
+    }
 }

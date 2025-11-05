@@ -15,7 +15,9 @@ public enum ServiceExceptionCode {
     NOT_FOUND_CATEGORY("카테고리를 찾을 수 없습니다"),
     ALREADY_EXISTS_PRODUCT("동일한 이름의 상품이 이미 존재합니다"),
     INVALID_PRODUCT_STOCK("상품 재고가 올바르지 않습니다"),
-    INVALID_PRODUCT_PRICE("상품 가격이 올바르지 않습니다");
+    INVALID_PRODUCT_PRICE("상품 가격이 올바르지 않습니다"),
+    NOT_FOUND_PURCHASE("구매 내역을 찾을 수 없습니다"),
+    REFUND_NOT_ALLOWED("환불을 진행할 수 없는 상태입니다");
 
     final String message;
 }
