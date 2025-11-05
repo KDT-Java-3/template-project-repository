@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 public enum OrderStatus {
     PENDING,    // 주문 대기
     COMPLETED,  // 주문 완료
+    CANCEL_PENDING, // 취소대기
     CANCELED    // 주문 취소
     ;
 

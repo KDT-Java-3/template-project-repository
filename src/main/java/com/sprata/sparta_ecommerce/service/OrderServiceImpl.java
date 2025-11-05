@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("주문 취소는 주문대기 상태에서만 가능합니다.");
         }
 
-        order.updateStatus(OrderStatus.CANCELED);
+        order.updateStatus(OrderStatus.CANCEL_PENDING);
 
         return order.getId();
     }

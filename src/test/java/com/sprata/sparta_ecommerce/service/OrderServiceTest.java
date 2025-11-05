@@ -106,7 +106,7 @@ class OrderServiceTest {
 
         Order order = orderRepository.findById(created.getId()).get();
         assertEquals(created.getId(), canceledId);
-        assertEquals(OrderStatus.CANCELED, order.getStatus());
+        assertEquals(OrderStatus.CANCEL_PENDING, order.getStatus());
     }
 
     // ---------------------------- [실패 시나리오] ----------------------------

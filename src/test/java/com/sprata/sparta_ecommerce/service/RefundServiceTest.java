@@ -90,9 +90,12 @@ class RefundServiceTest {
 
         RefundResponseDto response = refundService.requestRefund(dto);
 
+        order = orderRepository.findAll().get(0);
+
         assertThat(response).isNotNull();
         assertThat(response.getOrder_id()).isEqualTo(order.getId());
         assertThat(response.getReason()).isEqualTo("단순 변심");
+        assertThat(OrderStatus.CANCELED).isEqualTo(order.getStatus());
     }
 
     @Test

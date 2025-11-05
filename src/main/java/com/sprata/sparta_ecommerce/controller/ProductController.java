@@ -1,10 +1,12 @@
 package com.sprata.sparta_ecommerce.controller;
 
+import com.sprata.sparta_ecommerce.controller.mapper.ProductMapper;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
 import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.SearchProductDto;
 import com.sprata.sparta_ecommerce.service.ProductService;
+import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import com.sprata.sparta_ecommerce.dto.ResponseDto;
@@ -20,9 +22,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @PostMapping
     public ResponseEntity<ResponseDto<?>> addProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
+        ProductServiceInputDto service = productMapper.toService(productRequestDto);
+
         ProductResponseDto responseDto = productService.addProduct(productRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseDto.success(responseDto.getName(), "상품 추가 성공"));

@@ -33,6 +33,7 @@ public class RefundServiceImpl implements RefundService {
                         .reason(refundRequestDto.getReason())
                         .build();
 
+        order.updateStatus(OrderStatus.CANCELED);
         Refund savedRefund = refundRepository.save(refund);
         return new RefundResponseDto(savedRefund);
     }
