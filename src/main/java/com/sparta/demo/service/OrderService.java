@@ -5,16 +5,17 @@ import com.sparta.demo.domain.order.OrderItem;
 import com.sparta.demo.domain.order.OrderStatus;
 import com.sparta.demo.domain.product.Product;
 import com.sparta.demo.domain.user.User;
-import com.sparta.demo.dto.order.OrderCreateDto;
-import com.sparta.demo.dto.order.OrderDto;
+import com.sparta.demo.exception.ServiceException;
+import com.sparta.demo.exception.ServiceExceptionCode;
 import com.sparta.demo.repository.OrderRepository;
 import com.sparta.demo.repository.ProductRepository;
 import com.sparta.demo.repository.UserRepository;
+import com.sparta.demo.service.dto.order.OrderCreateDto;
+import com.sparta.demo.service.dto.order.OrderDto;
+import com.sparta.demo.service.mapper.OrderServiceMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,24 +28,25 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final OrderServiceMapper mapper;
 
     @Transactional
     public OrderDto createOrder(OrderCreateDto dto) {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다. ID: " + dto.getUserId()));
+                .orElseThrow(() -> new ServiceException(
+                        ServiceExceptionCode.USER_NOT_FOUND, "ID: " + dto.getUserId()));
 
         Order order = Order.create(user, dto.getShippingAddress());
 
         dto.getOrderItems().forEach(itemDto -> {
             Product product = productRepository.findById(itemDto.getProductId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "상품을 찾을 수 없습니다. ID: " + itemDto.getProductId()));
+                    .orElseThrow(() -> new ServiceException(
+                            ServiceExceptionCode.PRODUCT_NOT_FOUND, "ID: " + itemDto.getProductId()));
 
             if (product.getStock() < itemDto.getQuantity()) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "재고가 부족합니다. 상품 ID: " + product.getId() +
+                throw new ServiceException(
+                        ServiceExceptionCode.INSUFFICIENT_STOCK,
+                        "상품 ID: " + product.getId() +
                         ", 요청 수량: " + itemDto.getQuantity() +
                         ", 현재 재고: " + product.getStock()
                 );
@@ -59,62 +61,57 @@ public class OrderService {
         order.calculateTotalPrice();
 
         Order savedOrder = orderRepository.save(order);
-        return OrderDto.from(savedOrder);
+        return mapper.toDto(savedOrder);
     }
 
     public OrderDto getOrder(Long id) {
         // N+1 해결: OrderItems와 Product를 함께 조회
         Order order = orderRepository.findByIdWithItemsAndProducts(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
-        return OrderDto.from(order);
+                .orElseThrow(() -> new ServiceException(
+                        ServiceExceptionCode.ORDER_NOT_FOUND, "ID: " + id));
+        return mapper.toDto(order);
     }
 
     public List<OrderDto> getOrdersByUserId(Long userId) {
         // N+1 해결: OrderItems와 Product를 함께 조회
         return orderRepository.findByUserIdWithItemsAndProducts(userId).stream()
-                .map(OrderDto::from)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public List<OrderDto> getOrdersByUserIdAndStatus(Long userId, OrderStatus status) {
         // N+1 해결: OrderItems와 Product를 함께 조회
         return orderRepository.findByUserIdAndStatusWithItemsAndProducts(userId, status).stream()
-                .map(OrderDto::from)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void updateOrderStatus(Long id, OrderStatus status) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
+                .orElseThrow(() -> new ServiceException(
+                        ServiceExceptionCode.ORDER_NOT_FOUND, "ID: " + id));
         order.updateStatus(status);
-        return;
     }
 
     @Transactional
     public void cancelOrder(Long id) {
         // N+1 해결: OrderItems와 Product를 함께 조회
         Order order = orderRepository.findByIdWithItemsAndProducts(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다. ID: " + id));
+                .orElseThrow(() -> new ServiceException(
+                        ServiceExceptionCode.ORDER_NOT_FOUND, "ID: " + id));
 
         // PENDING 상태의 주문만 취소 가능
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+            throw new ServiceException(
+                    ServiceExceptionCode.CANNOT_CANCEL_ORDER,
                     "PENDING 상태의 주문만 취소할 수 있습니다. 현재 상태: " + order.getStatus());
         }
 
-        try {
-            order.cancel();
-            order.getOrderItems().forEach(orderItem -> {
-                Product product = orderItem.getProduct();
-                product.increaseStock(orderItem.getQuantity());
-            });
-        } catch (IllegalStateException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+        order.cancel();
+        order.getOrderItems().forEach(orderItem -> {
+            Product product = orderItem.getProduct();
+            product.increaseStock(orderItem.getQuantity());
+        });
     }
 }

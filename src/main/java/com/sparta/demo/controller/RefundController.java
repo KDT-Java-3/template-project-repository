@@ -1,8 +1,12 @@
 package com.sparta.demo.controller;
 
+import com.sparta.demo.common.ApiResponse;
+import com.sparta.demo.controller.dto.refund.RefundRequest;
+import com.sparta.demo.controller.dto.refund.RefundResponse;
+import com.sparta.demo.controller.mapper.RefundControllerMapper;
 import com.sparta.demo.domain.refund.RefundStatus;
-import com.sparta.demo.dto.refund.*;
 import com.sparta.demo.service.RefundService;
+import com.sparta.demo.service.dto.refund.RefundDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,59 +25,59 @@ import java.util.stream.Collectors;
 public class RefundController {
 
     private final RefundService refundService;
+    private final RefundControllerMapper mapper;
 
     @Operation(summary = "환불 요청", description = "새로운 환불 요청을 생성합니다.")
     @PostMapping
-    public ResponseEntity<RefundResponse> createRefund(@Valid @RequestBody RefundRequest request) {
-        RefundCreateDto dto = RefundCreateDto.from(request);
-        RefundDto refundDto = refundService.createRefund(dto);
-        RefundResponse response = RefundResponse.from(refundDto);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<RefundResponse>> createRefund(@Valid @RequestBody RefundRequest request) {
+        var createDto = mapper.toCreateDto(request);
+        RefundDto refundDto = refundService.createRefund(createDto);
+        RefundResponse response = mapper.toResponse(refundDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
     @Operation(summary = "환불 단건 조회", description = "ID로 환불 요청을 조회합니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<RefundResponse> getRefund(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<RefundResponse>> getRefund(@PathVariable Long id) {
         RefundDto refundDto = refundService.getRefund(id);
-        RefundResponse response = RefundResponse.from(refundDto);
-        return ResponseEntity.ok(response);
+        RefundResponse response = mapper.toResponse(refundDto);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @Operation(summary = "사용자별 환불 조회", description = "특정 사용자의 모든 환불 요청을 조회합니다.")
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<RefundResponse>> getRefundsByUserId(@PathVariable Long userId) {
-        List<RefundDto> refundDtos = refundService.getRefundsByUserId(userId);
-        List<RefundResponse> responses = refundDtos.stream()
-                .map(RefundResponse::from)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
-    }
+    @Operation(summary = "환불 목록 조회", description = "환불 목록을 조회합니다. Query Parameter로 필터링 가능: user-id, status")
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<RefundResponse>>> getRefunds(
+            @RequestParam(name = "user-id", required = false) Long userId,
+            @RequestParam(required = false) RefundStatus status) {
+        List<RefundDto> refundDtos;
 
-    @Operation(summary = "사용자별 환불 상태 조회", description = "특정 사용자의 특정 상태 환불 요청을 조회합니다.")
-    @GetMapping("/user/{userId}/status/{status}")
-    public ResponseEntity<List<RefundResponse>> getRefundsByUserIdAndStatus(
-            @PathVariable Long userId,
-            @PathVariable RefundStatus status) {
-        List<RefundDto> refundDtos = refundService.getRefundsByUserIdAndStatus(userId, status);
+        if (userId != null && status != null) {
+            refundDtos = refundService.getRefundsByUserIdAndStatus(userId, status);
+        } else if (userId != null) {
+            refundDtos = refundService.getRefundsByUserId(userId);
+        } else {
+            throw new IllegalArgumentException("user-id 파라미터는 필수입니다.");
+        }
+
         List<RefundResponse> responses = refundDtos.stream()
-                .map(RefundResponse::from)
+                .map(mapper::toResponse)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
     @Operation(summary = "환불 승인", description = "환불 요청을 승인하고 재고를 복원합니다.")
-    @PatchMapping("/{id}/approve")
-    public ResponseEntity<RefundResponse> approveRefund(@PathVariable Long id) {
+    @PostMapping("/{id}/approval")
+    public ResponseEntity<ApiResponse<RefundResponse>> approveRefund(@PathVariable Long id) {
         RefundDto refundDto = refundService.approveRefund(id);
-        RefundResponse response = RefundResponse.from(refundDto);
-        return ResponseEntity.ok(response);
+        RefundResponse response = mapper.toResponse(refundDto);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(summary = "환불 거절", description = "환불 요청을 거절합니다.")
-    @PatchMapping("/{id}/reject")
-    public ResponseEntity<RefundResponse> rejectRefund(@PathVariable Long id) {
+    @PostMapping("/{id}/rejection")
+    public ResponseEntity<ApiResponse<RefundResponse>> rejectRefund(@PathVariable Long id) {
         RefundDto refundDto = refundService.rejectRefund(id);
-        RefundResponse response = RefundResponse.from(refundDto);
-        return ResponseEntity.ok(response);
+        RefundResponse response = mapper.toResponse(refundDto);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
