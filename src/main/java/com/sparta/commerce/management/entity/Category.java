@@ -56,7 +56,6 @@ public class Category {
     LocalDateTime rgDt;
 
     @NotNull
-    @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "ud_dt", nullable = false)
     LocalDateTime udDt;

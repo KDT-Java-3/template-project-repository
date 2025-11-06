@@ -17,8 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "(:categoryId IS NULL OR p.category.id = :categoryId) AND " +
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
             "(:maxPrice IS NULL OR p.price <= :maxPrice) AND" +
-            "(:keyword IS NULL OR lower(p.name) LIKE lower(concat('%', :keyword, '%')) " +
-            "or lower(p.description) like lower(concat('%', :keyword, '%')))")
+            "(:keyword IS NULL OR lower(p.name) LIKE lower(:keyword))")
     List<Product> searchProducts(@Param("categoryId") UUID categoryId,
                                  @Param("minPrice") BigDecimal minPrice,
                                  @Param("maxPrice") BigDecimal maxPrice,

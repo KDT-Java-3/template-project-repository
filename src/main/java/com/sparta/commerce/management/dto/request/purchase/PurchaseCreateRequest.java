@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +22,6 @@ public class PurchaseCreateRequest {
     String recipientAddress;
 
     @NotNull(message = "주문 상품은 필수 입니다.")
-    List<PurchaseProductRequest> purchaseProductRequests = new ArrayList<>();
+    List<PurchaseProductRequest> purchaseProductRequests;
 
 }
