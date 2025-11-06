@@ -14,6 +14,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 // Product.java
 @Table
@@ -44,6 +46,9 @@ public class Product {
 
     @Column(nullable = false)
     private Integer stock;
+
+    @OneToMany(mappedBy = "product")
+    private final List<Purchase> purchases = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

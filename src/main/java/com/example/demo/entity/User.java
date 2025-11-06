@@ -12,6 +12,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -34,6 +36,9 @@ public class User {
 
     @Column(nullable = false)
     String passwordHash;
+
+    @OneToMany(mappedBy = "user")
+    private final List<Purchase> purchases = new ArrayList<>();
 
     // 주민번호
     // 현재 거주 주소

@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,6 +12,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Table
@@ -31,10 +32,15 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
+
+    @OneToMany(mappedBy = "parent")
+    private final List<Category> children = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category")
+    private final List<Product> products = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

@@ -13,6 +13,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -26,12 +28,12 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(nullable = false)
@@ -46,6 +48,9 @@ public class Purchase {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private PurchaseStatus status;
+
+    @OneToMany(mappedBy = "purchase")
+    private final List<Refund> refunds = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
