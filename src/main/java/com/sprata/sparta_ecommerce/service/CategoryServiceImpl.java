@@ -1,7 +1,9 @@
 package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
+import com.sprata.sparta_ecommerce.controller.exception.DataReferencedException;
 import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
+import com.sprata.sparta_ecommerce.dto.CategoryDetailResponseDto;
 import com.sprata.sparta_ecommerce.dto.CategoryRequestDto;
 import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
@@ -48,9 +50,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CategoryResponseDto> getAllCategories(PageDto pageDto) {
+    public List<CategoryDetailResponseDto> getAllCategories(PageDto pageDto) {
+
+
+
+
         return categoryRepository.findListPaging(pageDto).stream()
-                .map(CategoryResponseDto::new)
+                .map(CategoryDetailResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -78,5 +84,22 @@ public class CategoryServiceImpl implements CategoryService {
 
         category.update(categoryRequestDto.getName(), categoryRequestDto.getDescription(), parentCategory);
         return new CategoryResponseDto(category, null);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new DataNotFoundException("해당 카테고리를 찾을 수 없습니다."));
+
+        if(!category.getSubCategories().isEmpty()){
+            throw new DataReferencedException("하위 카테고리가 존재합니다.");
+        }
+
+        if(!category.getProducts().isEmpty()){
+            throw new DataReferencedException("연관된 상품이 존재합니다.");
+        }
+
+        categoryRepository.delete(category);
     }
 }

@@ -1,12 +1,17 @@
 package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
+import com.sprata.sparta_ecommerce.controller.exception.DataReferencedException;
 import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
+import com.sprata.sparta_ecommerce.dto.CategoryDetailResponseDto;
 import com.sprata.sparta_ecommerce.dto.CategoryRequestDto;
 import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
+import com.sprata.sparta_ecommerce.repository.ProductRepository;
+import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -26,13 +30,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CategoryServiceTest {
 
     @Autowired
+    EntityManager em;
+
+    @Autowired
     private CategoryServiceImpl categoryService;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
 
     private CategoryRequestDto parentRequest;
+    @Autowired
+    private ProductService productService;
 
     @BeforeEach
     void setup() {
@@ -154,11 +166,11 @@ class CategoryServiceTest {
         PageDto pageDto = new PageDto(1, 10);
 
         // when
-        List<CategoryResponseDto> result = categoryService.getAllCategories(pageDto);
+        List<CategoryDetailResponseDto> result = categoryService.getAllCategories(pageDto);
 
         // then
         assertThat(result).hasSize(3);
-        assertThat(result).extracting(CategoryResponseDto::getName)
+        assertThat(result).extracting(CategoryDetailResponseDto::getName)
                 .containsExactlyInAnyOrder("식품", "패션", "전자");
     }
 
@@ -202,5 +214,76 @@ class CategoryServiceTest {
         assertThatThrownBy(() -> categoryService.addCategory(childRequest))
                 .isInstanceOf(DataNotFoundException.class)
                 .hasMessageContaining("상위 카테고리를 찾을 수 없습니다");
+    }
+
+    // ✅ 성공 케이스
+    @Test
+    @DisplayName("✅ 카테고리 삭제 성공 - 하위, 상품 없음")
+    void deleteCategory_success() {
+        // given
+        Category removable = categoryRepository.save(
+                Category.builder().name("삭제대상").description("삭제용").build()
+        );
+
+        // when & then
+        assertThatCode(() -> categoryService.deleteCategory(removable.getId()))
+                .doesNotThrowAnyException();
+
+        assertThat(categoryRepository.findById(removable.getId())).isEmpty();
+    }
+
+    // ❌ 실패 1 - 하위 카테고리 존재
+    @Test
+    @DisplayName("❌ 카테고리 삭제 실패 - 하위 카테고리 존재")
+    void deleteCategory_fail_hasSubCategory() {
+
+        Category parentCategory = categoryRepository.save(
+                Category.builder().name("전자제품").description("전자 관련").build()
+        );
+        Category childCategory = categoryRepository.save(
+                Category.builder().name("가전소형").description("소형 전자").parentCategory(parentCategory).build()
+        );
+
+        em.flush();
+        em.clear();
+
+        assertThatThrownBy(() -> categoryService.deleteCategory(parentCategory.getId()))
+                .isInstanceOf(DataReferencedException.class)
+                .hasMessageContaining("하위 카테고리가 존재합니다.");
+    }
+
+    // ❌ 실패 2 - 연관 상품 존재
+    @Test
+    @DisplayName("❌ 카테고리 삭제 실패 - 연관 상품 존재")
+    void deleteCategory_fail_hasProduct() {
+        // given
+        Category parentCategory = categoryRepository.save(
+                Category.builder().name("전자제품").description("전자 관련").build()
+        );
+
+        em.flush();
+        em.clear();
+
+        productService.addProduct(ProductServiceInputDto.builder()
+                .name("노트북")
+                .description("테스트 상품")
+                .price(1000L)
+                .stock(5)
+                .category_id(parentCategory.getId())
+                .build());
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.deleteCategory(parentCategory.getId()))
+                .isInstanceOf(DataReferencedException.class)
+                .hasMessageContaining("연관된 상품이 존재합니다.");
+    }
+
+    // ❌ 실패 3 - 존재하지 않는 카테고리
+    @Test
+    @DisplayName("❌ 카테고리 삭제 실패 - 존재하지 않는 카테고리")
+    void deleteCategory_fail_notFound() {
+        assertThatThrownBy(() -> categoryService.deleteCategory(999L))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessageContaining("해당 카테고리를 찾을 수 없습니다.");
     }
 }

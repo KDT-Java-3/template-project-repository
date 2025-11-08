@@ -34,6 +34,9 @@ public class Category extends Timestamped {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCategory")
     private List<Category> subCategories = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
+
     @Builder
     public Category(String name, String description, Category parentCategory) {
         this.name = name;

@@ -1,5 +1,6 @@
 package com.sprata.sparta_ecommerce.controller;
 
+import com.sprata.sparta_ecommerce.dto.CategoryDetailResponseDto;
 import com.sprata.sparta_ecommerce.dto.CategoryRequestDto;
 import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
@@ -30,7 +31,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<?>> getAllCategories(@ModelAttribute PageDto pageDto) {
-        List<CategoryResponseDto> responseDtos = categoryService.getAllCategories(pageDto);
+        List<CategoryDetailResponseDto> responseDtos = categoryService.getAllCategories(pageDto);
         return ResponseEntity.ok(ResponseDto.success(responseDtos, "카테고리 조회 성공"));
     }
 
@@ -38,5 +39,11 @@ public class CategoryController {
     public ResponseEntity<ResponseDto<?>> updateCategory(@PathVariable Long categoryId, @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
         CategoryResponseDto responseDto = categoryService.updateCategory(categoryId, categoryRequestDto);
         return ResponseEntity.ok(ResponseDto.success(responseDto, "카테고리 수정 성공"));
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<ResponseDto<?>> deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok(ResponseDto.success(categoryId, "카테고리 수정 성공"));
     }
 }
