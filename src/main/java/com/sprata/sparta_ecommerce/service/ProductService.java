@@ -1,6 +1,5 @@
 package com.sprata.sparta_ecommerce.service;
 
-import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
 import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.dto.param.SearchProductDto;
@@ -15,5 +14,5 @@ public interface ProductService {
 
     List<ProductResponseDto> getAllProducts(SearchProductDto searchProductDto, PageDto pageDto);
 
-    ProductResponseDto updateProduct(Long productId, ProductRequestDto productRequestDto);
+    ProductResponseDto updateProduct(Long productId, ProductServiceInputDto productRequestDto);
 }

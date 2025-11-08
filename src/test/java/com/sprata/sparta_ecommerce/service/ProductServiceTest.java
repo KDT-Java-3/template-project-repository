@@ -119,8 +119,6 @@ public class ProductServiceTest {
     @DisplayName("상품 수정 성공")
     void updateProductSuccess() {
 
-
-
         // 수정 DTO
         ProductRequestDto updateDto = new ProductRequestDto();
         updateDto.setName("LG TV");
@@ -129,7 +127,9 @@ public class ProductServiceTest {
         updateDto.setStock(5);
         updateDto.setCategory_id(electronics.getId());
 
-        ProductResponseDto updated = productService.updateProduct(lgTv.getId(), updateDto);
+        ProductServiceInputDto dto = productMapper.toService(updateDto);
+
+        ProductResponseDto updated = productService.updateProduct(lgTv.getId(), dto);
 
         assertEquals("LG TV", updated.getName());
         assertEquals(1200L, updated.getPrice());
@@ -146,8 +146,11 @@ public class ProductServiceTest {
         updateDto.setStock(5);
         updateDto.setCategory_id(electronics.getId());
 
+        ProductServiceInputDto dto = productMapper.toService(updateDto);
+
+
         DataNotFoundException ex = assertThrows(DataNotFoundException.class,
-                () -> productService.updateProduct(999L, updateDto));
+                () -> productService.updateProduct(999L, dto));
 
         assertEquals("해당 상품을 찾을 수 없습니다.", ex.getMessage());
     }
@@ -165,10 +168,36 @@ public class ProductServiceTest {
         updateDto.setStock(5);
         updateDto.setCategory_id(999L); // 존재하지 않는 카테고리
 
+        ProductServiceInputDto dto = productMapper.toService(updateDto);
+
         DataNotFoundException ex = assertThrows(DataNotFoundException.class,
-                () -> productService.updateProduct(created.getId(), updateDto));
+                () -> productService.updateProduct(created.getId(), dto));
 
         assertEquals("해당 카테고리를 찾을 수 없습니다.", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("상품 수정 실패 - 상품 이름 중복")
+    void updateProductDuplicateProductName() {
+        ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
+        ProductResponseDto created = productService.addProduct(inputDto);
+
+        // 중복데이터생성
+        Product product = productRepository.findAll().get(0);
+
+        ProductRequestDto updateDto = new ProductRequestDto();
+        updateDto.setName(product.getName());
+        updateDto.setDescription("42인치 TV");
+        updateDto.setPrice(1200L);
+        updateDto.setStock(5);
+        updateDto.setCategory_id(electronics.getId());
+
+        ProductServiceInputDto dto = productMapper.toService(updateDto);
+
+        DuplicationException ex = assertThrows(DuplicationException.class,
+                () -> productService.updateProduct(created.getId(), dto));
+
+        assertEquals(product.getName() + " 중복된 상품명 존재합니다.", ex.getMessage());
     }
 
     // ----------------------------

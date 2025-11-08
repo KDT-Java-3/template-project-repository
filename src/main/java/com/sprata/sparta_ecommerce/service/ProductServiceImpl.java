@@ -2,7 +2,6 @@ package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
 import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
-import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
 import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.dto.param.SearchProductDto;
@@ -67,17 +66,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductResponseDto updateProduct(Long productId, ProductRequestDto productRequestDto) {
+    public ProductResponseDto updateProduct(Long productId, ProductServiceInputDto updateDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("해당 상품을 찾을 수 없습니다."));
 
-        Category category = categoryRepository.findById(productRequestDto.getCategory_id())
+        Category category = categoryRepository.findById(updateDto.getCategory_id())
                 .orElseThrow(() -> new DataNotFoundException("해당 카테고리를 찾을 수 없습니다."));
 
-        product.update(productRequestDto.getName()
-                ,productRequestDto.getDescription()
-                ,productRequestDto.getPrice()
-                ,productRequestDto.getStock()
+
+        if(productRepository.findByProductName(updateDto.getName()).isPresent()){
+            Product findProduct = productRepository.findByProductName(updateDto.getName()).get();
+            if(!product.equals(findProduct)){
+                throw new DuplicationException(updateDto.getName() + " 중복된 상품명 존재합니다.");
+            }
+        }
+
+        product.update(updateDto.getName()
+                ,updateDto.getDescription()
+                ,updateDto.getPrice()
+                ,updateDto.getStock()
                 ,category
         );
 
