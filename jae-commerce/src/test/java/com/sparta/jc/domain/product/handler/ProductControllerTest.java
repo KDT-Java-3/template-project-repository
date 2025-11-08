@@ -3,7 +3,6 @@ package com.sparta.jc.domain.product.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.jc.domain.category.entity.Category;
 import com.sparta.jc.domain.category.repository.CategoryRepository;
-import com.sparta.jc.domain.product.handler.dto.ProductRequest;
 import com.sparta.jc.domain.product.repository.ProductRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
