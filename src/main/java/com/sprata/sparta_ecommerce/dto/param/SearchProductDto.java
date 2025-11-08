@@ -1,12 +1,17 @@
 package com.sprata.sparta_ecommerce.dto.param;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class SearchProductDto {
 
     private static final long MIN_PRICE = 0;
@@ -24,10 +29,16 @@ public class SearchProductDto {
     @Builder.Default
     private String keyword = "";
 
-    public SearchProductDto(Long categoryId, Long minPrice, Long maxPrice, String keyword) {
-        this.categoryId = categoryId;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-        this.keyword = keyword;
+
+    // 다중 정렬 조건
+    @Builder.Default
+    private List<SortCondition> sortConditions = new ArrayList<>();
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SortCondition {
+        private String field;
+        private String direction;
     }
 }

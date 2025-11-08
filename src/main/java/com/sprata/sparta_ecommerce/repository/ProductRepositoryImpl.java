@@ -1,6 +1,8 @@
 package com.sprata.sparta_ecommerce.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +43,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 )
                 .offset(pageDto.getOffset())
                 .limit(pageDto.getSize())
+                .orderBy(searchProductOrder(searchDto))
                 .fetch();
     }
 
@@ -110,6 +114,39 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return Optional.ofNullable(queryFactory.selectFrom(product)
                 .where(product.name.eq(name))
                 .fetchOne());
+    }
+
+
+    /**
+     * 동적 정렬 조건
+     * */
+    private OrderSpecifier[] searchProductOrder(SearchProductDto dto) {
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+
+        for (SearchProductDto.SortCondition sc : dto.getSortConditions()) {
+            Order order = "asc".equalsIgnoreCase(sc.getDirection()) ? Order.ASC : Order.DESC;
+
+            switch (sc.getField()) {
+                case "price":
+                    orderSpecifiers.add(new OrderSpecifier<>(order, product.price));
+                    break;
+                case "name":
+                    orderSpecifiers.add(new OrderSpecifier<>(order, product.name));
+                    break;
+                case "createdAt":
+                    orderSpecifiers.add(new OrderSpecifier<>(order, product.createdAt));
+                    break;
+                default:
+                    break; // 알 수 없는 필드는 무시
+            }
+        }
+
+        // 정렬 조건이 없으면 기본값: 등록일 DESC
+        if (orderSpecifiers.isEmpty()) {
+            orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));
+        }
+
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
     }
 
     /**

@@ -9,13 +9,14 @@ import java.util.Optional;
 
 @Getter
 public class ProductResponseDto {
-    private Long id;
-    private String name;
-    private String description;
-    private Long price;
-    private int stock;
-    private Long category_id;
-    private String category_name;
+    private final Long id;
+    private final String name;
+    private final String description;
+    private final Long price;
+    private final int stock;
+    private final boolean stockActive;
+    private final Long category_id;
+    private final String category_name;
 
     public ProductResponseDto(Product product) {
         this.id = product.getId();
@@ -23,10 +24,10 @@ public class ProductResponseDto {
         this.description = product.getDescription();
         this.price = product.getPrice();
         this.stock = product.getStock();
+        this.stockActive = product.getStock() <= 0;
         this.category_id = Optional.ofNullable(product.getCategory())
                 .map(Category::getId)
                 .orElse(null);
-
         this.category_name = Optional.ofNullable(product.getCategory())
                 .map(Category::getName)
                 .orElse("");

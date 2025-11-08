@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -77,7 +79,7 @@ public class ProductServiceTest {
         this.samsungNoteBook = productRepository.save(new Product("삼성 노트북", "노트북", 1500L, 10, electronics));
         this.lgTv = productRepository.save(new Product("LG TV", "42인치 TV", 1200L, 5, electronics));
         this.desk = productRepository.save(new Product("책상", "원목 책상", 300L, 3, furniture));
-        this.chair = productRepository.save(new Product("의자", "사무용 의자", 100L, 7, furniture));
+        this.chair = productRepository.save(new Product("의자", "사무용 의자", 300L, 7, furniture));
     }
 
 
@@ -295,6 +297,28 @@ public class ProductServiceTest {
     }
 
     // ----------------------------
+    // 가격 -> 이름 순으로 ASC 조회
+    // ----------------------------
+    @Test
+    @DisplayName("복합 조건 조회")
+    void getAllProductsByMultipleOrderBy() {
+        SearchProductDto searchDto = SearchProductDto.builder()
+                .sortConditions(List.of(
+                        new SearchProductDto.SortCondition("price","desc")
+                        ,new SearchProductDto.SortCondition("name","asc")
+                ))
+                .build();
+        PageDto pageDto = new PageDto(1, 10);
+
+        var results = productService.getAllProducts(searchDto, pageDto);
+        assertEquals(4, results.size());
+        assertEquals("삼성 노트북", results.get(0).getName());
+        assertEquals("LG TV", results.get(1).getName());
+        assertEquals("의자", results.get(2).getName());
+        assertEquals("책상", results.get(3).getName());
+    }
+
+    // ----------------------------
     // 검색 조건 결과 없음
     // ----------------------------
     @Test
@@ -338,7 +362,7 @@ public class ProductServiceTest {
         order.updateStatus(OrderStatus.COMPLETED);
         em.flush();
         em.clear();
-        
+
         // when
         DataReferencedException ex = assertThrows(
                 DataReferencedException.class,
