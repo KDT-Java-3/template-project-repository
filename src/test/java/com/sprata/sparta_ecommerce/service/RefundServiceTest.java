@@ -10,7 +10,6 @@ import com.sprata.sparta_ecommerce.repository.OrderRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
 import com.sprata.sparta_ecommerce.repository.RefundRepository;
 import jakarta.transaction.Transactional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -95,7 +94,7 @@ class RefundServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getOrder_id()).isEqualTo(order.getId());
         assertThat(response.getReason()).isEqualTo("단순 변심");
-        assertThat(OrderStatus.CANCELED).isEqualTo(order.getStatus());
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCELED);
     }
 
     @Test
@@ -106,7 +105,8 @@ class RefundServiceTest {
         dto.setOrder_id(9999L);
         dto.setReason("테스트 실패 케이스");
 
-        assertThrows(DataNotFoundException.class, () -> refundService.requestRefund(dto));
+        assertThatThrownBy(() -> refundService.requestRefund(dto))
+                .isInstanceOf(DataNotFoundException.class);
     }
 
     @Test
@@ -144,8 +144,8 @@ class RefundServiceTest {
                         .build()
         );
 
-        assertThrows(DataNotFoundException.class,
-                () -> refundService.processRefund(refund.getId(), RefundStatus.APPROVED));
+        assertThatThrownBy(() -> refundService.processRefund(refund.getId(), RefundStatus.APPROVED))
+                .isInstanceOf(DataNotFoundException.class);
     }
 
     @Test

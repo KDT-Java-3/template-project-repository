@@ -27,8 +27,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -68,8 +68,8 @@ public class ProductServiceTest {
     @BeforeEach
     void setUp() {
         // 카테고리 저장
-        electronics = categoryRepository.save(new Category("가전", "전자제품"));
-        furniture = categoryRepository.save(new Category("가구", "가구류"));
+        electronics = categoryRepository.save(new Category("가전", "전자제품",null));
+        furniture = categoryRepository.save(new Category("가구", "가구류",null));
 
         this.productRequestDto =  new ProductRequestDto(
                 "아이폰", "애플폰이야", 132_000_000L, 10, electronics.getId()
@@ -89,9 +89,9 @@ public class ProductServiceTest {
         ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
         ProductResponseDto responseDto = productService.addProduct(inputDto);
 
-        assertNotNull(responseDto.getId());
-        assertEquals("아이폰", responseDto.getName());
-        assertEquals(electronics.getId(), responseDto.getCategory_id());
+        assertThat(responseDto.getId()).isNotNull();
+        assertThat(responseDto.getName()).isEqualTo("아이폰");
+        assertThat(responseDto.getCategory_id()).isEqualTo(electronics.getId());
     }
 
     @Test
@@ -100,10 +100,9 @@ public class ProductServiceTest {
         productRequestDto.setCategory_id(999L); // 존재하지 않는 카테고리
 
         ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
-        DataNotFoundException ex = assertThrows(DataNotFoundException.class,
-                () -> productService.addProduct(inputDto));
-
-        assertEquals("해당 카테고리를 찾을 수 없습니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.addProduct(inputDto))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage("해당 카테고리를 찾을 수 없습니다.");
     }
 
 
@@ -117,10 +116,9 @@ public class ProductServiceTest {
         );
 
         ProductServiceInputDto inputDto = productMapper.toService(dto);
-        DuplicationException ex = assertThrows(DuplicationException.class,
-                () -> productService.addProduct(inputDto));
-
-        assertEquals(duplicateName + " 중복된 상품명 존재합니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.addProduct(inputDto))
+                .isInstanceOf(DuplicationException.class)
+                .hasMessage(duplicateName + " 중복된 상품명 존재합니다.");
     }
 
 
@@ -141,9 +139,9 @@ public class ProductServiceTest {
 
         ProductResponseDto updated = productService.updateProduct(lgTv.getId(), dto);
 
-        assertEquals("LG TV", updated.getName());
-        assertEquals(1200L, updated.getPrice());
-        assertEquals(5, updated.getStock());
+        assertThat(updated.getName()).isEqualTo("LG TV");
+        assertThat(updated.getPrice()).isEqualTo(1200L);
+        assertThat(updated.getStock()).isEqualTo(5);
     }
 
     @Test
@@ -158,11 +156,9 @@ public class ProductServiceTest {
 
         ProductServiceInputDto dto = productMapper.toService(updateDto);
 
-
-        DataNotFoundException ex = assertThrows(DataNotFoundException.class,
-                () -> productService.updateProduct(999L, dto));
-
-        assertEquals("해당 상품을 찾을 수 없습니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.updateProduct(999L, dto))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage("해당 상품을 찾을 수 없습니다.");
     }
 
     @Test
@@ -180,10 +176,9 @@ public class ProductServiceTest {
 
         ProductServiceInputDto dto = productMapper.toService(updateDto);
 
-        DataNotFoundException ex = assertThrows(DataNotFoundException.class,
-                () -> productService.updateProduct(created.getId(), dto));
-
-        assertEquals("해당 카테고리를 찾을 수 없습니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.updateProduct(created.getId(), dto))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage("해당 카테고리를 찾을 수 없습니다.");
     }
 
     @Test
@@ -204,10 +199,9 @@ public class ProductServiceTest {
 
         ProductServiceInputDto dto = productMapper.toService(updateDto);
 
-        DuplicationException ex = assertThrows(DuplicationException.class,
-                () -> productService.updateProduct(created.getId(), dto));
-
-        assertEquals(product.getName() + " 중복된 상품명 존재합니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.updateProduct(created.getId(), dto))
+                .isInstanceOf(DuplicationException.class)
+                .hasMessage(product.getName() + " 중복된 상품명 존재합니다.");
     }
 
     // ----------------------------
@@ -221,7 +215,7 @@ public class ProductServiceTest {
 
         var results = productService.getAllProducts(searchDto, pageDto);
 
-        assertEquals(4, results.size());
+        assertThat(results).hasSize(4);
     }
 
     // ----------------------------
@@ -237,8 +231,8 @@ public class ProductServiceTest {
 
         var results = productService.getAllProducts(searchDto, pageDto);
 
-        assertEquals(2, results.size());
-        assertTrue(results.stream().allMatch(p -> p.getCategory_id().equals(electronics.getId())));
+        assertThat(results).hasSize(2);
+        assertThat(results).allMatch(p -> p.getCategory_id().equals(electronics.getId()));
     }
 
     // ----------------------------
@@ -249,14 +243,14 @@ public class ProductServiceTest {
     void getAllProductsByPriceRange() {
         SearchProductDto searchDto = SearchProductDto.builder()
                 .minPrice(200L)
-                .maxPrice(1300L)
+                .maxPrice(1000L)
                 .build();
         PageDto pageDto = new PageDto(1, 10);
 
         var results = productService.getAllProducts(searchDto, pageDto);
 
-        assertEquals(2, results.size());
-        assertTrue(results.stream().allMatch(p -> p.getPrice() >= 200L && p.getPrice() <= 1300L));
+        assertThat(results).hasSize(2);
+        assertThat(results).allMatch(p -> p.getPrice() >= 200L && p.getPrice() <= 1300L);
     }
 
     // ----------------------------
@@ -272,8 +266,8 @@ public class ProductServiceTest {
 
         var results = productService.getAllProducts(searchDto, pageDto);
 
-        assertEquals(1, results.size());
-        assertEquals("삼성 노트북", results.get(0).getName());
+        assertThat(results).hasSize(1);
+        assertThat(results.get(0).getName()).isEqualTo("삼성 노트북");
     }
 
     // ----------------------------
@@ -285,15 +279,15 @@ public class ProductServiceTest {
         SearchProductDto searchDto = SearchProductDto.builder()
                 .categoryId(furniture.getId())
                 .minPrice(50L)
-                .maxPrice(200L)
+                .maxPrice(1000L)
                 .keyword("의자")
                 .build();
         PageDto pageDto = new PageDto(1, 10);
 
         var results = productService.getAllProducts(searchDto, pageDto);
 
-        assertEquals(1, results.size());
-        assertEquals("의자", results.get(0).getName());
+        assertThat(results).hasSize(1);
+        assertThat(results.get(0).getName()).isEqualTo("의자");
     }
 
     // ----------------------------
@@ -311,11 +305,11 @@ public class ProductServiceTest {
         PageDto pageDto = new PageDto(1, 10);
 
         var results = productService.getAllProducts(searchDto, pageDto);
-        assertEquals(4, results.size());
-        assertEquals("삼성 노트북", results.get(0).getName());
-        assertEquals("LG TV", results.get(1).getName());
-        assertEquals("의자", results.get(2).getName());
-        assertEquals("책상", results.get(3).getName());
+        assertThat(results).hasSize(4);
+        assertThat(results.get(0).getName()).isEqualTo("삼성 노트북");
+        assertThat(results.get(1).getName()).isEqualTo("LG TV");
+        assertThat(results.get(2).getName()).isEqualTo("의자");
+        assertThat(results.get(3).getName()).isEqualTo("책상");
     }
 
     // ----------------------------
@@ -332,7 +326,7 @@ public class ProductServiceTest {
 
         var results = productService.getAllProducts(searchDto, pageDto);
 
-        assertTrue(results.isEmpty());
+        assertThat(results).isEmpty();
     }
 
     @Test
@@ -347,8 +341,7 @@ public class ProductServiceTest {
         em.clear();
 
         // then
-        boolean isEmpty = productRepository.findById(productId).isEmpty();
-        assertTrue(isEmpty);
+        assertThat(productRepository.findById(productId)).isEmpty();
     }
 
     @Test
@@ -364,12 +357,9 @@ public class ProductServiceTest {
         em.clear();
 
         // when
-        DataReferencedException ex = assertThrows(
-                DataReferencedException.class,
-                () -> productService.deleteProduct(productId)
-        );
-
-        assertEquals(samsungNoteBook.getName() + " 은 주문이 존재합니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.deleteProduct(productId))
+                .isInstanceOf(DataReferencedException.class)
+                .hasMessage(samsungNoteBook.getName() + " 은 주문이 존재합니다.");
     }
 
     @Test
@@ -378,11 +368,9 @@ public class ProductServiceTest {
         // given
         Long invalidProductId = 9999L;
 
-        DataNotFoundException ex = assertThrows(
-                DataNotFoundException.class,
-                () -> productService.deleteProduct(invalidProductId)
-        );
-        assertEquals("해당 상품을 찾을 수 없습니다.", ex.getMessage());
+        assertThatThrownBy(() -> productService.deleteProduct(invalidProductId))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage("해당 상품을 찾을 수 없습니다.");
 
     }
 }

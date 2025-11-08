@@ -22,8 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -51,7 +50,7 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        category = categoryRepository.save(new Category("가전", "전자제품"));
+        category = categoryRepository.save(new Category("가전", "전자제품",null));
         product = productRepository.save(new Product("삼성 노트북", "고성능 노트북", 1500L, 10, category));
 
         em.flush();
@@ -65,9 +64,9 @@ class OrderServiceTest {
         OrderRequestDto dto = new OrderRequestDto(1L,product.getId(),  1, "서울시 송파구");
         OrderResponseDto response = orderService.createOrder(dto);
 
-        assertNotNull(response);
-        assertEquals(OrderStatus.PENDING, response.getStatus());
-        assertEquals(9, productRepository.findById(product.getId()).get().getStock());
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(productRepository.findById(product.getId()).get().getStock()).isEqualTo(9);
     }
 
     @Test
@@ -81,8 +80,8 @@ class OrderServiceTest {
         List<OrderResponseDto> result = orderService.getOrdersByUserId(1L);
 
         // then
-        assertEquals(1, result.size());
-        assertEquals("삼성 노트북", result.get(0).getProduct_name());
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getProduct_name()).isEqualTo("삼성 노트북");
     }
 
     @Test
@@ -93,7 +92,7 @@ class OrderServiceTest {
 
         OrderResponseDto updated = orderService.updateOrderStatus(created.getId(), OrderStatus.COMPLETED);
 
-        assertEquals(OrderStatus.COMPLETED, updated.getStatus());
+        assertThat(updated.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 
     @Test
@@ -105,8 +104,8 @@ class OrderServiceTest {
         Long canceledId = orderService.cancelOrder(created.getId());
 
         Order order = orderRepository.findById(created.getId()).get();
-        assertEquals(created.getId(), canceledId);
-        assertEquals(OrderStatus.CANCEL_PENDING, order.getStatus());
+        assertThat(canceledId).isEqualTo(created.getId());
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCEL_PENDING);
     }
 
     // ---------------------------- [실패 시나리오] ----------------------------
@@ -116,7 +115,8 @@ class OrderServiceTest {
     void createOrder_fail_invalidProduct() {
         OrderRequestDto dto = new OrderRequestDto(999L, 2L, 1, "서울시 송파구");
 
-        assertThrows(DataNotFoundException.class, () -> orderService.createOrder(dto));
+        assertThatThrownBy(() -> orderService.createOrder(dto))
+                .isInstanceOf(DataNotFoundException.class);
     }
 
     @Test
@@ -124,7 +124,8 @@ class OrderServiceTest {
     void createOrder_fail_notEnoughStock() {
         OrderRequestDto dto = new OrderRequestDto(1L,product.getId(), 999, "서울시 송파구");
 
-        assertThrows(NotEnoughStockException.class, () -> orderService.createOrder(dto));
+        assertThatThrownBy(() -> orderService.createOrder(dto))
+                .isInstanceOf(NotEnoughStockException.class);
     }
 
     @Test
@@ -134,8 +135,8 @@ class OrderServiceTest {
         OrderResponseDto created = orderService.createOrder(dto);
         orderService.updateOrderStatus(created.getId(), OrderStatus.COMPLETED);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> orderService.updateOrderStatus(created.getId(), OrderStatus.CANCELED));
+        assertThatThrownBy(() -> orderService.updateOrderStatus(created.getId(), OrderStatus.CANCELED))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -145,7 +146,7 @@ class OrderServiceTest {
         OrderResponseDto created = orderService.createOrder(dto);
         orderService.updateOrderStatus(created.getId(), OrderStatus.COMPLETED);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> orderService.cancelOrder(created.getId()));
+        assertThatThrownBy(() -> orderService.cancelOrder(created.getId()))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
