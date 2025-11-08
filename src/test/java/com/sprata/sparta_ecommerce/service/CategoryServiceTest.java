@@ -8,7 +8,6 @@ import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -32,13 +32,14 @@ class CategoryServiceTest {
     private CategoryRepository categoryRepository;
 
 
-    private CategoryRequestDto request;
+    private CategoryRequestDto parentRequest;
 
     @BeforeEach
     void setup() {
-        request = new CategoryRequestDto();
-        request.setName("전자제품");
-        request.setDescription("전자 관련 제품 카테고리");
+        parentRequest = new CategoryRequestDto();
+        parentRequest.setName("전자제품");
+        parentRequest.setDescription("전자 관련 제품 카테고리");
+        parentRequest.setParent_id(0L);
     }
 
 
@@ -46,7 +47,7 @@ class CategoryServiceTest {
     @DisplayName("✅ 카테고리 등록 성공")
     void addCategory_success() {
         // when
-        CategoryResponseDto result = categoryService.addCategory(request);
+        CategoryResponseDto result = categoryService.addCategory(parentRequest);
 
         // then
         assertThat(result).isNotNull();
@@ -58,10 +59,10 @@ class CategoryServiceTest {
     @DisplayName("❌ 중복 카테고리 등록 실패")
     void addCategory_fail_duplicate() {
         // given
-        categoryService.addCategory(request);
+        categoryService.addCategory(parentRequest);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.addCategory(request))
+        assertThatThrownBy(() -> categoryService.addCategory(parentRequest))
                 .isInstanceOf(DuplicationException.class)
                 .hasMessageContaining("이미 존재하는 카테고리입니다");
     }
@@ -140,5 +141,47 @@ class CategoryServiceTest {
         assertThat(result).hasSize(3);
         assertThat(result).extracting(CategoryResponseDto::getName)
                 .containsExactlyInAnyOrder("식품", "패션", "전자");
+    }
+
+
+    // -----------------------------
+    // 하위 카테고리 생성
+    // -----------------------------
+    @Test
+    @DisplayName("하위 카테고리 생성 성공")
+    void addSubCategorySuccess() {
+        // 먼저 상위 카테고리 생성
+        CategoryRequestDto parentRequest = new CategoryRequestDto();
+        parentRequest.setName("가전");
+        parentRequest.setDescription("가전 제품");
+        parentRequest.setParent_id(0L);
+        CategoryResponseDto parentCategory = categoryService.addCategory(parentRequest);
+
+        // 하위 카테고리 생성
+        CategoryRequestDto childRequest = new CategoryRequestDto();
+        childRequest.setName("TV");
+        childRequest.setDescription("텔레비전");
+        childRequest.setParent_id(parentCategory.getId());
+
+        CategoryResponseDto childCategory = categoryService.addCategory(childRequest);
+
+        assertThat(childCategory.getId()).isNotNull();
+        assertThat("TV").isEqualTo(childCategory.getName());
+        assertThat(parentCategory.getName()).isEqualTo(childCategory.getParentCategoryName());
+    }
+
+    @Test
+    @DisplayName("상위 카테고리가 없으면 예외 발생")
+    void addSubCategoryParentNotFound() {
+        CategoryRequestDto childRequest = new CategoryRequestDto();
+        childRequest.setName("TV");
+        childRequest.setDescription("텔레비전");
+        childRequest.setParent_id(999L); // 존재하지 않는 상위 카테고리
+
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.addCategory(childRequest))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessageContaining("상위 카테고리를 찾을 수 없습니다");
     }
 }

@@ -26,13 +26,26 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRepository.findByName(categoryRequestDto.getName()).isPresent()) {
             throw new DuplicationException("이미 존재하는 카테고리입니다. : "+ categoryRequestDto.getName() );
         }
-        Category category =
-                Category.builder()
+
+        /** 카테고리 부모 지정
+         * parent_id = 0L 일시, 최상위 부모
+         * */
+        Category parentCategory = null;
+        if(categoryRequestDto.getParent_id() != 0L){
+            parentCategory = categoryRepository.findById(categoryRequestDto.getParent_id())
+                    .orElseThrow(() -> new DataNotFoundException("상위 카테고리를 찾을 수 없습니다."));
+        }
+
+
+
+        Category category = Category.builder()
                         .name(categoryRequestDto.getName())
                         .description(categoryRequestDto.getDescription())
+                        .parentCategory(parentCategory)
                         .build();
+
         Category savedCategory = categoryRepository.save(category);
-        return new CategoryResponseDto(savedCategory);
+        return new CategoryResponseDto(savedCategory, parentCategory);
     }
 
     @Override
@@ -57,6 +70,6 @@ public class CategoryServiceImpl implements CategoryService {
         });
 
         category.update(categoryRequestDto.getName(), categoryRequestDto.getDescription());
-        return new CategoryResponseDto(category);
+        return new CategoryResponseDto(category, null);
     }
 }

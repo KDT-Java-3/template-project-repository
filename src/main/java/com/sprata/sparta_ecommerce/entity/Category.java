@@ -6,6 +6,9 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,10 +27,18 @@ public class Category extends Timestamped {
     @Column(nullable = false)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parentCategory;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCategory")
+    private List<Category> subCategories = new ArrayList<>();
+
     @Builder
-    public Category(String name, String description) {
+    public Category(String name, String description, Category parentCategory) {
         this.name = name;
         this.description = description;
+        this.parentCategory = parentCategory;
     }
 
     public void update(@NotBlank String name, String description) {
