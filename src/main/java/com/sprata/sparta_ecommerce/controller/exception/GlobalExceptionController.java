@@ -19,6 +19,20 @@ public class GlobalExceptionController {
                 .body(ResponseDto.fail(ex.getMessage()));
     }
 
+    @ExceptionHandler(DuplicationException.class)
+    public ResponseEntity<ResponseDto<Void>> handleDuplicationData(DuplicationException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ResponseDto.fail(ex.getMessage()));
+    }
+
+    @ExceptionHandler(DataReferencedException.class)
+    public ResponseEntity<ResponseDto<Void>> handleDataReference(DataReferencedException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ResponseDto.fail(ex.getMessage()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseDto<Void>> handleIllegalArgument(IllegalArgumentException ex) {
         log.error(ex.getMessage(), ex);

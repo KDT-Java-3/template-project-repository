@@ -54,4 +54,10 @@ public class ProductController {
         ProductResponseDto responseDto = productService.updateProduct(productId, updateDto);
         return ResponseEntity.ok(ResponseDto.success(responseDto, "상품 수정 성공"));
     }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<ResponseDto<?>> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok(ResponseDto.success(productId, "상품 수정 성공"));
+    }
 }

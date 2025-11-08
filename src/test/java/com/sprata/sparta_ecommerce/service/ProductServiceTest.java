@@ -1,6 +1,7 @@
 package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
+import com.sprata.sparta_ecommerce.controller.exception.DataReferencedException;
 import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
 import com.sprata.sparta_ecommerce.controller.mapper.ProductMapper;
 import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
@@ -8,8 +9,11 @@ import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.dto.param.SearchProductDto;
 import com.sprata.sparta_ecommerce.entity.Category;
+import com.sprata.sparta_ecommerce.entity.Order;
+import com.sprata.sparta_ecommerce.entity.OrderStatus;
 import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
+import com.sprata.sparta_ecommerce.repository.OrderRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
 import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
 import jakarta.persistence.EntityManager;
@@ -22,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -42,6 +47,9 @@ public class ProductServiceTest {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     //
     private Category electronics;
@@ -301,5 +309,56 @@ public class ProductServiceTest {
         var results = productService.getAllProducts(searchDto, pageDto);
 
         assertTrue(results.isEmpty());
+    }
+
+    @Test
+    @DisplayName("✅ 주문이 없는 상품은 정상 삭제된다")
+    void deleteProduct_success() {
+        // given
+        Long productId = samsungNoteBook.getId();
+
+        // when
+        productService.deleteProduct(productId);
+        em.flush();
+        em.clear();
+
+        // then
+        boolean isEmpty = productRepository.findById(productId).isEmpty();
+        assertTrue(isEmpty);
+    }
+
+    @Test
+    @DisplayName("❌ 주문이 존재하면 DataReferencedException 발생")
+    void deleteProduct_fail_dueToOrderExists() {
+        // given
+        Long productId = samsungNoteBook.getId();
+        Order order = orderRepository.save(new Order(1L, samsungNoteBook, 2, "주소"));
+
+        // when & then
+        order.updateStatus(OrderStatus.COMPLETED);
+        em.flush();
+        em.clear();
+        
+        // when
+        DataReferencedException ex = assertThrows(
+                DataReferencedException.class,
+                () -> productService.deleteProduct(productId)
+        );
+
+        assertEquals(samsungNoteBook.getName() + " 은 주문이 존재합니다.", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("❌ 존재하지 않는 상품 삭제 시 DataNotFoundException 발생")
+    void deleteProduct_fail_notFound() {
+        // given
+        Long invalidProductId = 9999L;
+
+        DataNotFoundException ex = assertThrows(
+                DataNotFoundException.class,
+                () -> productService.deleteProduct(invalidProductId)
+        );
+        assertEquals("해당 상품을 찾을 수 없습니다.", ex.getMessage());
+
     }
 }
