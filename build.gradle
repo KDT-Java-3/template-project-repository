@@ -49,6 +49,10 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     // 어노테이션 프로세서를 지정해야 코드가 자동 생성됨
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    //sql parameter show
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
+
 }
 
 tasks.named('test') {

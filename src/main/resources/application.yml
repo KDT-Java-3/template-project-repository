@@ -13,6 +13,13 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
 
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      multiline: true
+      logging: slf4j
+
 ---
 # 활성화할 프로파일 기본값
 spring:
@@ -60,7 +67,7 @@ spring:
 
 
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -75,7 +82,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
   flyway:
     enabled: false   # H2 테스트에서는 필요 없으면 비활성화
