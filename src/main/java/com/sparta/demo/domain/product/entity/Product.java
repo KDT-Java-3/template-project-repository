@@ -1,5 +1,7 @@
 package com.sparta.demo.domain.product.entity;
 
+import com.sparta.demo.domain.Purcahse.entity.Purchase;
+import com.sparta.demo.domain.Purcahse.entity.PurchaseItem;
 import com.sparta.demo.domain.category.entity.Category;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -14,6 +16,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -51,6 +55,9 @@ public class Product {
     @Column(nullable = false)
     @UpdateTimestamp
     LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "product")
+    private List<PurchaseItem> purchaseItems = new ArrayList<>();
 
     @Builder
     public Product(

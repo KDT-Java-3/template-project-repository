@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
@@ -21,7 +22,7 @@ public class ProductRequest {
 
     @Schema(description = "가격", example = "59000")
     @NotNull(message = "가격은 필수입니다.")
-    @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
+    @Positive(message = "가격은 양수여야 합니다")
     private BigDecimal price;
 
     @Schema(description = "재고", example = "100")

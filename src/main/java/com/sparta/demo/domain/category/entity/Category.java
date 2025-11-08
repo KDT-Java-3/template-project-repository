@@ -1,6 +1,7 @@
 package com.sparta.demo.domain.category.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sparta.demo.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,6 +14,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -46,6 +49,14 @@ public class Category {
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
+    // 자식 카테고리
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<Category> children = new ArrayList<>();
+
+    // 이 카테고리에 속한 상품들
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
+
     @Builder
     public Category(
             String name,
@@ -57,9 +68,10 @@ public class Category {
         this.description = description;
     }
 
-    public void update(String name, String description) {
+    public void update(String name, String description, Category parent) {
         this.name = name;
         this.description = description;
+        this.parent = parent;
     }
 
 }
