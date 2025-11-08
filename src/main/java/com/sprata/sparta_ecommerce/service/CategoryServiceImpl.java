@@ -9,6 +9,8 @@ import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
+import com.sprata.sparta_ecommerce.repository.ProductRepository;
+import com.sprata.sparta_ecommerce.repository.projection.CategorySalesProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     @Override
     @Transactional
@@ -50,12 +53,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CategoryDetailResponseDto> getAllCategories(PageDto pageDto) {
+    public List<CategoryDetailResponseDto> getTop10SalesCategories() {
 
+        List<CategorySalesProjection> top10SalesCategory = categoryRepository.findTop10SalesCategory();
 
-
-
-        return categoryRepository.findListPaging(pageDto).stream()
+        return top10SalesCategory.stream()
                 .map(CategoryDetailResponseDto::new)
                 .collect(Collectors.toList());
     }

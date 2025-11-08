@@ -8,6 +8,9 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @DynamicInsert
@@ -34,6 +37,10 @@ public class Product extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<Order> orderList = new ArrayList<>();
+
 
     @Builder
     public Product(String name, String description, Long price, int stock, Category category) {

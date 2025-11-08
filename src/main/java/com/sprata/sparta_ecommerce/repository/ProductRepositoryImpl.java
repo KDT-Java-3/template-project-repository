@@ -9,8 +9,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.dto.param.SearchProductDto;
 import com.sprata.sparta_ecommerce.entity.Product;
-import com.sprata.sparta_ecommerce.entity.QCategory;
-import com.sprata.sparta_ecommerce.entity.QProduct;
 import com.sprata.sparta_ecommerce.repository.projection.ProductCategoryProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,8 +23,8 @@ import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.sum;
 import static com.querydsl.core.types.ExpressionUtils.count;
-import static com.sprata.sparta_ecommerce.entity.QCategory.*;
-import static com.sprata.sparta_ecommerce.entity.QProduct.*;
+import static com.sprata.sparta_ecommerce.entity.QCategory.category;
+import static com.sprata.sparta_ecommerce.entity.QProduct.product;
 
 @RequiredArgsConstructor
 @Repository

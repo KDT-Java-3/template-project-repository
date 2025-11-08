@@ -2,15 +2,13 @@ package com.sprata.sparta_ecommerce.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @Setter
 @ToString
+@AllArgsConstructor
 public class CategoryRequestDto {
 
     @NotBlank

@@ -3,11 +3,11 @@ package com.sprata.sparta_ecommerce.service;
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
 import com.sprata.sparta_ecommerce.controller.exception.DataReferencedException;
 import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
-import com.sprata.sparta_ecommerce.dto.CategoryDetailResponseDto;
-import com.sprata.sparta_ecommerce.dto.CategoryRequestDto;
-import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
+import com.sprata.sparta_ecommerce.dto.*;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.entity.Category;
+import com.sprata.sparta_ecommerce.entity.Order;
+import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
 import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -45,6 +47,8 @@ class CategoryServiceTest {
     private CategoryRequestDto parentRequest;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private OrderService orderService;
 
     @BeforeEach
     void setup() {
@@ -156,22 +160,54 @@ class CategoryServiceTest {
     // GET ALL TESTS
     // -----------------------------
     @Test
-    @DisplayName("✅ 카테고리 목록 조회 성공")
-    void getAllCategories_success() {
-        // given
-        categoryRepository.save(Category.builder().name("식품").description("desc").build());
-        categoryRepository.save(Category.builder().name("패션").description("desc").build());
-        categoryRepository.save(Category.builder().name("전자").description("desc").build());
+    @DisplayName("✅ Top 10 카테고리 목록 조회 성공")
+    void getTop10SalesCategories_success() {
+        // given: 카테고리 12개 생성
+        List<CategoryResponseDto> categoryDtos = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            categoryDtos.add(
+                    categoryService.addCategory(
+                            new CategoryRequestDto("카테고리" + i, "설명" + i, 0L)
+                    )
+            );
+        }
 
-        PageDto pageDto = new PageDto(1, 10);
+        // 상품 생성 및 주문 생성
+        for (int i = 0; i < categoryDtos.size(); i++) {
+            // 상품 생성
+            ProductResponseDto productDto = productService.addProduct(
+                    ProductServiceInputDto.builder()
+                            .name("상품" + (i + 1))
+                            .description("설명" + (i + 1))
+                            .price(1000L * (i + 1))
+                            .stock(100)
+                            .category_id(categoryDtos.get(i).getId())
+                            .build()
+            );
 
-        // when
-        List<CategoryDetailResponseDto> result = categoryService.getAllCategories(pageDto);
+            // 주문 생성 (판매량 차등)
+            orderService.createOrder(
+                    new OrderRequestDto(
+                            1L,                     // 사용자 ID
+                            productDto.getId(),     // 상품 ID
+                            i + 1,                  // 수량: 1~12
+                            "주소 " + (i + 1)       // 배송지
+                    )
+            );
+        }
 
-        // then
-        assertThat(result).hasSize(3);
-        assertThat(result).extracting(CategoryDetailResponseDto::getName)
-                .containsExactlyInAnyOrder("식품", "패션", "전자");
+        // when: Top 10 조회
+        List<CategoryDetailResponseDto> result = categoryService.getTop10SalesCategories();
+
+        // then: Top 10만 반환
+        assertThat(result).hasSize(10);
+
+        // 가장 많이 팔린 카테고리 확인 - 첫 번째 카테고리 확인
+        assertThat(result.get(0).getName()).isEqualTo("카테고리12");
+        // 마지막(10번째) 카테고리 확인
+        assertThat(result.get(9).getSalesCount()).isEqualTo(3);
+        assertThat(result.get(9).getName()).isEqualTo("카테고리3");
+
     }
 
 

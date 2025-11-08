@@ -3,7 +3,6 @@ package com.sprata.sparta_ecommerce.controller;
 import com.sprata.sparta_ecommerce.dto.CategoryDetailResponseDto;
 import com.sprata.sparta_ecommerce.dto.CategoryRequestDto;
 import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
-import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +28,10 @@ public class CategoryController {
                 .body(ResponseDto.success(responseDto, "카테고리 추가 성공"));
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseDto<?>> getAllCategories(@ModelAttribute PageDto pageDto) {
-        List<CategoryDetailResponseDto> responseDtos = categoryService.getAllCategories(pageDto);
-        return ResponseEntity.ok(ResponseDto.success(responseDtos, "카테고리 조회 성공"));
+    @GetMapping("/topSales")
+    public ResponseEntity<ResponseDto<?>> getTop10SalesCategories() {
+        List<CategoryDetailResponseDto> responseDtos = categoryService.getTop10SalesCategories();
+        return ResponseEntity.ok(ResponseDto.success(responseDtos, "Top 10 카테고리 조회 성공"));
     }
 
     @PutMapping("/{categoryId}")

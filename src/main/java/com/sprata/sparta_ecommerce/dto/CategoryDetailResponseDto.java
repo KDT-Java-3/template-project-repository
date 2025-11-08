@@ -1,25 +1,18 @@
 package com.sprata.sparta_ecommerce.dto;
 
 import com.sprata.sparta_ecommerce.entity.Category;
+import com.sprata.sparta_ecommerce.repository.projection.CategorySalesProjection;
 import lombok.Getter;
 
 @Getter
 public class CategoryDetailResponseDto {
     private Long id;
     private String name;
-    private String description;
-    private String parentCategoryName;
+    private int salesCount;
 
-    public CategoryDetailResponseDto(Category category, Category parentCategory) {
-        this.id = category.getId();
-        this.name = category.getName();
-        this.description = category.getDescription();
-        this.parentCategoryName = parentCategory != null ? parentCategory.getName() : "없음";
-    }
-
-    public CategoryDetailResponseDto(Category category) {
-        this.id = category.getId();
-        this.name = category.getName();
-        this.description = category.getDescription();
+    public CategoryDetailResponseDto(CategorySalesProjection data) {
+        this.id = data.getCategoryId();
+        this.name = data.getCategoryName();
+        this.salesCount = data.getCategorySalesCount();
     }
 }
