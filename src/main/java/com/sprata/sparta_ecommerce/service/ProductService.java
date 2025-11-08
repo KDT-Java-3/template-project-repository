@@ -4,11 +4,12 @@ import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
 import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.dto.param.SearchProductDto;
+import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
 
 import java.util.List;
 
 public interface ProductService {
-    ProductResponseDto addProduct(ProductRequestDto productRequestDto);
+    ProductResponseDto addProduct(ProductServiceInputDto productRequestDto);
 
     ProductResponseDto getProduct(Long productId);
 

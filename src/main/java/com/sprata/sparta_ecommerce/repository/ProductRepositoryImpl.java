@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.sum;
 import static com.querydsl.core.types.ExpressionUtils.count;
@@ -26,7 +27,7 @@ import static com.sprata.sparta_ecommerce.entity.QProduct.*;
 
 @RequiredArgsConstructor
 @Repository
-public class ProductRepositoryImpl implements ProductRepositoryCustom{
+public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -104,31 +105,45 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
                 ;
     }
 
-    /** 카테고리 조회 조건 */
+    @Override
+    public Optional<Product> findByProductName(String name) {
+        return Optional.ofNullable(queryFactory.selectFrom(product)
+                .where(product.name.eq(name))
+                .fetchOne());
+    }
+
+    /**
+     * 카테고리 조회 조건
+     */
     private BooleanExpression isCategory(Long categoryId) {
-        if(categoryId==null || categoryId==0L){
+        if (categoryId == null || categoryId == 0L) {
             return null;
-        }else {
+        } else {
             return product.category.id.eq(categoryId);
         }
     }
 
-    /** 검색어 설정 */
+    /**
+     * 검색어 설정
+     */
     private BooleanExpression searchKeyword(String keyword) {
-        if(StringUtils.hasText(keyword)){
-           return product.name.contains(keyword);
-        }else {
-           return null;
+        if (StringUtils.hasText(keyword)) {
+            return product.name.contains(keyword);
+        } else {
+            return null;
         }
     }
-    /** 금액 설정 */
+
+    /**
+     * 금액 설정
+     */
     private BooleanBuilder hasPriceRange(Long minPrice, Long maxPrice) {
         BooleanBuilder builder = new BooleanBuilder();
-        if(minPrice!=null && maxPrice!=null){
+        if (minPrice != null && maxPrice != null) {
             builder.and(product.price.between(minPrice, maxPrice));
-        }else if(minPrice!=null){
+        } else if (minPrice != null) {
             builder.and(product.price.goe(minPrice));
-        }else if(maxPrice!=null){
+        } else if (maxPrice != null) {
             builder.and(product.price.loe(maxPrice));
         }
         return builder;

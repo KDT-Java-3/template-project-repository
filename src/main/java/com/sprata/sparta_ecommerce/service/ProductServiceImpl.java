@@ -1,6 +1,7 @@
 package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
+import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
 import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
 import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
@@ -9,6 +10,7 @@ import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
+import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +27,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductResponseDto addProduct(ProductRequestDto productRequestDto) {
-        Category category = categoryRepository.findById(productRequestDto.getCategory_id())
+    public ProductResponseDto addProduct(ProductServiceInputDto inputDto) {
+        Category category = categoryRepository.findById(inputDto.getCategory_id())
                 .orElseThrow(() -> new DataNotFoundException("해당 카테고리를 찾을 수 없습니다."));
 
+        if(productRepository.findByProductName(inputDto.getName()).isPresent()){
+            throw new DuplicationException(inputDto.getName() + " 중복된 상품명 존재합니다.");
+        }
+
         Product product = Product.builder()
-                .name(productRequestDto.getName())
-                .description(productRequestDto.getDescription())
-                .price(productRequestDto.getPrice())
-                .stock(productRequestDto.getStock())
+                .name(inputDto.getName())
+                .description(inputDto.getDescription())
+                .price(inputDto.getPrice())
+                .stock(inputDto.getStock())
                 .category(category)
                 .build();
 

@@ -1,6 +1,8 @@
 package com.sprata.sparta_ecommerce.service;
 
 import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
+import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
+import com.sprata.sparta_ecommerce.controller.mapper.ProductMapper;
 import com.sprata.sparta_ecommerce.dto.ProductRequestDto;
 import com.sprata.sparta_ecommerce.dto.ProductResponseDto;
 import com.sprata.sparta_ecommerce.dto.param.PageDto;
@@ -9,6 +11,7 @@ import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
+import com.sprata.sparta_ecommerce.service.dto.ProductServiceInputDto;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +39,9 @@ public class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductMapper productMapper;
 
     //
     private Category electronics;
@@ -70,7 +76,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 생성 성공")
     void addProductSuccess() {
-        ProductResponseDto responseDto = productService.addProduct(productRequestDto);
+        ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
+        ProductResponseDto responseDto = productService.addProduct(inputDto);
 
         assertNotNull(responseDto.getId());
         assertEquals("아이폰", responseDto.getName());
@@ -82,11 +89,31 @@ public class ProductServiceTest {
     void addProductFailCategoryNotFound() {
         productRequestDto.setCategory_id(999L); // 존재하지 않는 카테고리
 
+        ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
         DataNotFoundException ex = assertThrows(DataNotFoundException.class,
-                () -> productService.addProduct(productRequestDto));
+                () -> productService.addProduct(inputDto));
 
         assertEquals("해당 카테고리를 찾을 수 없습니다.", ex.getMessage());
     }
+
+
+    @Test
+    @DisplayName("상품 생성 실패 - 상품 명 중복")
+    void addProductFailDuplicateProductName() {
+        Product product = productRepository.findAll().get(0);
+        String duplicateName = product.getName();
+        ProductRequestDto dto = new ProductRequestDto(
+                duplicateName, "중복이름", 1_000_000L, 5, electronics.getId()
+        );
+
+        ProductServiceInputDto inputDto = productMapper.toService(dto);
+        DuplicationException ex = assertThrows(DuplicationException.class,
+                () -> productService.addProduct(inputDto));
+
+        assertEquals(duplicateName + " 중복된 상품명 존재합니다.", ex.getMessage());
+    }
+
+
 
     @Test
     @DisplayName("상품 수정 성공")
@@ -128,7 +155,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 수정 실패 - 카테고리 없음")
     void updateProductFailCategoryNotFound() {
-        ProductResponseDto created = productService.addProduct(productRequestDto);
+        ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
+        ProductResponseDto created = productService.addProduct(inputDto);
 
         ProductRequestDto updateDto = new ProductRequestDto();
         updateDto.setName("LG TV");

@@ -2,6 +2,7 @@ package com.sprata.sparta_ecommerce.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -20,8 +21,7 @@ public class ProductRequestDto {
     @Size(min = 100)
     private Long price;
 
-    @NotNull
-    @Size(min = 0)
+    @PositiveOrZero
     private int stock;
 
     @NotNull

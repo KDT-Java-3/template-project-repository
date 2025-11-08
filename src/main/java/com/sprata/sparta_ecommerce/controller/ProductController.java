@@ -26,11 +26,11 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<?>> addProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
-        ProductServiceInputDto service = productMapper.toService(productRequestDto);
+        ProductServiceInputDto inputDto = productMapper.toService(productRequestDto);
 
-        ProductResponseDto responseDto = productService.addProduct(productRequestDto);
+        ProductResponseDto responseDto = productService.addProduct(inputDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDto.success(responseDto.getName(), "상품 추가 성공"));
+                .body(ResponseDto.success(responseDto.getId(), "상품 추가 성공"));
     }
 
     @GetMapping("/{productId}")

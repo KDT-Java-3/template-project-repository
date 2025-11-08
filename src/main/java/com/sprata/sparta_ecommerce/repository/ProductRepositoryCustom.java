@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepositoryCustom {
     List<Product> searchProducts(SearchProductDto searchDto, PageDto pageDto);
@@ -16,4 +17,5 @@ public interface ProductRepositoryCustom {
     Page<Product> findProductByPaging(Pageable pageable);
     List<ProductCategoryProjection> findProductWithCategory();
 
+    Optional<Product> findByProductName(String name);
 }
