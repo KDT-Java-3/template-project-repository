@@ -82,6 +82,7 @@ class CategoryServiceTest {
         CategoryRequestDto updateDto = new CategoryRequestDto();
         updateDto.setName("패션");
         updateDto.setDescription("의류 및 패션 관련");
+        updateDto.setParent_id(0L);
 
         // when
         CategoryResponseDto updated = categoryService.updateCategory(saved.getId(), updateDto);
@@ -119,6 +120,24 @@ class CategoryServiceTest {
         assertThatThrownBy(() -> categoryService.updateCategory(cat2.getId(), updateDto))
                 .isInstanceOf(DuplicationException.class)
                 .hasMessageContaining("이미 존재하는 카테고리명");
+    }
+
+    @Test
+    @DisplayName("❌ 카테고리 수정 실패 - 상위 카테고리 없음")
+    void updateCategory_fail_parentNotFound() {
+        // given: 기존 카테고리 생성
+        CategoryResponseDto categoryResponseDto = categoryService.addCategory(parentRequest);
+
+        // 부모 카테고리 없는 ID 지정
+        CategoryRequestDto updateDto = new CategoryRequestDto();
+        updateDto.setName("가전제품");
+        updateDto.setDescription("수정된 설명");
+        updateDto.setParent_id(999L); // 존재하지 않는 상위 카테고리
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.updateCategory(categoryResponseDto.getId(), updateDto))
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessageContaining("상위 카테고리를 찾을 수 없습니다");
     }
 
     // -----------------------------

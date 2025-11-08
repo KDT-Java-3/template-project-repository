@@ -36,8 +36,6 @@ public class CategoryServiceImpl implements CategoryService {
                     .orElseThrow(() -> new DataNotFoundException("상위 카테고리를 찾을 수 없습니다."));
         }
 
-
-
         Category category = Category.builder()
                         .name(categoryRequestDto.getName())
                         .description(categoryRequestDto.getDescription())
@@ -69,7 +67,16 @@ public class CategoryServiceImpl implements CategoryService {
             }
         });
 
-        category.update(categoryRequestDto.getName(), categoryRequestDto.getDescription());
+        /** 카테고리 부모 지정
+         * parent_id = 0L 일시, 최상위 부모
+         * */
+        Category parentCategory = null;
+        if(categoryRequestDto.getParent_id() != 0L){
+            parentCategory = categoryRepository.findById(categoryRequestDto.getParent_id())
+                    .orElseThrow(() -> new DataNotFoundException("상위 카테고리를 찾을 수 없습니다."));
+        }
+
+        category.update(categoryRequestDto.getName(), categoryRequestDto.getDescription(), parentCategory);
         return new CategoryResponseDto(category, null);
     }
 }
