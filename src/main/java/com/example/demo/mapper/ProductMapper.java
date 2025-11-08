@@ -2,7 +2,9 @@ package com.example.demo.mapper;
 
 import com.example.demo.controller.dto.ProductRequestDto;
 import com.example.demo.controller.dto.ProductResponseDto;
+import com.example.demo.controller.dto.ProductSummaryResponseDto;
 import com.example.demo.entity.Product;
+import com.example.demo.repository.projection.ProductSummaryDto;
 import com.example.demo.service.dto.ProductServiceInputDto;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Builder;
@@ -24,6 +26,10 @@ public interface ProductMapper {
     ProductResponseDto toResponse(Product product);
 
     List<ProductResponseDto> toResponseList(List<Product> products);
+
+    ProductSummaryResponseDto toSummaryResponse(ProductSummaryDto dto);
+
+    List<ProductSummaryResponseDto> toSummaryResponseList(List<ProductSummaryDto> dtos);
 
     default String normalizeDescription(String description) {
         if (description == null) {
@@ -64,4 +70,3 @@ public interface ProductMapper {
         builder.displayName(productId != null ? "[" + productId + "] " + name : name);
     }
 }
-
