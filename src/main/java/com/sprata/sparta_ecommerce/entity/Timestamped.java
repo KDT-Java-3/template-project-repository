@@ -1,0 +1,25 @@
+package com.sprata.sparta_ecommerce.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+@Slf4j(topic = "생성시간, 수정시간")
+@Getter
+@MappedSuperclass // 공통 맵핑 정보
+@EntityListeners(AuditingEntityListener.class)
+public abstract class Timestamped {
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column
+    private LocalDateTime modifiedAt;
+}

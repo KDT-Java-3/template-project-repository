@@ -1,0 +1,18 @@
+package com.sprata.sparta_ecommerce.service.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductServiceInputDto {
+    private String name;
+    private String description;
+    private Long price;
+    private int stock;
+    private Long category_id;
+}
