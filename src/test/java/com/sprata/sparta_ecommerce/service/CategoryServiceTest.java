@@ -322,4 +322,70 @@ class CategoryServiceTest {
                 .isInstanceOf(DataNotFoundException.class)
                 .hasMessageContaining("해당 카테고리를 찾을 수 없습니다.");
     }
+
+    @Test
+    @DisplayName("✅ 카테고리 트리 조회 성공")
+    void getCategoryTree_success() {
+        // given
+        // 1. 루트 카테고리 2개 생성
+        CategoryResponseDto categoryResponseDto = categoryService.addCategory(CategoryRequestDto.builder().name("전자제품").description("").parent_id(0L).build());
+        CategoryResponseDto categoryResponseDto1 = categoryService.addCategory(CategoryRequestDto.builder().name("전자제품1").description("").parent_id(0L).build());
+        categoryService.addCategory(CategoryRequestDto.builder().name("패션").description("뿡").parent_id(0L).build());
+
+
+        // 2. 하위 카테고리 생성
+        CategoryResponseDto categoryResponseDto2 = categoryService.addCategory(CategoryRequestDto.builder().name("서브전자제품1").description("").parent_id(categoryResponseDto.getId()).build());
+        categoryService.addCategory(CategoryRequestDto.builder().name("서브전자제품2").description("").parent_id(categoryResponseDto.getId()).build());
+        categoryService.addCategory(CategoryRequestDto.builder().name("서브전자제품3").description("").parent_id(categoryResponseDto1.getId()).build());
+
+        // 3. 손자 카테고리 생성
+        categoryService.addCategory(CategoryRequestDto.builder().name("손자전자제품1").description("").parent_id(categoryResponseDto2.getId()).build());
+        categoryService.addCategory(CategoryRequestDto.builder().name("손자전자제품2").description("").parent_id(categoryResponseDto2.getId()).build());
+        categoryService.addCategory(CategoryRequestDto.builder().name("손자전자제품3").description("").parent_id(categoryResponseDto2.getId()).build());
+
+        em.flush();
+        em.clear();
+
+        // when
+        List<CategoryTreeResponseDto> categoryTree = categoryService.getCategoryTree();
+
+        // then
+        // ✅ 1. 루트 카테고리는 3개 (전자제품, 전자제품1, 패션)
+        assertThat(categoryTree).hasSize(3)
+                .extracting("name")
+                .containsExactlyInAnyOrder("전자제품", "전자제품1", "패션");
+
+        // ✅ 2. "전자제품" → 자식 2개
+        CategoryTreeResponseDto electronics = categoryTree.stream()
+                .filter(c -> c.getName().equals("전자제품"))
+                .findFirst().orElseThrow();
+        assertThat(electronics.getChildren())
+                .hasSize(2)
+                .extracting("name")
+                .containsExactlyInAnyOrder("서브전자제품1", "서브전자제품2");
+
+        // ✅ 3. "서브전자제품1" → 손자 3개
+        CategoryTreeResponseDto subElectronics1 = electronics.getChildren().stream()
+                .filter(c -> c.getName().equals("서브전자제품1"))
+                .findFirst().orElseThrow();
+        assertThat(subElectronics1.getChildren())
+                .hasSize(3)
+                .extracting("name")
+                .containsExactlyInAnyOrder("손자전자제품1", "손자전자제품2", "손자전자제품3");
+
+        // ✅ 4. "전자제품1" → 자식 1개
+        CategoryTreeResponseDto electronics1 = categoryTree.stream()
+                .filter(c -> c.getName().equals("전자제품1"))
+                .findFirst().orElseThrow();
+        assertThat(electronics1.getChildren())
+                .hasSize(1)
+                .extracting("name")
+                .containsExactly("서브전자제품3");
+
+        // ✅ 5. "패션" → 자식 없음
+        CategoryTreeResponseDto fashion = categoryTree.stream()
+                .filter(c -> c.getName().equals("패션"))
+                .findFirst().orElseThrow();
+        assertThat(fashion.getChildren()).isEmpty();
+    }
 }

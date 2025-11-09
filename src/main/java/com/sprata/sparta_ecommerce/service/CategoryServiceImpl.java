@@ -6,7 +6,7 @@ import com.sprata.sparta_ecommerce.controller.exception.DuplicationException;
 import com.sprata.sparta_ecommerce.dto.CategoryDetailResponseDto;
 import com.sprata.sparta_ecommerce.dto.CategoryRequestDto;
 import com.sprata.sparta_ecommerce.dto.CategoryResponseDto;
-import com.sprata.sparta_ecommerce.dto.param.PageDto;
+import com.sprata.sparta_ecommerce.dto.CategoryTreeResponseDto;
 import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
@@ -104,4 +104,17 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.delete(category);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CategoryTreeResponseDto> getCategoryTree() {
+        /* 1. 재귀 조회 */
+        List<Category> rootCategories = categoryRepository.findByParentCategoryIsNull();
+        List<CategoryTreeResponseDto> collect = rootCategories.stream()
+                .map(CategoryTreeResponseDto::new)
+                .collect(Collectors.toList());
+
+        return collect;
+    }
+
 }

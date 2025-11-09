@@ -42,11 +42,17 @@ public class Category extends Timestamped {
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
+        if(this.parentCategory != null){
+            this.parentCategory.getSubCategories().add(this);
+        }
     }
 
     public void update(@NotBlank String name, String description,  Category parentCategory) {
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
+        if(this.parentCategory != null){
+            this.parentCategory.getSubCategories().add(this);
+        }
     }
 }

@@ -49,6 +49,7 @@ public class Product extends Timestamped {
         this.price = price;
         this.stock = stock;
         this.category = category;
+        this.category.getProducts().add(this);
     }
 
     public void update( String name, String description, Long price, int stock, Category category) {
@@ -57,6 +58,7 @@ public class Product extends Timestamped {
         this.price = price;
         this.stock = stock;
         this.category = category;
+        this.category.getProducts().add(this);
     }
 
     /** 동시성 처리 */

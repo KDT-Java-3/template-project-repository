@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
+@Builder
 public class CategoryRequestDto {
 
     @NotBlank
