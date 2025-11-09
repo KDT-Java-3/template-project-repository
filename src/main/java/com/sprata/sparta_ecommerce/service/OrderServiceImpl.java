@@ -26,14 +26,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
-        Product product = productRepository.findById(orderRequestDto.getProduct_id())
+        /* 상품의 재고수 변경에 대한 동시성 처리 */
+        // 락과 함께 Product 조회
+        /** 영속성 엔티티 락을 같이 관리해야한다.  */
+        Product product = productRepository.getProductLock(orderRequestDto.getProduct_id())
                 .orElseThrow(() -> new DataNotFoundException("해당 상품을 찾을 수 없습니다."));
+
 
         if (product.getStock() < orderRequestDto.getQuantity()) {
             throw new NotEnoughStockException(product.getName(), product.getStock(), orderRequestDto.getQuantity());
         }
 
-        /* 상품의 재고수 변경에 대한 동시성 처리 필요 */
         product.updateStock(product.getStock() - orderRequestDto.getQuantity());
 
         Order order = Order.builder()
@@ -80,6 +83,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.updateStatus(OrderStatus.CANCEL_PENDING);
+
+        // 재고수 원복은 확정할때..
 
         return order.getId();
     }

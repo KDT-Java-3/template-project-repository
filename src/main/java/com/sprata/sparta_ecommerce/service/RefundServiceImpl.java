@@ -5,6 +5,7 @@ import com.sprata.sparta_ecommerce.dto.RefundRequestDto;
 import com.sprata.sparta_ecommerce.dto.RefundResponseDto;
 import com.sprata.sparta_ecommerce.entity.*;
 import com.sprata.sparta_ecommerce.repository.OrderRepository;
+import com.sprata.sparta_ecommerce.repository.ProductRepository;
 import com.sprata.sparta_ecommerce.repository.RefundRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class RefundServiceImpl implements RefundService {
 
     private final RefundRepository refundRepository;
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
     @Override
     @Transactional
@@ -52,7 +54,10 @@ public class RefundServiceImpl implements RefundService {
                 .filter(o -> o.getStatus() == OrderStatus.CANCELED)
                 .orElseThrow(() -> new DataNotFoundException("취소된 주문이 아니거나, 주문 정보를 찾을 수 없습니다."));
 
-        Product product = order.getProduct();
+
+        /* 상품의 재고수 변경에 대한 동시성 처리 */
+        Product product = productRepository.getProductLock(order.getProduct().getId())
+                .orElseThrow(() -> new DataNotFoundException("해당 상품을 찾을 수 없습니다."));
         product.updateStock(product.getStock() + order.getQuantity());
         refund.updateStatus(status);
 
