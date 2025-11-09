@@ -51,9 +51,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     private BooleanExpression searchOrderDate(LocalDate startDate, LocalDate endDate) {
         if(startDate != null && endDate != null) {
-            LocalDateTime startDateTime = startDate.atStartOfDay();
-            LocalDateTime endDateTime =endDate.atTime(23, 59, 59);
-            return order.createdAt.between(startDateTime, endDateTime);
+            return order.orderDate.between(startDate, endDate);
         }
         return null;
     }

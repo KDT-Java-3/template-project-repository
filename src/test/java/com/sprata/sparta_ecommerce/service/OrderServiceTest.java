@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -89,6 +90,71 @@ class OrderServiceTest {
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getProduct_name()).isEqualTo("삼성 노트북");
     }
+
+    @Test
+    @DisplayName("주문 검색 (상태, 날짜 범위) 성공")
+    void getOrdersByUserId_withSearchCriteria_success() {
+        // Given: 여러 주문 생성
+       LocalDate today =LocalDate.now();
+       LocalDate yesterday = today.minusDays(1);
+       LocalDate twoDaysAgo = today.minusDays(2);
+
+        Product product2 = productRepository.save(new Product("LG 그램", "가벼운 노트북", 1200L, 5, category));
+        Product product3 = productRepository.save(new Product("맥북 에어", "애플 노트북", 1800L, 3, category));
+
+        // 1. PENDING 상태, 오늘 날짜
+        Order order1 = orderRepository.save(Order.builder().userId(1L).product(product).quantity(1).shippingAddress("서울시 송파구").orderDate(today).build());
+        // 2. COMPLETED 상태, 어제 날짜
+        Order order2 = orderRepository.save(Order.builder().userId(1L).product(product2).quantity(1).shippingAddress("경기도 성남시").orderDate(yesterday).build());
+        order2.updateStatus(OrderStatus.COMPLETED);
+        // 3. CANCEL_PENDING 상태, 2일 전 날짜
+        Order order3 = orderRepository.save(Order.builder().userId(1L).product(product3).quantity(1).shippingAddress("부산시 해운대구").orderDate(twoDaysAgo).build());
+        order3.updateStatus(OrderStatus.CANCEL_PENDING);
+
+        em.flush();
+        em.clear();
+
+        // When 1: PENDING 상태로 검색
+        OrderServiceSearchDto searchDto1 = new OrderServiceSearchDto(1L, OrderStatus.PENDING.name(), null, null);
+        PageDto pageDto1 = new PageDto();
+        List<OrderResponseDto> result1 = orderService.getOrdersByUserId(searchDto1, pageDto1);
+
+        // Then 1: PENDING 상태의 주문 1개 확인
+        assertThat(result1).hasSize(1);
+        assertThat(result1.get(0).getStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(result1.get(0).getProduct_name()).isEqualTo("삼성 노트북");
+
+        // When 2: COMPLETED 상태로 검색
+        OrderServiceSearchDto searchDto2 = new OrderServiceSearchDto(1L, OrderStatus.COMPLETED.name(), null, null);
+        PageDto pageDto2 = new PageDto();
+        List<OrderResponseDto> result2 = orderService.getOrdersByUserId(searchDto2, pageDto2);
+
+        // Then 2: COMPLETED 상태의 주문 1개 확인
+        assertThat(result2).hasSize(1);
+        assertThat(result2.get(0).getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(result2.get(0).getProduct_name()).isEqualTo("LG 그램");
+
+        // When 3: 날짜 범위로 검색 (어제부터 오늘까지)
+        OrderServiceSearchDto searchDto3 = new OrderServiceSearchDto(1L, null, yesterday, today);
+        PageDto pageDto3 = new PageDto();
+        List<OrderResponseDto> result3 = orderService.getOrdersByUserId(searchDto3, pageDto3);
+
+        // Then 3: 어제와 오늘 생성된 주문 2개 확인 (PENDING, COMPLETED)
+        assertThat(result3).hasSize(2);
+        assertThat(result3).extracting(OrderResponseDto::getStatus)
+                .containsExactlyInAnyOrder(OrderStatus.PENDING, OrderStatus.COMPLETED);
+
+        // When 4: 상태와 날짜 범위 조합 검색 (PENDING 상태, 어제부터 오늘까지)
+        OrderServiceSearchDto searchDto4 = new OrderServiceSearchDto(1L, OrderStatus.PENDING.name(), yesterday, today);
+        PageDto pageDto4 = new PageDto();
+        List<OrderResponseDto> result4 = orderService.getOrdersByUserId(searchDto4, pageDto4);
+
+        // Then 4: PENDING 상태이면서 어제부터 오늘까지 생성된 주문 1개 확인
+        assertThat(result4).hasSize(1);
+        assertThat(result4.get(0).getStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(result4.get(0).getProduct_name()).isEqualTo("삼성 노트북");
+    }
+
 
 
 

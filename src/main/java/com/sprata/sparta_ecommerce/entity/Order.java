@@ -6,6 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @DynamicInsert
@@ -35,13 +37,17 @@ public class Order extends Timestamped {
     @Column(nullable = false)
     private OrderStatus status;
 
+    @Column
+    private LocalDate orderDate;
+
     @Builder
-    public Order(Long userId, Product product, int quantity, String shippingAddress) {
+    public Order(Long userId, Product product, int quantity, String shippingAddress, LocalDate orderDate) {
         this.userId = userId;
         this.product = product;
         this.quantity = quantity;
         this.shippingAddress = shippingAddress;
         this.status = OrderStatus.PENDING;
+        this.orderDate = orderDate;
     }
 
     public void updateStatus(OrderStatus status) {

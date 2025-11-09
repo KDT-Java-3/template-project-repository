@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -349,7 +350,7 @@ public class ProductServiceTest {
     void deleteProduct_fail_dueToOrderExists() {
         // given
         Long productId = samsungNoteBook.getId();
-        Order order = orderRepository.save(new Order(1L, samsungNoteBook, 2, "주소"));
+        Order order = orderRepository.save(new Order(1L, samsungNoteBook, 2, "주소", LocalDate.now()));
 
         // when & then
         order.updateStatus(OrderStatus.COMPLETED);

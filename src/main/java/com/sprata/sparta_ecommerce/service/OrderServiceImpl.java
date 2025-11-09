@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
                         .product(product)
                         .quantity(orderRequestDto.getQuantity())
                         .shippingAddress(orderRequestDto.getShipping_address())
+                        .orderDate(LocalDate.now())
                         .build();
         Order savedOrder = orderRepository.save(order);
         return new OrderResponseDto(savedOrder);
