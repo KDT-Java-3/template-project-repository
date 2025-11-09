@@ -70,7 +70,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponseDto updateProduct(Long productId, ProductServiceInputDto updateDto) {
-        Product product = productRepository.findById(productId)
+        /** 동시성 처리 */
+        Product product = productRepository.getProductLock(productId)
                 .orElseThrow(() -> new DataNotFoundException("해당 상품을 찾을 수 없습니다."));
 
         Category category = categoryRepository.findById(updateDto.getCategory_id())
