@@ -1,16 +1,19 @@
 package com.example.demo.service;
 
 
+import com.example.demo.PurchaseStatus;
 import com.example.demo.common.ServiceException;
 import com.example.demo.common.ServiceExceptionCode;
 import com.example.demo.controller.dto.ProductResponseDto;
 import com.example.demo.controller.dto.ProductSummaryResponseDto;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.entity.Purchase;
 import com.example.demo.mapper.ProductMapper;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductQueryRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.PurchaseRepository;
 import com.example.demo.service.dto.ProductServiceInputDto;
 import com.example.demo.service.dto.ProductSearchCondition;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class ProductService {
     private final ProductQueryRepository productQueryRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
+    private final PurchaseRepository purchaseRepository;
 
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getAll() {
@@ -87,6 +91,15 @@ public class ProductService {
     public void delete(Long id) {
         Product product = findProduct(id);
         productRepository.delete(product);
+    }
+
+    @Transactional
+    public void deleteProduct(Long productId) {
+        boolean hasCompleted = purchaseRepository.existsByProductIdAndStatus(productId, PurchaseStatus.COMPLETED);
+        if (hasCompleted) {
+            throw new IllegalStateException("완료된 주문이 있어 삭제할 수 없습니다.");
+        }
+        productRepository.deleteById(productId);
     }
 
     @Transactional(readOnly = true)
