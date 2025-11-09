@@ -3,6 +3,7 @@ package com.sparta.demo1.domain.user.service;
 import com.sparta.demo1.common.error.CustomException;
 import com.sparta.demo1.common.error.ExceptionCode;
 import com.sparta.demo1.domain.user.entity.UserEntity;
+import com.sparta.demo1.domain.user.enums.UserRate;
 import com.sparta.demo1.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class UserService {
                         .name(name)
                         .email(email)
                         .passwordHash(passwordEncoder.encode(password))
+                        .userRate(UserRate.NORMAL)
                 .build());
         return userEntity.getId().toString();
     }

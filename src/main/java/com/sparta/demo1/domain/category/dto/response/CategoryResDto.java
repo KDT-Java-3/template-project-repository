@@ -29,4 +29,20 @@ public class CategoryResDto {
             this.productInfoList = productInfoList;
         }
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class CategorySimpleInfo{
+        private Long id;
+        private Long parentId;
+        private String name;
+
+        @Builder
+        public CategorySimpleInfo(Long id, Long parentId, String name) {
+            this.id = id;
+            this.parentId = parentId;
+            this.name = name;
+        }
+    }
 }

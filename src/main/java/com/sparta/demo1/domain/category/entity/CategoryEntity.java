@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Category.java
-@Table(name = "category")
+@Table(name = "category",
+        uniqueConstraints=@UniqueConstraint(name="uq_category_name", columnNames="name"))
 @Entity
 @Getter
 @DynamicInsert
@@ -42,6 +43,9 @@ public class CategoryEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private CategoryEntity parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<CategoryEntity> childrenCategoryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", fetch=FetchType.LAZY)
     private List<ProductEntity> productList = new ArrayList<>();
@@ -71,5 +75,9 @@ public class CategoryEntity {
 
     public void updateDescription(String description){
         this.description = description;
+    }
+
+    public void updateParent(CategoryEntity parent){
+        this.parent = parent;
     }
 }

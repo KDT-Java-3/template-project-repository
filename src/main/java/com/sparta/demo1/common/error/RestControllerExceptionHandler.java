@@ -1,7 +1,8 @@
 package com.sparta.demo1.common.error;
 
-import com.architecture.archi.common.model.ApiResponseModel;
+import com.sparta.demo1.common.model.ApiResponseModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -101,5 +102,19 @@ public class RestControllerExceptionHandler {
 //        }
 
         return new ResponseEntity<>(apiResponse, exceptionCode.getStatusCode());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiResponseModel handleUnique(Exception ex) {
+
+        log.error(ex.getClass().getSimpleName() + " Handling : {}", ex);
+
+        ApiResponseModel apiResponse = new ApiResponseModel(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
+
+        apiResponse.putError("상품명이 중복되었습니다.");
+
+        return apiResponse;
     }
 }

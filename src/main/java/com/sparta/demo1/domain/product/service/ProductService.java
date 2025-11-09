@@ -4,11 +4,20 @@ import com.sparta.demo1.common.error.CustomException;
 import com.sparta.demo1.common.error.ExceptionCode;
 import com.sparta.demo1.domain.category.entity.CategoryEntity;
 import com.sparta.demo1.domain.category.repository.CategoryRepository;
+import com.sparta.demo1.domain.product.dto.mapper.ProductMapper;
 import com.sparta.demo1.domain.product.dto.response.ProductResDto;
 import com.sparta.demo1.domain.product.entity.ProductEntity;
+import com.sparta.demo1.domain.product.enums.ProductOrderBy;
+import com.sparta.demo1.domain.product.enums.ProductStockFilter;
+import com.sparta.demo1.domain.product.repository.ProductQueryDsl;
 import com.sparta.demo1.domain.product.repository.ProductRepository;
 import com.sparta.demo1.domain.product.repository.ProductSpecification;
+import com.sparta.demo1.domain.purchase.entity.PurchaseProductEntity;
+import com.sparta.demo1.domain.purchase.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,20 +29,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductQueryDsl productQueryDsl;
+
     private final CategoryRepository categoryRepository;
+
+    private final ProductMapper productMapper;
+
+    private final PurchaseService purchaseService;
 
     @Transactional
     public Long registerProduct(String name, String description, BigDecimal price, Integer stock, Long categoryId){
         CategoryEntity categoryEntity = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_EXIST));
 
-        return productRepository.save(ProductEntity.builder()
-                        .name(name)
-                        .description(description)
-                        .price(price)
-                        .stock(stock)
-                        .category(categoryEntity)
-                .build()).getId();
+        return productQueryDsl.registerProduct(name, description, price, stock, categoryEntity);
+//        return productRepository.save(ProductEntity.builder()
+//                        .name(name)
+//                        .description(description)
+//                        .price(price)
+//                        .stock(stock)
+//                        .category(categoryEntity)
+//                .build()).getId();
     }
 
     @Transactional
@@ -70,41 +86,57 @@ public class ProductService {
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_EXIST));
 
-        return ProductResDto.ProductInfo.builder()
-                .id(productEntity.getId())
-                .name(productEntity.getName())
-                .description(productEntity.getDescription())
-                .price(productEntity.getPrice())
-                .stock(productEntity.getStock())
-                .build();
+        return productMapper.toRes(productEntity);
+//        return ProductResDto.ProductInfo.builder()
+//                .id(productEntity.getId())
+//                .name(productEntity.getName())
+//                .description(productEntity.getDescription())
+//                .price(productEntity.getPrice())
+//                .stock(productEntity.getStock())
+//                .build();
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResDto.ProductInfo> getProductInfoList(
+    public Page<ProductResDto.ProductInfo> getProductInfoList(
             List<Long> filterCategoryIdList,
             BigDecimal minPrice,
             BigDecimal maxPrice,
-            String nameKeyWord
+            String nameKeyWord,
+            ProductStockFilter stockFilter,
+            Pageable pageable,
+            List<ProductOrderBy> productOrderByList
     ) {
-
-        Specification<ProductEntity> spec = Specification.allOf(
-                ProductSpecification.categoryIn(filterCategoryIdList),
-                ProductSpecification.minPrice(minPrice),
-                ProductSpecification.maxPrice(maxPrice),
-                ProductSpecification.nameContains(nameKeyWord)
+        // QueryDSL로 페이징 포함 검색
+        Page<ProductEntity> productPage = productQueryDsl.findProductOfFilter(
+                filterCategoryIdList,
+                minPrice,
+                maxPrice,
+                nameKeyWord,
+                stockFilter,
+                pageable,
+                productOrderByList
         );
 
-        return productRepository.findAll(spec)
+        // Entity → DTO 매핑
+        List<ProductResDto.ProductInfo> dtoList = productPage.getContent()
                 .stream()
-                .map(product -> ProductResDto.ProductInfo.builder()
-                        .id(product.getId())
-                        .name(product.getName())
-                        .description(product.getDescription())
-                        .price(product.getPrice())
-                        .stock(product.getStock())
-                        .build()
-                )
+                .map(productMapper::toRes)
                 .toList();
+
+        return new PageImpl<>(dtoList, pageable, productPage.getTotalElements());
+    }
+
+    @Transactional
+    public void deleteProduct(Long id){
+        List<PurchaseProductEntity> productEntityList = purchaseService.findPurchasesOfCompletedStateByProductId(id);
+        if(!productEntityList.isEmpty()){
+            throw new CustomException(ExceptionCode.ALREADY_EXIST, "주문 완료 상태가 있는 제품으로 삭제가 불가합니다.");
+        }
+
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_EXIST));
+
+        productRepository.deleteById(id);
     }
 
 }

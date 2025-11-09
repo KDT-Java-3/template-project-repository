@@ -2,6 +2,7 @@ package com.sparta.demo1.domain.refund.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.demo1.domain.product.entity.ProductEntity;
+import com.sparta.demo1.domain.purchase.entity.PurchaseEntity;
 import com.sparta.demo1.domain.refund.enums.RefundStatus;
 import com.sparta.demo1.domain.user.entity.UserEntity;
 import jakarta.persistence.*;
@@ -36,8 +37,8 @@ public class RefundEntity {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductEntity product;
+    @JoinColumn(name = "purchase_id", nullable = false)
+    private PurchaseEntity purchase;
 
     @Column(columnDefinition = "TEXT")
     private String reason;
@@ -57,13 +58,17 @@ public class RefundEntity {
     @Builder
     public RefundEntity(
             UserEntity user,
-            ProductEntity product,
+            PurchaseEntity purchase,
             String reason,
             RefundStatus status
     ) {
         this.user = user;
-        this.product = product;
+        this.purchase = purchase;
         this.reason = reason;
+        this.status = status;
+    }
+
+    public void updateStatus(RefundStatus status) {
         this.status = status;
     }
 }

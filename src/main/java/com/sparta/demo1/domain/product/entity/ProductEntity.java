@@ -1,6 +1,7 @@
 package com.sparta.demo1.domain.product.entity;
 
 import com.sparta.demo1.domain.category.entity.CategoryEntity;
+import com.sparta.demo1.domain.purchase.entity.PurchaseProductEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,8 +15,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Table(name = "product")
+@Table(name="product",
+        uniqueConstraints=@UniqueConstraint(name="uq_product_name", columnNames="name"))
 @Entity
 @Getter
 @DynamicInsert
@@ -31,6 +34,9 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+
+    @OneToMany(mappedBy = "product",  fetch = FetchType.LAZY)
+    private List<PurchaseProductEntity> purchaseProductList;
 
     @Column(nullable = false)
     private String name;

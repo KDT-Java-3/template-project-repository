@@ -1,5 +1,6 @@
 package com.sparta.demo1.domain.user.entity;
 
+import com.sparta.demo1.domain.user.enums.UserRate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,6 +37,10 @@ public class UserEntity {
     @Column(nullable = false)
     String passwordHash;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    UserRate userRate;
+
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     LocalDateTime createdAt;
@@ -49,11 +54,13 @@ public class UserEntity {
     public UserEntity(
             String name,
             String email,
-            String passwordHash
+            String passwordHash,
+            UserRate userRate
     ) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.userRate = userRate;
     }
 
     public void updateName(String newName) {

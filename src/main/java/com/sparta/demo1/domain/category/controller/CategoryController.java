@@ -28,14 +28,25 @@ public class CategoryController {
         return new ApiResponseModel<>(categoryService.getAllCategory());
     }
 
+    @GetMapping("/top-10-sale")
+    public ApiResponseModel<List<CategoryResDto.CategorySimpleInfo>> getCategoryTop10Sale() {
+        return new ApiResponseModel<>(categoryService.getCategoryTop10Sale());
+    }
+
     @PostMapping("/register")
     public ApiResponseModel<Long> register(@Valid @RequestBody CategoryReqDto.CategoryRegisterDto categoryRegisterDto) {
         return new ApiResponseModel<>(categoryService.registerCategory(categoryRegisterDto.getName(), categoryRegisterDto.getDescription(), categoryRegisterDto.getParentId()));
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ApiResponseModel<Boolean> updateUser(@Valid @RequestBody CategoryReqDto.CategoryUpdateDto categoryUpdateDto) {
-        categoryService.updateCategory(categoryUpdateDto.getId(), categoryUpdateDto.getName(), categoryUpdateDto.getDescription());
+        categoryService.updateCategory(categoryUpdateDto.getId(), categoryUpdateDto.getName(), categoryUpdateDto.getDescription(), categoryUpdateDto.getParentId());
+        return new ApiResponseModel<>(true);
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponseModel<Boolean> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
         return new ApiResponseModel<>(true);
     }
 }

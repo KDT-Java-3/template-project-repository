@@ -16,6 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 // Purchase.java
 @Table(name = "purchase")
@@ -35,6 +36,9 @@ public class PurchaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    @OneToMany(mappedBy = "purchase",  fetch = FetchType.LAZY)
+    private List<PurchaseProductEntity> purchaseProductList;
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
@@ -67,4 +71,7 @@ public class PurchaseEntity {
         this.shippingAddress = shippingAddress;
     }
 
+    public void updateStatus(PurchaseStatus status) {
+        this.status = status;
+    }
 }
