@@ -2,12 +2,16 @@ package com.sprata.sparta_ecommerce.dto;
 
 import com.sprata.sparta_ecommerce.entity.Category;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@NoArgsConstructor
+@Setter
 public class CategoryTreeResponseDto {
     private Long id;
     private String name;
