@@ -4,5 +4,7 @@ public enum PurchaseStatus {
     PENDING,
     COMPLETED,
     CANCELED,
+    REFUND_REQUESTED,
+    REFUNDED,
     ;
 }

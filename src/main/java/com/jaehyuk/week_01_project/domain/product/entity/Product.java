@@ -1,6 +1,7 @@
 package com.jaehyuk.week_01_project.domain.product.entity;
 
 import com.jaehyuk.week_01_project.domain.category.entity.Category;
+import com.jaehyuk.week_01_project.exception.custom.InsufficientStockException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -66,5 +67,27 @@ public class Product {
         this.description = description;
         this.price = price;
         this.stock = stock;
+    }
+
+    public void update(String name, String description, BigDecimal price, Integer stock, Category category) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+    }
+
+    public void decreaseStock(Integer quantity) {
+        if (this.stock < quantity) {
+            throw new InsufficientStockException(
+                    String.format("재고가 부족합니다. 상품: %s (현재 재고: %d, 요청 수량: %d)",
+                            this.name, this.stock, quantity)
+            );
+        }
+        this.stock -= quantity;
+    }
+
+    public void increaseStock(Integer quantity) {
+        this.stock += quantity;
     }
 }

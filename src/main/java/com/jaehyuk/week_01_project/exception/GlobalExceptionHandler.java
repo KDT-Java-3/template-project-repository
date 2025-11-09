@@ -2,7 +2,14 @@ package com.jaehyuk.week_01_project.exception;
 
 import com.jaehyuk.week_01_project.exception.custom.CategoryNotFoundException;
 import com.jaehyuk.week_01_project.exception.custom.DuplicateEmailException;
+import com.jaehyuk.week_01_project.exception.custom.InsufficientStockException;
 import com.jaehyuk.week_01_project.exception.custom.InvalidPasswordException;
+import com.jaehyuk.week_01_project.exception.custom.InvalidRefundRequestException;
+import com.jaehyuk.week_01_project.exception.custom.InvalidRefundStatusException;
+import com.jaehyuk.week_01_project.exception.custom.InvalidStatusTransitionException;
+import com.jaehyuk.week_01_project.exception.custom.ProductNotFoundException;
+import com.jaehyuk.week_01_project.exception.custom.PurchaseNotFoundException;
+import com.jaehyuk.week_01_project.exception.custom.RefundNotFoundException;
 import com.jaehyuk.week_01_project.exception.custom.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +80,90 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(
             CategoryNotFoundException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(error);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleProductNotFoundException(
+            ProductNotFoundException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(error);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<Map<String, String>> handleInsufficientStockException(
+            InsufficientStockException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
+
+    @ExceptionHandler(InvalidStatusTransitionException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidStatusTransitionException(
+            InvalidStatusTransitionException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
+
+    @ExceptionHandler(PurchaseNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlePurchaseNotFoundException(
+            PurchaseNotFoundException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(error);
+    }
+
+    @ExceptionHandler(InvalidRefundRequestException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidRefundRequestException(
+            InvalidRefundRequestException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
+
+    @ExceptionHandler(InvalidRefundStatusException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidRefundStatusException(
+            InvalidRefundStatusException ex
+    ) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
+
+    @ExceptionHandler(RefundNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleRefundNotFoundException(
+            RefundNotFoundException ex
     ) {
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
