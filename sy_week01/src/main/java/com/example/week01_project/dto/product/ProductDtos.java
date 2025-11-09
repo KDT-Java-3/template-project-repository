@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class ProductDtos {
 
     public record CreateReq(
-            @NotBlank String name,
+            @NotBlank(message = "상품명은 필수입니다.") String name,
             String description,
             @NotNull @DecimalMin("0.00") BigDecimal price,
             @NotNull @Min(0) Integer stock,

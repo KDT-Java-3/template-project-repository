@@ -1,35 +1,47 @@
 package com.example.week01_project.domain.orders;
 
+import com.example.week01_project.domain.product.Product;
 import jakarta.persistence.*;
-import lombok.*;
-import java.math.BigDecimal;
-import java.time.Instant;
+import jakarta.transaction.Status;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orders")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name="orders")
 public class Orders {
+    @Enumerated(EnumType.STRING)
+    private Status status;  // enum Status { PENDING, COMPLETED, CANCELED, REFUNDED }
+    public enum Status { PENDING, COMPLETED, CANCELED, REFUNDED }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)  // user FK는 논리 참조
-    private Long userId;
+    @NotNull private Long userId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private OrderStatus status = OrderStatus.pending;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="product_id")
+    private Product product;
 
-    @Column(nullable = false, precision = 18, scale = 2)
-    private BigDecimal totalAmount;
+    @Min(1) private int quantity;
 
-    @Column(nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
+    @NotBlank
+    private String shippingAddress;
 
-    @PrePersist
-    public void prePersist() {
-        if (totalAmount == null) totalAmount = BigDecimal.ZERO;
-        if (status == null) status = OrderStatus.pending;
-        if (createdAt == null) createdAt = Instant.now();
-    }
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // getter/setter
+    public Long getId() { return id; }
+    public Long getUserId() { return userId; }
+    public Product getProduct() { return product; }
+    public int getQuantity() { return quantity; }
+    public String getShippingAddress() { return shippingAddress; }
+    public Status getStatus() { return status; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setUserId(Long userId) { this.userId = userId; }
+    public void setProduct(Product product) { this.product = product; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
+    public void setStatus(Status status) { this.status = status; }
 }

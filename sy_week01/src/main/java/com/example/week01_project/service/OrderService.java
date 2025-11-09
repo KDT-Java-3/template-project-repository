@@ -1,116 +1,62 @@
 package com.example.week01_project.service;
 
-
-import com.example.week01_project.domain.orders.*;
+import com.example.week01_project.common.BadRequestException;
+import com.example.week01_project.common.NotFoundException;
+import com.example.week01_project.domain.orders.Orders;
 import com.example.week01_project.domain.product.Product;
-import com.example.week01_project.dto.orders.OrdersDtos.*;
-import com.example.week01_project.repository.*;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import com.example.week01_project.dto.orders.OrdersCreateRequest;
+import com.example.week01_project.repository.OrderRepository;
+import com.example.week01_project.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
 
 @Service
-@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderService {
-    private final ProductRepository productRepo;
     private final OrderRepository orderRepo;
-    private final OrderItemRepository orderItemRepo;
-    private final OrderShippingRepository orderShippingRepo;
+    private final ProductRepository productRepo;
+    private final com.example.week01_project.repository.OrderQueryRepository orderQueryRepo;
 
-    @Transactional
-    public Resp create(CreateReq req) {
-        // 1) 상품 잠그고(stock 체크)
-        Product p = productRepo.findByIdForUpdate(req.productId())
-                .orElseThrow(() -> new EntityNotFoundException("product not found"));
-
-        if (p.getStock() < req.quantity()) {
-            throw new IllegalStateException("out of stock");
-        }
-
-        // 2) 주문/항목/배송 생성
-        Orders order = Orders.builder()
-                .userId(req.userId())
-                .status(OrderStatus.pending)
-                .totalAmount(BigDecimal.ZERO)
-                .build();
-        orderRepo.save(order);
-
-        BigDecimal priceSnap = p.getPrice();
-        BigDecimal subtotal = priceSnap.multiply(BigDecimal.valueOf(req.quantity()));
-
-        OrderItem oi = OrderItem.builder()
-                .orderId(order.getId())
-                .productId(p.getId())
-                .productName(p.getName())
-                .productPrice(priceSnap)
-                .quantity(req.quantity())
-                .subtotalAmount(subtotal)
-                .build();
-        orderItemRepo.save(oi);
-
-        OrderShipping shipping = OrderShipping.builder()
-                .orderId(order.getId())
-                .recipientName(req.shipping().recipientName())
-                .phone(req.shipping().phone())
-                .addressLine1(req.shipping().addressLine1())
-                .addressLine2(req.shipping().addressLine2())
-                .city(req.shipping().city())
-                .state(req.shipping().state())
-                .postalCode(req.shipping().postalCode())
-                .country(req.shipping().country() == null ? "KR" : req.shipping().country())
-                .build();
-        orderShippingRepo.save(shipping);
-
-        // 3) 총액 갱신 & 재고 감소
-        order.setTotalAmount(subtotal);
-
-        p.setStock(p.getStock() - req.quantity()); // 낙관적/비관적 락으로 보호됨
-
-        return new Resp(order.getId(), order.getStatus().name());
-    }
-
-    @Transactional(readOnly = true)
-    public List<Orders> listByUser(Long userId) {
-        return orderRepo.findByUserIdOrderByCreatedAtDesc(userId);
+    public OrderService(OrderRepository orderRepo, ProductRepository productRepo,
+                        com.example.week01_project.repository.OrderQueryRepository orderQueryRepo) {
+        this.orderRepo = orderRepo; this.productRepo = productRepo; this.orderQueryRepo = orderQueryRepo;
     }
 
     @Transactional
-    public Resp changeStatus(Long orderId, ChangeStatusReq req) {
-        Orders order = orderRepo.findById(orderId).orElseThrow(() -> new EntityNotFoundException("order not found"));
-        OrderStatus target = OrderStatus.valueOf(req.status());
-        // 허용 전이: pending -> completed / canceled
-        if (order.getStatus() != OrderStatus.pending) {
-            throw new IllegalStateException("status change allowed only from pending");
-        }
-        if (target == OrderStatus.completed || target == OrderStatus.canceled) {
-            order.setStatus(target);
-        } else {
-            throw new IllegalStateException("invalid target status");
-        }
-        return new Resp(order.getId(), order.getStatus().name());
+    public Long create(OrdersCreateRequest req){
+        Product p = productRepo.findById(req.productId()).orElseThrow(() -> new NotFoundException("product not found"));
+        if (p.getStock() < req.quantity()) throw new BadRequestException("insufficient stock");
+        p.setStock(p.getStock() - req.quantity());
+
+        Orders o = new Orders();
+        o.setUserId(req.userId());
+        o.setProduct(p);
+        o.setQuantity(req.quantity());
+        o.setShippingAddress(req.shippingAddress());
+        // status 기본 PENDING
+        orderRepo.save(o);
+        return o.getId();
+    }
+
+    public Page<Orders> search(Long userId, Orders.Status status, LocalDate from, LocalDate to, Pageable pageable){
+        return orderQueryRepo.search(userId, status, from, to, pageable);
+    }
+
+    public Orders get(Long id){
+        return orderRepo.findById(id).orElseThrow(()-> new NotFoundException("order not found"));
     }
 
     @Transactional
-    public Resp cancel(Long orderId, Long userId) {
-        Orders order = orderRepo.findById(orderId).orElseThrow(() -> new EntityNotFoundException("order not found"));
-        if (!order.getUserId().equals(userId)) {
-            throw new IllegalStateException("user mismatch");
-        }
-        if (order.getStatus() != OrderStatus.pending) {
-            throw new IllegalStateException("only pending can be canceled");
-        }
+    public void cancel(Long id){
+        Orders o = orderRepo.findById(id).orElseThrow(()-> new NotFoundException("order not found"));
+        if (o.getStatus() != Orders.Status.PENDING) throw new BadRequestException("only pending can be canceled");
+        o.setStatus(Orders.Status.CANCELED);
         // 재고 복원
-        List<OrderItem> items = orderItemRepo.findByOrderId(orderId);
-        for (OrderItem oi : items) {
-            Product p = productRepo.findByIdForUpdate(oi.getProductId())
-                    .orElseThrow(() -> new EntityNotFoundException("product not found"));
-            p.setStock(p.getStock() + oi.getQuantity());
-        }
-        order.setStatus(OrderStatus.canceled);
-        return new Resp(order.getId(), order.getStatus().name());
+        Product p = o.getProduct();
+        p.setStock(p.getStock() + o.getQuantity());
     }
 }

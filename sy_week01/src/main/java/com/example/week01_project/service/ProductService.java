@@ -1,65 +1,72 @@
 package com.example.week01_project.service;
 
+import com.example.week01_project.common.ConflictException;
+import com.example.week01_project.common.NotFoundException;
+import com.example.week01_project.domain.category.Category;
+import com.example.week01_project.domain.orders.Orders;
 import com.example.week01_project.domain.product.Product;
-import com.example.week01_project.dto.product.ProductDtos.*;
+import com.example.week01_project.dto.product.ProductRequest;
+import com.example.week01_project.dto.product.ProductResponse;
+import com.example.week01_project.repository.CategoryRepository;
+import com.example.week01_project.repository.OrderRepository;
 import com.example.week01_project.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductService {
     private final ProductRepository productRepo;
+    private final CategoryRepository categoryRepo;
+    private final OrderRepository orderRepo;
 
-    @Transactional
-    public Resp create(CreateReq req) {
-        Product p = Product.builder()
-                .name(req.name())
-                .description(req.description())
-                .price(req.price())
-                .stock(req.stock())
-                .categoryId(req.categoryId())
-                .isActive(true)
-                .build();
-        productRepo.save(p);
-        return toResp(p);
-    }
-
-    @Transactional(readOnly = true)
-    public Resp get(Long id) {
-        Product p = productRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("product not found"));
-        return toResp(p);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Product> list(Long categoryId, BigDecimal minPrice, BigDecimal maxPrice, String keyword) {
-        Specification<Product> spec = Specification.where(null);
-        if (categoryId != null) spec = spec.and((root, q, cb) -> cb.equal(root.get("categoryId"), categoryId));
-        if (minPrice != null) spec = spec.and((root, q, cb) -> cb.ge(root.get("price"), minPrice));
-        if (maxPrice != null) spec = spec.and((root, q, cb) -> cb.le(root.get("price"), maxPrice));
-        if (keyword != null && !keyword.isBlank())
-            spec = spec.and((root, q, cb) -> cb.like(root.get("name"), "%" + keyword + "%"));
-        return productRepo.findAll(spec);
+    public ProductService(ProductRepository productRepo, CategoryRepository categoryRepo, OrderRepository orderRepo) {
+        this.productRepo = productRepo; this.categoryRepo = categoryRepo; this.orderRepo = orderRepo;
     }
 
     @Transactional
-    public Resp update(Long id, UpdateReq req) {
-        Product p = productRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("product not found"));
+    public Long create(ProductRequest req){
+        if (productRepo.existsByName(req.name())) throw new ConflictException("duplicate product name");
+        Category cat = categoryRepo.findById(req.categoryId()).orElseThrow(() -> new NotFoundException("category not found"));
+        Product p = new Product();
         p.setName(req.name());
         p.setDescription(req.description());
         p.setPrice(req.price());
         p.setStock(req.stock());
-        p.setCategoryId(req.categoryId());
-        return toResp(p);
+        p.setCategory(cat);
+        productRepo.save(p);
+        return p.getId(); // 등록 후 ID 반환 (요구사항)
     }
 
-    private Resp toResp(Product p) {
-        return new Resp(p.getId(), p.getName(), p.getDescription(), p.getPrice(), p.getStock(), p.getCategoryId(), p.getIsActive());
+    public ProductResponse get(Long id){
+        Product p = productRepo.findById(id).orElseThrow(() -> new NotFoundException("product not found"));
+        return new ProductResponse(p.getId(), p.getName(), p.getDescription(), p.getPrice(), p.getStock(),
+                p.getCategory()==null? null : p.getCategory().getId());
+    }
+
+    @Transactional
+    public void update(Long id, ProductRequest req){
+        Product p = productRepo.findById(id).orElseThrow(() -> new NotFoundException("product not found"));
+        if (!p.getName().equals(req.name()) && productRepo.existsByName(req.name()))
+            throw new ConflictException("duplicate product name");
+        Category cat = categoryRepo.findById(req.categoryId()).orElseThrow(() -> new NotFoundException("category not found"));
+        p.setName(req.name()); p.setDescription(req.description()); p.setPrice(req.price()); p.setStock(req.stock()); p.setCategory(cat);
+    }
+
+    @Transactional
+    public void delete(Long id){
+        Product p = productRepo.findById(id).orElseThrow(() -> new NotFoundException("product not found"));
+        long completed = orderRepo.countByProductAndStatus(p, Orders.Status.COMPLETED);
+        if (completed > 0) throw new ConflictException("cannot delete: completed order exists");
+        productRepo.delete(p);
+    }
+
+    public Page<ProductResponse> search(Long categoryId, java.math.BigDecimal min, java.math.BigDecimal max,
+                                        Boolean includeZero, Pageable pageable){
+        return productRepo.search(categoryId, min, max, includeZero, pageable)
+                .map(pp -> new ProductResponse(pp.getId(), pp.getName(), pp.getDescription(), pp.getPrice(), pp.getStock(),
+                        pp.getCategory()==null? null : pp.getCategory().getId()));
     }
 }

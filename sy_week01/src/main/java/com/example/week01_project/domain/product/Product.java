@@ -1,42 +1,40 @@
 package com.example.week01_project.domain.product;
+import com.example.week01_project.domain.category.Category;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name="products", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
-
-    @NotBlank
-    @Column(nullable = false, length = 200)
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
+    @NotBlank private String name;
     private String description;
 
-    @NotNull
-    @Column(nullable = false, precision = 18, scale = 2)
+    @NotNull @DecimalMin("0.0") @Digits(integer=12, fraction=2)
     private BigDecimal price;
 
     @Min(0)
-    @Column(nullable = false)
-    private Integer stock;
+    private int stock;
 
-    @Column(nullable = false)
-    private Boolean isActive = true;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id")
+    private Category category;
 
-    @Version
-    private Long version; // 낙관적 락
+    // getter/setter
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public String getDescription() { return description; }
+    public BigDecimal getPrice() { return price; }
+    public int getStock() { return stock; }
+    public Category getCategory() { return category; }
+    public void setName(String name) { this.name = name; }
+    public void setDescription(String description) { this.description = description; }
+    public void setPrice(BigDecimal price) { this.price = price; }
+    public void setStock(int stock) { this.stock = stock; }
+    public void setCategory(Category category) { this.category = category; }
 }
