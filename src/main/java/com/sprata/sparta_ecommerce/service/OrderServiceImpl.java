@@ -4,11 +4,13 @@ import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
 import com.sprata.sparta_ecommerce.controller.exception.NotEnoughStockException;
 import com.sprata.sparta_ecommerce.dto.OrderRequestDto;
 import com.sprata.sparta_ecommerce.dto.OrderResponseDto;
+import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.entity.Order;
 import com.sprata.sparta_ecommerce.entity.OrderStatus;
 import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.OrderRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
+import com.sprata.sparta_ecommerce.service.dto.OrderServiceSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,10 +53,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponseDto> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId).stream()
+    public List<OrderResponseDto> getOrdersByUserId(OrderServiceSearchDto searchDto, PageDto pageDto) {
+
+        List<OrderResponseDto> collect = orderRepository.findByUserWithPaging(searchDto, pageDto).stream()
                 .map(OrderResponseDto::new)
                 .collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override

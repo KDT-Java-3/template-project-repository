@@ -1,5 +1,6 @@
 package com.sprata.sparta_ecommerce.entity;
 
+import com.sprata.sparta_ecommerce.listener.OrderListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders") // 'order' is a reserved keyword in SQL
+@EntityListeners(OrderListener.class)
 public class Order extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

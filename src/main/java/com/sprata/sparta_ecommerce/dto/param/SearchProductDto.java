@@ -30,6 +30,12 @@ public class SearchProductDto {
     private String keyword = "";
 
 
+    @Builder.Default
+    private List<String> field = new ArrayList<>();
+
+    @Builder.Default
+    private List<String> direction = new ArrayList<>();
+
     // 다중 정렬 조건
     @Builder.Default
     private List<SortCondition> sortConditions = new ArrayList<>();
@@ -40,5 +46,13 @@ public class SearchProductDto {
     public static class SortCondition {
         private String field;
         private String direction;
+    }
+
+    public void makeSortCondition() {
+        for (int i = 0; i < field.size(); i++) {
+            String f = field.get(i);
+            String d = direction.get(i) != null ? direction.get(i) : "desc";
+            sortConditions.add(new SortCondition(f, d));
+        }
     }
 }

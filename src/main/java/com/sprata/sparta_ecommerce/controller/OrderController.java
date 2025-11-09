@@ -1,10 +1,14 @@
 package com.sprata.sparta_ecommerce.controller;
 
+import com.sprata.sparta_ecommerce.controller.mapper.OrderMapper;
 import com.sprata.sparta_ecommerce.dto.ChangeOrderStatusRequestDto;
 import com.sprata.sparta_ecommerce.dto.OrderRequestDto;
 import com.sprata.sparta_ecommerce.dto.OrderResponseDto;
+import com.sprata.sparta_ecommerce.dto.param.PageDto;
+import com.sprata.sparta_ecommerce.dto.param.SearchOrderDto;
 import com.sprata.sparta_ecommerce.entity.OrderStatus;
 import com.sprata.sparta_ecommerce.service.OrderService;
+import com.sprata.sparta_ecommerce.service.dto.OrderServiceSearchDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import com.sprata.sparta_ecommerce.dto.ResponseDto;
@@ -20,6 +24,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderMapper orderMapper;
 
     @PostMapping
     public ResponseEntity<ResponseDto<?>> createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
@@ -29,8 +34,11 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ResponseDto<?>> getOrdersByUserId(@PathVariable Long userId) {
-        List<OrderResponseDto> responseDtos = orderService.getOrdersByUserId(userId);
+    public ResponseEntity<ResponseDto<?>> getOrdersByUserId(@PathVariable Long userId
+                                                        , @ModelAttribute SearchOrderDto searchDto
+                                                        , @ModelAttribute PageDto pageDto) {
+        OrderServiceSearchDto serviceSearchDto = orderMapper.toServiceSearchDto(userId, searchDto);
+        List<OrderResponseDto> responseDtos = orderService.getOrdersByUserId(serviceSearchDto, pageDto);
         return ResponseEntity.ok(ResponseDto.success(responseDtos, "주문 목록 조회 성공"));
     }
 

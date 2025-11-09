@@ -42,7 +42,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ResponseDto<?>> getAllProducts(@ModelAttribute SearchProductDto searchDto,
                                                          @ModelAttribute PageDto pageDto) {
-
+        searchDto.makeSortCondition();
         List<ProductResponseDto> response = productService.getAllProducts(searchDto, pageDto);
         return ResponseEntity.ok(ResponseDto.success(response, "상품 목록 조회 성공"));
     }

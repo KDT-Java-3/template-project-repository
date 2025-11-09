@@ -4,6 +4,7 @@ import com.sprata.sparta_ecommerce.controller.exception.DataNotFoundException;
 import com.sprata.sparta_ecommerce.controller.exception.NotEnoughStockException;
 import com.sprata.sparta_ecommerce.dto.OrderRequestDto;
 import com.sprata.sparta_ecommerce.dto.OrderResponseDto;
+import com.sprata.sparta_ecommerce.dto.param.PageDto;
 import com.sprata.sparta_ecommerce.entity.Category;
 import com.sprata.sparta_ecommerce.entity.Order;
 import com.sprata.sparta_ecommerce.entity.OrderStatus;
@@ -11,6 +12,7 @@ import com.sprata.sparta_ecommerce.entity.Product;
 import com.sprata.sparta_ecommerce.repository.CategoryRepository;
 import com.sprata.sparta_ecommerce.repository.OrderRepository;
 import com.sprata.sparta_ecommerce.repository.ProductRepository;
+import com.sprata.sparta_ecommerce.service.dto.OrderServiceSearchDto;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,14 +77,20 @@ class OrderServiceTest {
         // given
         OrderRequestDto dto = new OrderRequestDto(1L, product.getId(),  1, "서울시 송파구");
         orderService.createOrder(dto);
+        em.flush();
+        em.clear();
 
         // when
-        List<OrderResponseDto> result = orderService.getOrdersByUserId(1L);
+        OrderServiceSearchDto searchDto = new OrderServiceSearchDto(1L, "", null, null);
+        PageDto pageDto = new PageDto();
+        List<OrderResponseDto> result = orderService.getOrdersByUserId(searchDto, pageDto);
 
         // then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getProduct_name()).isEqualTo("삼성 노트북");
     }
+
+
 
     @Test
     @DisplayName("주문 상태 변경 성공")
