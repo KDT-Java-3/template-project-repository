@@ -143,6 +143,39 @@ public interface YourMapper {
 3. Create PR from work branch → submission branch
 4. Merge after review
 
+**Commit Message Convention:**
+
+Follow the Conventional Commits format defined in `COMMIT_CONVENTION.md`:
+
+```bash
+<type>[optional scope]: <description>
+
+[optional body]
+```
+
+**Important for Claude Code:**
+- DO NOT add "🤖 Generated with Claude Code" footer
+- DO NOT add "Co-Authored-By: Claude" footer
+- Keep commit messages clean and professional
+
+**Common types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or modifying tests
+- `build`: Build system or dependency changes
+- `chore`: Other changes (library updates, etc.)
+
+**Examples:**
+```bash
+feat(auth): 로그인 토큰 만료 처리 추가
+fix(api): 세션 만료 오류 해결
+build: Querydsl 설정 및 보안 취약점 해결
+docs: API 문서 업데이트
+```
+
 ## Domain Requirements Reference
 
 ### Product Management
