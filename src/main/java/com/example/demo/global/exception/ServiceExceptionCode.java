@@ -12,6 +12,8 @@ public enum ServiceExceptionCode {
 
     // Category
     NOT_FOUND_CATEGORY("카테고리를 찾을 수 없습니다."),
+    CATEGORY_HAS_CHILDREN("하위 카테고리가 있어 삭제할 수 없습니다."),
+    CATEGORY_HAS_PRODUCTS("연관된 상품이 있어 삭제할 수 없습니다."),
 
     // Product
     NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),

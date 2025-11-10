@@ -6,6 +6,7 @@ import com.example.demo.domain.category.dto.response.CategoryResponse;
 import com.example.demo.domain.category.entity.Category;
 import com.example.demo.domain.category.mapper.CategoryMapper;
 import com.example.demo.domain.category.repository.CategoryRepository;
+import com.example.demo.domain.product.repository.ProductRepository;
 import com.example.demo.global.exception.ServiceException;
 import com.example.demo.global.exception.ServiceExceptionCode;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
     private final CategoryMapper categoryMapper;
 
     /**
@@ -28,6 +30,18 @@ public class CategoryService {
     @Transactional
     public CategoryResponse createCategory(CategoryCreateRequest request) {
         Category category = categoryMapper.toEntity(request);
+
+        // parent 설정
+        if (request.getParentId() != null) {
+            Category parent = categoryRepository.findById(request.getParentId())
+                .orElseThrow(() -> new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY));
+            category = Category.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .parent(parent)
+                .build();
+        }
+
         Category savedCategory = categoryRepository.save(category);
         return categoryMapper.toResponse(savedCategory);
     }
@@ -58,7 +72,14 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY));
 
-        category.update(request.getName(), request.getDescription());
+        // parent 조회 (parentId가 제공된 경우)
+        Category parent = null;
+        if (request.getParentId() != null) {
+            parent = categoryRepository.findById(request.getParentId())
+                .orElseThrow(() -> new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY));
+        }
+
+        category.update(request.getName(), request.getDescription(), parent);
         return categoryMapper.toResponse(category);
     }
 
@@ -67,9 +88,21 @@ public class CategoryService {
      */
     @Transactional
     public void deleteCategory(Long id) {
+        // 카테고리 존재 여부 확인
         if (!categoryRepository.existsById(id)) {
             throw new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY);
         }
+
+        // 하위 카테고리 존재 여부 확인
+        if (categoryRepository.existsByParent_Id(id)) {
+            throw new ServiceException(ServiceExceptionCode.CATEGORY_HAS_CHILDREN);
+        }
+
+        // 연관 상품 존재 여부 확인
+        if (productRepository.existsByCategoryId(id)) {
+            throw new ServiceException(ServiceExceptionCode.CATEGORY_HAS_PRODUCTS);
+        }
+
         categoryRepository.deleteById(id);
     }
 }
