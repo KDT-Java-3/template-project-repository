@@ -16,6 +16,7 @@ public enum ServiceExceptionCode {
     // Product
     NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
     INSUFFICIENT_STOCK("상품의 재고가 부족합니다."),
+    PRODUCT_HAS_COMPLETED_ORDERS("완료된 주문이 있어 상품을 삭제할 수 없습니다."),
 
     // Order
     NOT_FOUND_ORDER("주문을 찾을 수 없습니다."),
