@@ -24,6 +24,8 @@ public enum ServiceExceptionCode {
     NOT_FOUND_ORDER("주문을 찾을 수 없습니다."),
     INVALID_ORDER_STATUS("유효하지 않은 주문 상태입니다."),
     CANNOT_CANCEL_ORDER("취소할 수 없는 주문입니다."),
+    EMPTY_ORDER_ITEMS("주문 항목이 비어있습니다."),
+    INVALID_ORDER_QUANTITY("주문 수량이 유효하지 않습니다."),
 
     // Refund
     NOT_FOUND_REFUND("환불 요청을 찾을 수 없습니다."),
