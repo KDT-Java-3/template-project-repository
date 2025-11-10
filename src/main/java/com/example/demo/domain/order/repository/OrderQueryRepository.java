@@ -7,6 +7,7 @@ import com.example.demo.domain.order.entity.QOrderItem;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
@@ -68,7 +69,10 @@ public class OrderQueryRepository {
                 order.status,
                 order.orderDate,
                 orderItem.count().intValue().as("itemCount"),
-                orderItem.unitPrice.multiply(orderItem.quantity).sum().as("totalAmount"),
+                Expressions.numberTemplate(java.math.BigDecimal.class,
+                    "COALESCE(SUM({0} * {1}), 0)",
+                    orderItem.unitPrice,
+                    orderItem.quantity).as("totalAmount"),
                 order.createdAt
             ))
             .from(order)
