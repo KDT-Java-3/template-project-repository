@@ -4,13 +4,12 @@ import com.example.demo.domain.category.dto.request.CategoryCreateRequest;
 import com.example.demo.domain.category.dto.request.CategoryUpdateRequest;
 import com.example.demo.domain.category.dto.response.CategoryResponse;
 import com.example.demo.domain.category.service.CategoryService;
+import com.example.demo.global.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,39 +29,39 @@ public class CategoryController {
 
     @Operation(summary = "카테고리 등록", description = "새로운 카테고리를 등록합니다.")
     @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(
+    public ApiResponse<CategoryResponse> createCategory(
         @Valid @RequestBody CategoryCreateRequest request) {
         CategoryResponse response = categoryService.createCategory(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ApiResponse.success(response);
     }
 
     @Operation(summary = "모든 카테고리 조회", description = "등록된 모든 카테고리를 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+    public ApiResponse<List<CategoryResponse>> getAllCategories() {
         List<CategoryResponse> responses = categoryService.getAllCategories();
-        return ResponseEntity.ok(responses);
+        return ApiResponse.success(responses);
     }
 
     @Operation(summary = "카테고리 단건 조회", description = "ID로 특정 카테고리를 조회합니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+    public ApiResponse<CategoryResponse> getCategoryById(@PathVariable Long id) {
         CategoryResponse response = categoryService.getCategoryById(id);
-        return ResponseEntity.ok(response);
+        return ApiResponse.success(response);
     }
 
     @Operation(summary = "카테고리 수정", description = "기존 카테고리 정보를 수정합니다.")
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(
+    public ApiResponse<CategoryResponse> updateCategory(
         @PathVariable Long id,
         @Valid @RequestBody CategoryUpdateRequest request) {
         CategoryResponse response = categoryService.updateCategory(id, request);
-        return ResponseEntity.ok(response);
+        return ApiResponse.success(response);
     }
 
     @Operation(summary = "카테고리 삭제", description = "카테고리를 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    public ApiResponse<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.success();
     }
 }

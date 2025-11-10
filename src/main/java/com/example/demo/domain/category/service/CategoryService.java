@@ -6,6 +6,8 @@ import com.example.demo.domain.category.dto.response.CategoryResponse;
 import com.example.demo.domain.category.entity.Category;
 import com.example.demo.domain.category.mapper.CategoryMapper;
 import com.example.demo.domain.category.repository.CategoryRepository;
+import com.example.demo.global.exception.ServiceException;
+import com.example.demo.global.exception.ServiceExceptionCode;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +46,7 @@ public class CategoryService {
      */
     public CategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다. ID: " + id));
+            .orElseThrow(() -> new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY));
         return categoryMapper.toResponse(category);
     }
 
@@ -54,7 +56,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryUpdateRequest request) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다. ID: " + id));
+            .orElseThrow(() -> new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY));
 
         category.update(request.getName(), request.getDescription());
         return categoryMapper.toResponse(category);
@@ -66,7 +68,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new IllegalArgumentException("카테고리를 찾을 수 없습니다. ID: " + id);
+            throw new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY);
         }
         categoryRepository.deleteById(id);
     }

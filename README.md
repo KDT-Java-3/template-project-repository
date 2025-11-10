@@ -245,6 +245,207 @@ Ref: user_roles.granted_by > users.id
 
 ---
 
+## 공통 응답 처리 및 예외 핸들링
+
+### 개요
+
+모든 API의 응답 형식을 통일하고, 예외를 중앙에서 처리하여 일관성 있고 예측 가능한 API를 제공합니다.
+
+### API 응답 구조
+
+모든 API는 `ApiResponse<T>` 제네릭 클래스를 통해 통일된 형식으로 응답합니다.
+
+#### 성공 응답
+
+```json
+{
+  "result": true,
+  "error": null,
+  "message": {
+    "id": 1,
+    "name": "전자기기",
+    "description": "전자제품 카테고리"
+  }
+}
+```
+
+#### 실패 응답
+
+```json
+{
+  "result": false,
+  "error": {
+    "errorCode": "NOT_FOUND_CATEGORY",
+    "errorMessage": "카테고리를 찾을 수 없습니다."
+  },
+  "message": null
+}
+```
+
+### 구현 구조
+
+#### 1. ApiResponse 클래스 (`global/dto/ApiResponse.java`)
+
+```java
+@Getter
+@Builder
+public class ApiResponse<T> {
+    Boolean result;      // 성공/실패 여부
+    Error error;         // 에러 정보 (실패 시)
+    T message;           // 응답 데이터 (성공 시)
+
+    // 정적 팩토리 메서드
+    public static <T> ApiResponse<T> success(T message);
+    public static <T> ResponseEntity<ApiResponse<T>> error(String code, String errorMessage);
+    public static <T> ResponseEntity<ApiResponse<T>> badRequest(String code, String errorMessage);
+    public static <T> ResponseEntity<ApiResponse<T>> serverError(String code, String errorMessage);
+}
+```
+
+#### 2. ServiceException 클래스 (`global/exception/ServiceException.java`)
+
+비즈니스 로직에서 발생하는 커스텀 예외입니다.
+
+```java
+public class ServiceException extends RuntimeException {
+    String code;
+    String message;
+
+    public ServiceException(ServiceExceptionCode response) {
+        super(response.getMessage());
+        this.code = response.name();
+        this.message = super.getMessage();
+    }
+}
+```
+
+#### 3. ServiceExceptionCode Enum (`global/exception/ServiceExceptionCode.java`)
+
+애플리케이션에서 발생할 수 있는 모든 비즈니스 예외 코드를 정의합니다.
+
+```java
+public enum ServiceExceptionCode {
+    // Category
+    NOT_FOUND_CATEGORY("카테고리를 찾을 수 없습니다."),
+
+    // Product
+    NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
+    INSUFFICIENT_STOCK("상품의 재고가 부족합니다."),
+
+    // Order
+    NOT_FOUND_ORDER("주문을 찾을 수 없습니다."),
+    INVALID_ORDER_STATUS("유효하지 않은 주문 상태입니다."),
+    CANNOT_CANCEL_ORDER("취소할 수 없는 주문입니다."),
+
+    // Refund
+    NOT_FOUND_REFUND("환불 요청을 찾을 수 없습니다."),
+    INVALID_REFUND_STATUS("유효하지 않은 환불 상태입니다."),
+
+    // User
+    NOT_FOUND_USER("사용자를 찾을 수 없습니다.");
+
+    final String message;
+}
+```
+
+#### 4. GlobalExceptionHandler (`global/exception/GlobalExceptionHandler.java`)
+
+`@RestControllerAdvice`를 사용하여 모든 예외를 중앙에서 처리합니다.
+
+```java
+@Hidden
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    // 비즈니스 예외 처리
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<?> handleResponseException(ServiceException ex) {
+        return ApiResponse.error(ex.getCode(), ex.getMessage());
+    }
+
+    // 유효성 검증 실패 처리
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        // 검증 오류 메시지 수집
+        return ApiResponse.badRequest(VALIDATE_ERROR, errors);
+    }
+
+    // 기타 모든 예외 처리
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> serverException(Exception ex) {
+        return ApiResponse.serverError(SERVER_ERROR, ex.getMessage());
+    }
+}
+```
+
+### 사용 예시
+
+#### Controller에서 ApiResponse 사용
+
+```java
+@RestController
+@RequestMapping("/api/categories")
+@RequiredArgsConstructor
+public class CategoryController {
+
+    private final CategoryService categoryService;
+
+    @PostMapping
+    public ApiResponse<CategoryResponse> createCategory(
+        @Valid @RequestBody CategoryCreateRequest request) {
+        CategoryResponse response = categoryService.createCategory(request);
+        return ApiResponse.success(response);  // 성공 응답
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<CategoryResponse> getCategoryById(@PathVariable Long id) {
+        CategoryResponse response = categoryService.getCategoryById(id);
+        return ApiResponse.success(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return ApiResponse.success();  // 데이터 없는 성공 응답
+    }
+}
+```
+
+#### Service에서 예외 발생
+
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CategoryService {
+
+    private final CategoryRepository categoryRepository;
+
+    public CategoryResponse getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY));
+        return categoryMapper.toResponse(category);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ServiceException(ServiceExceptionCode.NOT_FOUND_CATEGORY);
+        }
+        categoryRepository.deleteById(id);
+    }
+}
+```
+
+### 장점
+
+1. **일관성**: 모든 API가 동일한 응답 구조를 가져 클라이언트 개발이 용이합니다.
+2. **예측 가능성**: 에러 코드와 메시지가 명확하게 정의되어 있어 디버깅이 쉽습니다.
+3. **유지보수성**: 예외 처리 로직이 중앙 집중화되어 코드 중복이 없습니다.
+4. **확장성**: 새로운 예외 타입 추가가 간단합니다 (ServiceExceptionCode에 추가).
+
+---
+
 ## 자료
 
 ### MapStruct 사용 예시
