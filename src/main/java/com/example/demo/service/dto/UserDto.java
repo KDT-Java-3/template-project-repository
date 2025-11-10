@@ -18,4 +18,15 @@ public class UserDto {
     // 다른 데이터
     private int a;
     private int b; // ....
+
+    public static UserDto from(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getName())
+                .email(user.getEmail())
+                .purchaseCount(user.getPurchases().size())
+                .a(0)
+                .b(0)
+                .build();
+    }
 }

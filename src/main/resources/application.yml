@@ -34,3 +34,6 @@ logging:
 # ?? ? ?? ??
 server:
   port: 8082
+
+monitoring:
+  slow-threshold-ms: 400 # ExecutionTimeAspect warns when service methods exceed this value
