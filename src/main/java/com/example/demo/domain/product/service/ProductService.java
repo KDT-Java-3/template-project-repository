@@ -1,7 +1,7 @@
 package com.example.demo.domain.product.service;
 
 import com.example.demo.domain.order.entity.OrderStatus;
-import com.example.demo.domain.order.repository.OrderRepository;
+import com.example.demo.domain.order.repository.OrderItemRepository;
 import com.example.demo.domain.product.dto.request.ProductCreateRequest;
 import com.example.demo.domain.product.dto.request.ProductSearchCondition;
 import com.example.demo.domain.product.dto.request.ProductUpdateRequest;
@@ -29,7 +29,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductQueryRepository productQueryRepository;
-    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ProductMapper productMapper;
     private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
@@ -100,7 +100,7 @@ public class ProductService {
         }
 
         // 완료된 주문 존재 여부 확인
-        boolean hasCompletedOrders = orderRepository.existsByProductIdAndStatus(id, OrderStatus.COMPLETED);
+        boolean hasCompletedOrders = orderItemRepository.existsByProductIdAndOrderStatus(id, OrderStatus.COMPLETED);
         if (hasCompletedOrders) {
             throw new ServiceException(ServiceExceptionCode.PRODUCT_HAS_COMPLETED_ORDERS);
         }
