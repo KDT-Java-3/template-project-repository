@@ -1,4 +1,4 @@
-package com.example.demo.lecture.refactorsection1;
+package com.example.demo.lecture.refactorspringsection1;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.example.demo.lecture.refactorsection1;
+package com.example.demo.lecture.refactorspringsection1;
 
 import com.example.demo.common.ServiceException;
 import com.example.demo.common.ServiceExceptionCode;
@@ -9,8 +9,11 @@ import java.math.BigDecimal;
 
 /**
  * Spring Service 레이어 리팩토링 실습 (Before).
- * - 검증, 주문 생성, 가격 계산, 응답 변환이 한 메서드에 몰려있음.
- * - 안전하지 않은 파라미터 검증/총액 검사 로직이 뒤섞여 있어 SRP 위반 사례로 사용한다.
+ *
+ * 리팩토링 힌트:
+ * 1. "검증 → 주문 생성 → 총액 검증 → 저장 → 응답 변환" 을 단계별 메서드로 쪼개고, After 예제처럼 Validator/Mapper를 도입해보자.
+ * 2. Request → Domain 변환은 MapStruct 기반 Mapper에 맡기면 테스트와 재사용이 쉬워진다 (answer 참고).
+ * 3. 총액 제한 검증 로직을 별도 메서드(enforceTotalPriceLimit)로 추출해 SRP를 지키자.
  */
 @Service
 public class RefactorSection1OrderServiceBefore {

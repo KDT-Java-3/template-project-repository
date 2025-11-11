@@ -1,4 +1,4 @@
-package com.example.demo.lecture.refactorsection1;
+package com.example.demo.lecture.refactorspringsection1;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Spring MVC Controller 리팩토링 예제 (Before).
- * - Controller가 서비스/리포지토리까지 직접 의존해 단일 책임을 위반하는 모습을 보여준다.
+ *
+ * 리팩토링 힌트:
+ * - After Answer에서는 Controller가 Service만 의존하도록 단순화되어 있다. Repository 직접 호출을 제거해보자.
+ * - 클래스 책임을 "HTTP 처리"에만 집중시키고, DTO ↔ Domain 변환은 Service/Mapper로 위임한다.
+ * - ResponseEntity 빌더/에러 처리도 전역 핸들러나 공통 컴포넌트로 분리해 가독성을 높일 수 있다.
  */
 @RestController
 @RequestMapping("/lecture/refactor-section1/orders")
