@@ -59,25 +59,59 @@ public final class Section1AdvancedRefactExamples {
         // TODO: 할인/세금/수수료 계산을 private 메서드로 분리해보세요.
     }
 
-    public record Invoice(Long id, String clientTier, double taxRate, List<InvoiceLine> lines) {
+    public static class Invoice {
+        private final Long id;
+        private final String clientTier;
+        private final double taxRate;
+        private final List<InvoiceLine> lines = new ArrayList<>();
         private BigDecimal total = BigDecimal.ZERO;
         private String summary = "";
         private LocalDateTime generatedAt;
 
         public Invoice(Long id, String clientTier, double taxRate) {
-            this(id, clientTier, taxRate, new ArrayList<>());
+            this.id = id;
+            this.clientTier = clientTier;
+            this.taxRate = taxRate;
+        }
+
+        public Long id() {
+            return id;
+        }
+
+        public String clientTier() {
+            return clientTier;
+        }
+
+        public double taxRate() {
+            return taxRate;
+        }
+
+        public List<InvoiceLine> lines() {
+            return lines;
         }
 
         public void addLine(InvoiceLine line) {
             lines.add(line);
         }
 
+        public BigDecimal total() {
+            return total;
+        }
+
         public void setTotal(BigDecimal total) {
             this.total = total;
         }
 
+        public String summary() {
+            return summary;
+        }
+
         public void setSummary(String summary) {
             this.summary = summary;
+        }
+
+        public LocalDateTime generatedAt() {
+            return generatedAt;
         }
 
         public void setGeneratedAt(LocalDateTime generatedAt) {
