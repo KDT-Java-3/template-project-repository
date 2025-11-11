@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-import com.example.demo.PurchaseStatus;
 import com.example.demo.entity.Product;
 import com.example.demo.repository.projection.ProductSalesSummaryDto;
 import com.example.demo.repository.projection.ProductSummaryDto;
@@ -155,21 +154,6 @@ public class ProductQueryRepository {
                 .join(purchase).on(purchase.product.eq(product))
                 .groupBy(product.id, product.name, product.price)
                 .orderBy(purchase.quantity.sum().desc())
-                .fetch();
-    }
-
-    /**
-     * Purchase 테이블과 조인
-     */
-    public List<Product> findProductJoinWithPurchaseById(Long categoryId) {
-        return queryFactory
-                .select(product
-                )
-                .from(product)
-                .join(purchase).on(purchase.product.eq(product))
-                .where(
-                        purchase.product.id.eq(categoryId)
-                )
                 .fetch();
     }
 

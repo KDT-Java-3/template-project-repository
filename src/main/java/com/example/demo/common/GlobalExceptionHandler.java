@@ -1,18 +1,14 @@
 package com.example.demo.common;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -58,18 +54,6 @@ public class GlobalExceptionHandler {
         return errorCount > 1
                 ? "요청 값에 " + errorCount + "개의 오류가 있습니다."
                 : "요청 값이 올바르지 않습니다.";
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String,String> handleUnique(DataIntegrityViolationException ex) {
-        String errorMessage = "데이터베이스 제약 조건 위반";
-
-        if (ex.getMessage().contains("상품명이 중복")) { // 실제 DB 오류 메시지에 따라 분기
-            errorMessage = "상품명이 이미 존재합니다.";
-        }
-
-        return Map.of("message", errorMessage);
     }
 }
 

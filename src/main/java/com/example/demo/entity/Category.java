@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Table(name="category",
-        uniqueConstraints=@UniqueConstraint(name="uk_category_name", columnNames="name"))
+@Table
 @Entity
 @Getter
 @DynamicInsert

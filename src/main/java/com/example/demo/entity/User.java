@@ -63,7 +63,7 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    @Builder(builderClassName = "CreateUserBuilderWithNoPassword")
+    @Builder(builderMethodName = "createWithoutPassword", builderClassName = "CreateUserWithoutPasswordBuilder")
     public User(
             String name,
             String email
@@ -71,6 +71,11 @@ public class User {
         this.name = name;
         this.email = email;
         this.passwordHash = name+ "111" + email;
+    }
+
+    public void updateProfile(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
 }
