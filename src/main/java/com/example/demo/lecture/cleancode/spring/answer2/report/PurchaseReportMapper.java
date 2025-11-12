@@ -11,7 +11,7 @@ public class PurchaseReportMapper {
                 dto.getPurchaseId(),
                 dto.getUserId(),
                 dto.getProductId(),
-                dto.getPurchaseStatus().name(),
+                dto.getStatus().name(),
                 dto.getTotalPrice(),
                 dto.getPurchasedAt()
         );
