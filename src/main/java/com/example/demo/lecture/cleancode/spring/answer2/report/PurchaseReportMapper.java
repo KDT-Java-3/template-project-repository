@@ -1,0 +1,19 @@
+package com.example.demo.lecture.cleancode.spring.answer2.report;
+
+import com.example.demo.repository.projection.PurchaseDetailDto;
+import org.springframework.stereotype.Component;
+
+@Component
+public class PurchaseReportMapper {
+
+    public PurchaseSummaryResponse toSummaryResponse(PurchaseDetailDto dto) {
+        return new PurchaseSummaryResponse(
+                dto.getPurchaseId(),
+                dto.getUserId(),
+                dto.getProductId(),
+                dto.getPurchaseStatus().name(),
+                dto.getTotalPrice(),
+                dto.getPurchasedAt()
+        );
+    }
+}
