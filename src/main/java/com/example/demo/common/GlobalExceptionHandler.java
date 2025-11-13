@@ -33,6 +33,11 @@ public class GlobalExceptionHandler {
         return ApiResponse.badRequest(VALIDATE_ERROR, buildValidationSummary(errors.size()), errors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
+        return ApiResponse.badRequest(VALIDATE_ERROR, ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> serverException(Exception ex) {
         return ApiResponse.serverError(SERVER_ERROR, ex.getMessage());
@@ -56,4 +61,3 @@ public class GlobalExceptionHandler {
                 : "요청 값이 올바르지 않습니다.";
     }
 }
-

@@ -1,8 +1,15 @@
-package com.example.demo.controller;
+package com.example.demo.controller.mock;
 
 // JSON 배열 길이를 검증하기 위해 Hamcrest 매처를 정적 임포트한다.
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+// HTTP DELETE/GET/POST 요청을 구성하는 빌더와 JSON 검증 도구를 정적 임포트한다.
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.demo.controller.mock.MockApiController;
+// 요청/응답 Body 직렬화를 위해 ObjectMapper를 사용한다.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,19 +21,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 // 통합 테스트 환경에서 MockMvc를 사용하기 위한 공통 설정을 적용한다.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class MockApiControllerTest {
+class MockApiControllerAAATest {
 
     // MockMvc를 주입받아 컨트롤러를 서버 띄우지 않고 호출할 수 있게 한다.
     @Autowired

@@ -1,5 +1,4 @@
-package com.example.demo.controller;
-
+package com.example.demo.controller.mock;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
