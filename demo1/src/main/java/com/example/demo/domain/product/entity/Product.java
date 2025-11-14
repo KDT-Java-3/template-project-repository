@@ -74,4 +74,8 @@ public class Product {
         this.stock = stock;
         this.category = category;
     }
+
+    public void increaseStock(Integer stock){
+        this.stock += stock;
+    }
 }

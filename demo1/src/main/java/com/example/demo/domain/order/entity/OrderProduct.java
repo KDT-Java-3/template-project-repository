@@ -15,6 +15,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -23,7 +25,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrederProduct {
+public class OrderProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +40,9 @@ public class OrederProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     Product product;
+
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<OrderProduct> OrderProducts = new ArrayList<>();
 
     @Column(nullable = false)
     Integer quantity;
@@ -54,7 +59,7 @@ public class OrederProduct {
     LocalDateTime updatedAt;
 
     @Builder
-    public OrederProduct(
+    public OrderProduct(
             Order order,
             Product product,
             Integer quantity,

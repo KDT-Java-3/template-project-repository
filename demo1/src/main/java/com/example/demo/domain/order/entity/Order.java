@@ -60,4 +60,8 @@ public class Order {
         this.status = status;
         this.shippingAddress = shippingAddress;
     }
+
+    public void updateOrderStatus(Status status){
+        this.status = status;
+    }
 }
