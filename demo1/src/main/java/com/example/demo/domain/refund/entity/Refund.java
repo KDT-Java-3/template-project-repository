@@ -63,4 +63,8 @@ public class Refund {
         this.status = status;
 
     }
+
+    public void updateStatus(Status status){
+        this.status = status;
+    }
 }
