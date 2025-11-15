@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -15,6 +17,7 @@ public class UserDto {
     private String username;
     private String email;
     private int purchaseCount;
+    private BigDecimal point;
     // 다른 데이터
     private int a;
     private int b; // ....
@@ -25,6 +28,7 @@ public class UserDto {
                 .username(user.getName())
                 .email(user.getEmail())
                 .purchaseCount(user.getPurchases().size())
+                .point(user.getPoint())
                 .a(0)
                 .b(0)
                 .build();

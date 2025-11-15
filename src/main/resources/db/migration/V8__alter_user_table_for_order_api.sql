@@ -1,0 +1,2 @@
+ALTER TABLE user
+    ADD COLUMN point DECIMAL(18, 2) DEFAULT 0;

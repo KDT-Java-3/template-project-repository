@@ -56,6 +56,9 @@ public class Purchase {
     @CreationTimestamp
     private LocalDateTime purchasedAt;
 
+    @Column(nullable = false, updatable = false)
+    private String shipping_address;
+
     @Builder
     public Purchase(
             User user,
@@ -63,7 +66,8 @@ public class Purchase {
             Integer quantity,
             BigDecimal unitPrice,
             BigDecimal totalPrice,
-            PurchaseStatus status
+            PurchaseStatus status,
+            String shipping_address
     ) {
         this.user = user;
         this.product = product;
@@ -71,6 +75,8 @@ public class Purchase {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.shipping_address = shipping_address;
+
     }
 
     public void markCompleted() {

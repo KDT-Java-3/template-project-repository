@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,16 +52,20 @@ public class User {
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    BigDecimal point; // 사용자 포인트
 
     @Builder
     public User(
             String name,
             String email,
-            String passwordHash
+            String passwordHash,
+            BigDecimal point
     ) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.point = point;
     }
 
     @Builder(builderMethodName = "createWithoutPassword", builderClassName = "CreateUserWithoutPasswordBuilder")
@@ -76,6 +81,10 @@ public class User {
     public void updateProfile(String name, String email) {
         this.name = name;
         this.email = email;
+    }
+
+    public void updatePoints(BigDecimal point) {
+        this.point = point;
     }
 
 }

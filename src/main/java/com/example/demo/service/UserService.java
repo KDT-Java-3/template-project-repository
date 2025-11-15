@@ -10,6 +10,7 @@ import com.example.demo.service.dto.UserUpdateCommand;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -34,6 +35,7 @@ public class UserService {
                 .name(command.username())
                 .email(command.email())
                 .passwordHash(command.password())
+                .point( new BigDecimal( command.point()) )
                 .build();
         User saved = userJpaRepository.save(user);
         return UserDto.from(saved);
@@ -58,6 +60,15 @@ public class UserService {
         }
         user.updateProfile(command.username(), command.email());
         return UserDto.from(user);
+    }
+
+    @Transactional
+    public BigDecimal decreasePoint(Long userId, BigDecimal point) {
+        User user = findUserById(userId);
+        user.updatePoints(user.getPoint().subtract(point));
+
+        userJpaRepository.save(user);
+        return user.getPoint();
     }
 
     @Transactional
