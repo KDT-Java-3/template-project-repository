@@ -1,0 +1,51 @@
+###
+GET http://localhost:8082/api/purchases/3
+Content-Type: application/json
+
+### 다중 조건 조회
+GET http://localhost:8082/api/purchases?userId=1&startDate=2025-11-09&sort=totalPrice,desc
+Content-Type: application/json
+
+###
+POST http://localhost:8082/api/purchases/2/cancel
+Content-Type: application/json
+
+###
+POST http://localhost:8082/api/purchases
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "products": [
+    {
+      "productId": 33,
+      "quantity": 1
+    },
+    {
+      "productId": 355
+    }
+  ]
+}
+
+###
+POST http://localhost:8082/api/purchases
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "shippingAddress": "서울시 관악구 ",
+  "products": [
+    {
+      "productId": 1,
+      "quantity": 4
+    },
+    {
+      "productId": 3,
+      "quantity": 2
+    },
+    {
+      "productId": 5,
+      "quantity": 1
+    }
+  ]
+}

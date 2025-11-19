@@ -1,0 +1,2 @@
+ALTER TABLE product
+    ADD COLUMN del_yn CHAR(1) DEFAULT 'N'

@@ -1,0 +1,35 @@
+###
+GET http://localhost:8082/api/products/3
+Content-Type: application/json
+
+###
+POST http://localhost:8082/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 134,
+  "name": "99테스트 오버핏 데일리 반팔 티셔츠",
+  "description": "테스트 부드러운 면 소재의 오버핏 티셔츠입니다. 어떤 하의와도 잘 어울립니다.",
+  "price": 2500,
+  "stock": 10
+}
+
+###
+PUT http://localhost:8082/api/products/3
+Content-Type: application/json
+
+{
+  "categoryId": 190,
+  "name": "클래식 고양이 츄르 (레드) #3",
+  "description": "한정 수량으로 특별 할인가에 제공됩니다. (모델명: P-190-3)",
+  "price": 21862,
+  "stock": 394
+}
+
+###
+DELETE http://localhost:8082/api/products/10000003
+Content-Type: application/json.
+
+###
+GET http://localhost:8082/api/products?categoryId=143&sort=name,asc
+Content-Type: application/json

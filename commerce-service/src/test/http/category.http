@@ -1,0 +1,1304 @@
+### Send POST request with json body
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "패션 의류/잡화",
+  "description": "여성, 남성, 유아동 의류 및 패션 잡화"
+}
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "뷰티", "description": "스킨케어, 메이크업, 향수 등 뷰티 제품" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "식품", "description": "신선식품, 가공식품, 건강식품 등" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "가전/디지털", "description": "TV, 냉장고, 컴퓨터, 스마트폰 등 가전 및 디지털 기기" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스포츠/레저", "description": "스포츠 의류, 용품 및 레저 활동 관련 상품" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "가구/인테리어", "description": "침실, 거실, 주방 가구 및 인테리어 소품" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "생활/건강", "description": "생활용품, 주방용품, 건강/의료 용품" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "출산/육아", "description": "출산 준비물, 유아동 의류, 장난감, 식품" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "도서/음반/티켓", "description": "소설, 잡지, 음반, 공연 티켓" }
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여행/E쿠폰", "description": "여행 상품, 항공권, 숙박 및 E쿠폰" }
+
+###
+PUT http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여행/E쿠폰", "description": "여행 상품, 항공권, 숙박 및 E쿠폰" }
+
+###
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성의류", "description": "여성 상의, 하의, 원피스 등", "parentId": 1 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성의류", "description": "남성 상의, 하의, 정장 등", "parentId": 1 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남녀공용의류", "description": "후드, 맨투맨 등 공용 의류", "parentId": 1 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "유아동의류", "description": "베이비, 키즈 의류", "parentId": 1 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "신발", "description": "운동화, 구두, 샌들 등", "parentId": 1 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "가방/잡화", "description": "백팩, 핸드백, 액세서리 등", "parentId": 1 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스킨케어", "description": "기초 화장품, 클렌징, 마스크팩", "parentId": 2 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "메이크업", "description": "페이스, 아이, 립 메이크업", "parentId": 2 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "헤어케어", "description": "샴푸, 린스, 트리트먼트", "parentId": 2 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "바디케어", "description": "바디워시, 로션, 핸드크림", "parentId": 2 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "향수/디퓨저", "description": "여성/남성 향수, 룸 디퓨저", "parentId": 2 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성뷰티", "description": "남성용 스킨케어, 쉐이빙", "parentId": 2 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "신선식품", "description": "채소, 과일, 정육, 수산물", "parentId": 3 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "가공식품", "description": "면, 통조림, 냉동식품, 과자", "parentId": 3 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "음료/커피", "description": "생수, 주스, 커피, 차", "parentId": 3 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "건강식품", "description": "비타민, 홍삼, 다이어트 식품", "parentId": 3 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "베이커리/간식", "description": "빵, 떡, 아이스크림", "parentId": 3 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "주방가전", "description": "냉장고, 밥솥, 전자레인지", "parentId": 4 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "생활가전", "description": "세탁기, 청소기, 공기청정기", "parentId": 4 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "영상/음향가전", "description": "TV, 스피커, 프로젝터", "parentId": 4 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "컴퓨터/노트북", "description": "데스크탑, 노트북, 모니터, 주변기기", "parentId": 4 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "모바일/태블릿", "description": "스마트폰, 태블릿, 웨어러블", "parentId": 4 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "게임", "description": "콘솔, PC게임, 타이틀", "parentId": 4 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스포츠의류", "description": "트레이닝복, 요가복, 수영복", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스포츠신발", "description": "러닝화, 축구화, 등산화", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "헬스/피트니스", "description": "헬스기구, 덤벨, 요가매트", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "캠핑/등산", "description": "텐트, 캠핑용품, 등산용품", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "골프", "description": "골프클럽, 골프공, 골프웨어", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "낚시", "description": "낚시대, 릴, 낚시소품", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "자전거/보드", "description": "자전거, 전동킥보드, 스케이트보드", "parentId": 5 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "침실가구", "description": "침대, 매트리스, 옷장", "parentId": 6 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "거실가구", "description": "소파, 거실장, 테이블", "parentId": 6 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "주방가구", "description": "식탁, 주방수납장, 의자", "parentId": 6 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "인테리어 소품", "description": "조명, 시계, 거울, 액자", "parentId": 6 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "침구/커튼", "description": "이불, 베개, 커튼, 블라인드", "parentId": 6 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "주방용품", "description": "냄비, 후라이팬, 식기, 조리도구", "parentId": 7 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "생활용품", "description": "세제, 휴지, 청소용품, 욕실용품", "parentId": 7 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "건강/의료용품", "description": "마스크, 영양제, 안마기, 의료기기", "parentId": 7 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "반려동물용품", "description": "사료, 간식, 장난감, 캣타워", "parentId": 7 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "기저귀/물티슈", "description": "신생아, 유아용 기저귀 및 물티슈", "parentId": 8 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "분유/이유식", "description": "분유, 이유식, 유아 간식", "parentId": 8 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "유아동 장난감", "description": "블록, 인형, 교육용 완구", "parentId": 8 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "유아동 패션", "description": "신생아의류, 유아동 의류 및 잡화", "parentId": 8 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "소설/시", "description": "국내소설, 해외소설, 시", "parentId": 9 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "만화/라이트노벨", "description": "만화책, 웹툰, 라이트노벨", "parentId": 9 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "자기계발/경제", "description": "자기계발, 경제/경영, 재테크", "parentId": 9 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "컴퓨터/IT", "description": "프로그래밍, OS, 자격증", "parentId": 9 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "국내여행", "description": "제주, 부산, 강원도 등 국내 여행 상품", "parentId": 10 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "해외여행", "description": "동남아, 유럽, 미주 등 해외 여행 상품", "parentId": 10 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "항공/숙박", "description": "항공권, 호텔, 리조트 예약", "parentId": 10 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성의류 상의", "description": "티셔츠, 블라우스, 니트", "parentId": 11 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성의류 하의", "description": "청바지, 스커트, 슬랙스", "parentId": 11 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성의류 원피스", "description": "캐주얼, 정장 원피스", "parentId": 11 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성의류 아우터", "description": "자켓, 코트, 패딩", "parentId": 11 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성의류 상의", "description": "티셔츠, 셔츠, 맨투맨", "parentId": 12 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성의류 하의", "description": "청바지, 면바지, 슬랙스", "parentId": 12 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성의류 아우터", "description": "자켓, 코트, 패딩", "parentId": 12 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "운동화", "description": "러닝화, 패션 스니커즈", "parentId": 15 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "구두", "description": "여성 힐, 남성 로퍼", "parentId": 15 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "샌들/슬리퍼", "description": "여름 샌들, 슬리퍼", "parentId": 15 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "백팩", "description": "학생, 직장인용 백팩", "parentId": 16 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "핸드백/숄더백", "description": "여성 핸드백, 숄더백", "parentId": 16 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "주얼리", "description": "목걸이, 귀걸이, 반지", "parentId": 16 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "모자", "description": "캡, 버킷햇, 비니", "parentId": 16 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "클렌징", "description": "클렌징폼, 오일, 워터", "parentId": 17 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "기초케어", "description": "스킨, 로션, 에센스, 크림", "parentId": 17 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "선케어", "description": "선크림, 선스틱, 선쿠션", "parentId": 17 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "마스크/팩", "description": "시트마스크, 워시오프팩", "parentId": 17 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "페이스 메이크업", "description": "파운데이션, 쿠션, 파우더", "parentId": 18 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "아이 메이크업", "description": "아이섀도우, 아이라이너, 마스카라", "parentId": 18 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "립 메이크업", "description": "립스틱, 틴트, 립글로스", "parentId": 18 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "샴푸/린스", "description": "지성, 건성, 탈모 샴푸", "parentId": 19 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "트리트먼트/팩", "description": "극손상모, 헤어팩", "parentId": 19 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "헤어 스타일링", "description": "헤어에센스, 왁스, 스프레이", "parentId": 19 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "채소", "description": "잎채소, 뿌리채소, 열매채소", "parentId": 23 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "과일", "description": "제철과일, 수입과일, 냉동과일", "parentId": 23 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "정육/계란", "description": "소고기, 돼지고기, 닭고기, 계란", "parentId": 23 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "수산/해산물", "description": "생선, 갑각류, 해조류", "parentId": 23 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "유제품", "description": "우유, 요거트, 치즈, 버터", "parentId": 23 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "면/파스타", "description": "라면, 파스타면", "parentId": 24 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "통조림/햄", "description": "참치, 햄, 소시지", "parentId": 24 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "냉동식품", "description": "만두, 피자, 아이스크림", "parentId": 24 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "과자/시리얼", "description": "스낵, 비스킷, 시리얼", "parentId": 24 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "생수/탄산수", "description": "생수, 탄산수", "parentId": 25 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "커피/차", "description": "원두, 믹스커피, 티백", "parentId": 25 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "주스/탄산음료", "description": "과일주스, 탄산음료", "parentId": 25 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "냉장고", "description": "양문형, 4도어, 일반형", "parentId": 28 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "전자레인지/오븐", "description": "전자레인지, 광파오븐, 에어프라이어", "parentId": 28 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "밥솥", "description": "IH압력, 열판압력, 보온밥솥", "parentId": 28 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "커피머신/포트", "description": "캡슐, 반자동, 전자동, 전기포트", "parentId": 28 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "세탁기", "description": "드럼, 통돌이", "parentId": 29 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "건조기/스타일러", "description": "의류 건조기, 의류 관리기", "parentId": 29 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "청소기", "description": "무선, 유선, 로봇 청소기", "parentId": 29 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "공기청정기/가습기", "description": "공기청정기, 가습기, 제습기", "parentId": 29 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "TV", "description": "QLED, OLED, UHD TV", "parentId": 30 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스피커/오디오", "description": "블루투스 스피커, 사운드바, 홈시어터", "parentId": 30 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "프로젝터", "description": "홈, 비즈니스용 프로젝터", "parentId": 30 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "노트북", "description": "게이밍, 비즈니스, 학생용", "parentId": 31 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "데스크탑", "description": "조립PC, 완제PC, 일체형PC", "parentId": 31 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "모니터", "description": "게이밍, 사무용, 와이드", "parentId": 31 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "PC주변기기", "description": "키보드, 마우스, 프린터", "parentId": 31 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "PC부품", "description": "CPU, 그래픽카드, RAM, 메인보드", "parentId": 31 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스마트폰", "description": "안드로이드, iOS", "parentId": 32 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "태블릿PC", "description": "아이패드, 갤럭시탭", "parentId": 32 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "웨어러블", "description": "스마트워치, 밴드", "parentId": 32 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "모바일 액세서리", "description": "케이스, 충전기, 이어폰, 보조배터리", "parentId": 32 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "헬스기구", "description": "런닝머신, 사이클, 벤치", "parentId": 36 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "웨이트 용품", "description": "덤벨, 바벨, 원판", "parentId": 36 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "요가/필라테스", "description": "요가매트, 폼롤러, 짐볼", "parentId": 36 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "텐트/타프", "description": "돔텐트, 거실형텐트, 타프", "parentId": 37 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "캠핑 가구", "description": "테이블, 의자, 해먹", "parentId": 37 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "캠핑 취사용품", "description": "버너, 코펠, 쿨러", "parentId": 37 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "침대", "description": "싱글, 퀸, 킹 사이즈, 프레임", "parentId": 41 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "옷장/수납장", "description": "옷장, 서랍장, 시스템행거", "parentId": 41 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "소파", "description": "2-3인용, 4인용, 리클라이너", "parentId": 42 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "테이블/책상", "description": "소파 테이블, 스터디 책상", "parentId": 42 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "냄비/팬", "description": "냄비세트, 후라이팬, 웍", "parentId": 46 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "식기/수저", "description": "식기세트, 컵, 수저세트", "parentId": 46 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "세제/청소", "description": "세탁세제, 주방세제, 청소도구", "parentId": 47 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "휴지/욕실", "description": "두루마리 휴지, 미용티슈, 수건", "parentId": 47 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "강아지 사료", "description": "건식, 습식, 처방식 사료", "parentId": 49 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "고양이 사료", "description": "건식, 습식, 처방식 사료", "parentId": 49 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "반려동물 장난감", "description": "강아지, 고양이 장난감", "parentId": 49 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성상의 티셔츠", "description": "반팔, 긴팔, 무지 티셔츠", "parentId": 61 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성상의 블라우스/셔츠", "description": "실크, 면 블라우스 및 셔츠", "parentId": 61 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성상의 니트", "description": "라운드넥, 브이넥 니트", "parentId": 61 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성하의 청바지", "description": "스키니, 와이드, 부츠컷", "parentId": 62 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성하의 스커트", "description": "미니, 롱, 플리츠 스커트", "parentId": 62 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여성하의 슬랙스", "description": "오피스룩, 캐주얼 슬랙스", "parentId": 62 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성상의 티셔츠", "description": "라운드, 브이넥 반팔/긴팔", "parentId": 65 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성상의 셔츠", "description": "드레스 셔츠, 캐주얼 셔츠", "parentId": 65 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성상의 맨투맨/후드", "description": "기모, 오버핏 맨투맨 및 후드", "parentId": 65 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성하의 청바지", "description": "슬림, 레귤러, 와이드핏", "parentId": 66 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성하의 면바지", "description": "치노, 카고 팬츠", "parentId": 66 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "남성하의 슬랙스", "description": "테이퍼드, 와이드 슬랙스", "parentId": 66 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "스킨/토너", "description": "보습, 진정, 각질제거 토너", "parentId": 76 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "로션/에멀젼", "description": "유수분 밸런스 로션", "parentId": 76 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "에센스/세럼", "description": "고농축 앰플, 세럼", "parentId": 76 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "크림", "description": "수분크림, 영양크림", "parentId": 76 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "파운데이션", "description": "리퀴드, 스틱 파운데이션", "parentId": 79 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "쿠션", "description": "글로우, 매트 쿠션", "parentId": 79 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "파우더/팩트", "description": "루스 파우더, 프레스드 팩트", "parentId": 79 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "아이섀도우", "description": "싱글, 팔레트 섀도우", "parentId": 80 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "아이라이너", "description": "펜슬, 붓펜, 젤 라이너", "parentId": 80 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "마스카라", "description": "볼륨, 롱래시, 컬링 마스카라", "parentId": 80 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "립스틱", "description": "매트, 벨벳, 촉촉 립스틱", "parentId": 81 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "립틴트", "description": "워터, 벨벳 틴트", "parentId": 81 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "립밤/립케어", "description": "보습 립밤, 컬러 립밤", "parentId": 81 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "뿌리채소", "description": "감자, 고구마, 당근, 무", "parentId": 85 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "잎채소", "description": "상추, 깻잎, 시금치, 배추", "parentId": 85 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "열매채소", "description": "토마토, 오이, 고추, 호박", "parentId": 85 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "소고기", "description": "한우, 수입산 소고기", "parentId": 87 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "돼지고기", "description": "삼겹살, 목살, 앞다리살", "parentId": 87 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "닭고기/오리", "description": "닭볶음탕용, 백숙용, 오리고기", "parentId": 87 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "원두", "description": "홀빈, 분쇄 원두", "parentId": 95 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "믹스커피", "description": "커피믹스", "parentId": 95 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "캡슐커피", "description": "네스프레소 호환, 돌체구스토 호환", "parentId": 95 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "QLED TV", "description": "삼성 QLED", "parentId": 105 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "OLED TV", "description": "LG OLED", "parentId": 105 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "게이밍 노트북", "description": "고성능 그래픽카드 탑재", "parentId": 108 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "비즈니스 노트북", "description": "경량, 긴 배터리 시간", "parentId": 108 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "2-in-1 노트북", "description": "태블릿 겸용 노트북", "parentId": 108 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "키보드", "description": "기계식, 무선, 유선", "parentId": 111 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "마우스", "description": "광, 레이저, 무선, 유선", "parentId": 111 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "헤드셋/이어폰", "description": "게이밍 헤드셋, PC 이어폰", "parentId": 111 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "CPU", "description": "인텔, AMD", "parentId": 112 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "그래픽카드", "description": "NVIDIA, AMD", "parentId": 112 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "RAM", "description": "DDR4, DDR5", "parentId": 112 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "메인보드", "description": "ASUS, GIGABYTE, MSI", "parentId": 112 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "케이스/필름", "description": "스마트폰, 태블릿 케이스/보호필름", "parentId": 116 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "충전기/케이블", "description": "고속충전기, C타입, 8핀 케이블", "parentId": 116 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "무선이어폰", "description": "블루투스 이어폰, 헤드셋", "parentId": 116 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "덤벨/아령", "description": "고정식, 무게조절 덤벨", "parentId": 118 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "바벨/원판", "description": "바벨봉, 중량 원판", "parentId": 118 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "강아지 건식사료", "description": "퍼피, 어덜트, 시니어 건식", "parentId": 131 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "강아지 습식사료", "description": "캔, 파우치 형태 습식", "parentId": 131 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "강아지 간식", "description": "개껌, 육포, 동결건조 간식", "parentId": 131 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "고양이 건식사료", "description": "키튼, 어덜트, 시니어 건식", "parentId": 132 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "고양이 습식사료", "description": "주식캔, 파우치", "parentId": 132 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "고양이 간식", "description": "츄르, 동결건조 간식", "parentId": 132 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "트레이닝복", "description": "져지, 트레이닝 팬츠", "parentId": 34 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "요가/필라테스복", "description": "레깅스, 요가탑", "parentId": 34 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "수영복", "description": "실내, 비치 수영복", "parentId": 34 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "러닝화", "description": "안정화, 쿠션화", "parentId": 35 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "축구화/풋살화", "description": "스터드, 풋살화", "parentId": 35 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "농구화", "description": "실내, 실외용 농구화", "parentId": 35 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "골프클럽", "description": "드라이버, 아이언, 퍼터", "parentId": 38 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "골프웨어", "description": "골프 상의, 하의, 모자", "parentId": 38 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "골프공/용품", "description": "골프공, 골프장갑", "parentId": 38 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "이불", "description": "차렵이불, 이불솜, 이불커버", "parentId": 45 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "베개", "description": "메모리폼 베개, 솜 베개", "parentId": 45 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "매트리스", "description": "스프링, 라텍스, 메모리폼", "parentId": 45 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "블록/조립", "description": "레고, 듀플로, 나무 블록", "parentId": 52 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "인형", "description": "봉제인형, 피규어", "parentId": 52 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "교육/학습완구", "description": "퍼즐, 그림책", "parentId": 52 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "기계식 키보드", "description": "청축, 갈축, 적축", "parentId": 173 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "멤브레인 키보드", "description": "사무용, 저소음", "parentId": 173 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "게이밍 마우스", "description": "고DPI, 유선 마우스", "parentId": 174 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "무선 마우스", "description": "블루투스, 2.4Ghz", "parentId": 174 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "드라이버", "description": "남성, 여성용 드라이버", "parentId": 197 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "아이언", "description": "아이언 세트", "parentId": 197 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "퍼터", "description": "블레이드, 말렛 퍼터", "parentId": 197 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "여름 이불", "description": "인견, 시어서커 이불", "parentId": 200 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "겨울 이불", "description": "구스, 극세사 이불", "parentId": 200 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "레고", "description": "시티, 스타워즈, 듀플로", "parentId": 203 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "나무 블록", "description": "원목, 친환경 블록", "parentId": 203 }
+###
+
+POST http://localhost:8082/api/products/categories
+Content-Type: application/json
+
+{ "name": "3333나무 블록", "description": "33원목, 친환경 블록", "parentId": 203 }
+###
+
+DELETE http://localhost:8082/api/products/categories/227
+Content-Type: application/json
