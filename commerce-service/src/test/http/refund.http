@@ -1,0 +1,25 @@
+###
+GET http://localhost:8082/api/refunds/1
+Content-Type: application/json
+
+###
+GET http://localhost:8082/api/refunds?status=APPROVED&startDate=2025-11-10&endDate=2025-11-15&page=0
+Content-Type: application/json
+
+###
+POST http://localhost:8082/api/refunds
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "reason": "물건이 썩어서",
+  "purchaseId": 1
+}
+
+###
+POST http://localhost:8082/api/refunds/1/process
+Content-Type: application/json
+
+{
+  "status": "APPROVED"
+}
